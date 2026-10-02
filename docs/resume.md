@@ -13,17 +13,28 @@ $$\text{[Action Verb]} + \text{[Specific Tech / Architecture]} + \text{[Feature 
 
 ### Technical Skills
 * **Languages:** Python, JavaScript (ES6+), TypeScript, SQL, HTML5, CSS3
-* **Backend & Systems:** Node.js, Express, PostgreSQL, Sequelize, Flask (`Flask[async]`), `aiosqlite`, RESTful APIs, Asynchronous I/O, SQLite, JSONB
-* **Generative AI & Media Processing:** OpenAI Whisper, DeepSeek, OpenAI GPT Image 2, FFmpeg, Cloudinary, Prompt Engineering, Structured JSON Patches
-* **Frontend & Web APIs:** React (React 18), Vite, WaveSurfer.js, Web Audio API, Vanilla Web Speech API (`SpeechRecognition`, `SpeechSynthesis`), IntersectionObserver API, Responsive & Accessible UI
-* **Engineering Disciplines:** Distributed Media Pipelines, State Machine Orchestration, Client-Side Lexical Analysis, Defensive UX / URL Interception, Web Accessibility (a11y), Single-Page Applications (SPA), Git Version Control
+* **Backend & Systems:** Node.js, Express (Express 5), PostgreSQL, Sequelize, Flask (`Flask[async]`), `aiosqlite`, RESTful APIs, Asynchronous I/O, SQLite, JSONB, Excel Workbook Parsing (`xlsx`), SHA-256 Cryptographic Verification
+* **Generative AI & Media Processing:** OpenAI Whisper, DeepSeek, OpenAI GPT Image 2, OpenAI (`gpt-4.1-nano`), FFmpeg, Cloudinary, Prompt Engineering, Structured JSON Patches, Deterministic LLM Fallbacks
+* **Frontend & Web APIs:** React (React 18 & React 19), Vite (Vite 8), WaveSurfer.js, Web Audio API, Vanilla Web Speech API (`SpeechRecognition`, `SpeechSynthesis`), IntersectionObserver API, CSS 3D Transforms, Responsive & Accessible UI
+* **Engineering Disciplines:** Rapid Hackathon Prototyping (24h Sprint Delivery), Distributed Media Pipelines, State Machine Orchestration, Client-Side Lexical Analysis, Defensive UX / URL Interception, Web Accessibility (a11y), Single-Page Applications (SPA), Git Version Control
 
 ---
 
 ## 2. Verified Project Bullet Bank
 
-### Lead Full-Stack Engineer — Shades of SG
-*Distributed AI Media Pipeline & Cultural Studio (React, Vite, Node.js, Express, PostgreSQL, Cloudinary, OpenAI, DeepSeek)*
+### Full-Stack Engineer — ROLLOVER (SDG Open Hack 2026)
+*24-Hour Hackathon Prototype (Equal 3-Person Team · SDG 12: Circular Retail) | Stack: React 19, Vite 8, Node.js, Express 5, Excel Parser (xlsx), CSS 3D Transforms, OpenAI (gpt-4.1-nano)*
+
+* **Co-architected and built** an end-to-end circular-retail discovery platform with an equal 3-person team during a high-intensity **24-hour hackathon sprint**, converting enterprise surplus deadstock into personalized mystery bundles diverting usable physical products from landfills (SDG 12).
+* **Engineered** a deterministic inventory-grounded matching engine in Node.js/Express 5 that partitions live surplus stock into up to 4 sealed bundle tiers, enforcing strict budget ceilings, size constraints, and dietary/allergen exclusions with 100% compliance.
+* **Implemented** a zero-spoiler state machine and SHA-256 offer verification protocol separating preview metadata (`/api/drops/match`) from reveal payloads (`/api/drops/reveal`), preventing client-side SKU leakage and eliminating bundle tampering.
+* **Developed** a tactile Y2K Neobrutalist arcade interface in React 19 featuring mechanical microswitch button physics, CSS 3D perspective box drop/burst animations, sequential card-pull flips, and complete haul transparency.
+* **Built** a resilient hybrid AI quiz service leveraging `gpt-4.1-nano` to dynamically synthesize scenario dilemmas from real inventory tags, coupled with an automatic offline deterministic fallback ensuring zero demo downtime and zero price hallucinations.
+
+---
+
+### Full-Stack Engineer — Shades of SG
+*Distributed AI Media Pipeline & Cultural Studio | Stack: React, Vite, Node.js, Express, PostgreSQL, Cloudinary, OpenAI, DeepSeek*
 
 * **Architected** an asynchronous 5-phase generative media pipeline orchestrating audio intake (`yt-dlp`), Whisper speech-to-text, DeepSeek scene planning, GPT Image 2 rendering, and FFmpeg video assembly in Node.js/PostgreSQL.
 * **Reduced** generative image API costs by 20% to 35% by developing a deterministic chorus-hashing engine (`normalizeCacheKey`) that identifies repeating lyrical hooks and re-links Cloudinary frame assets across scenes.

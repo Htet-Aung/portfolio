@@ -7,8 +7,25 @@
 
 ## Featured Projects
 
+### ROLLOVER — Circular-Retail Gacha Arcade
+**Full-Stack Engineer (Equal Team of 3) — Built in 24 Hours for SDG Open Hack 2026 (Challenge 2 / SDG 12)**
+
+A rapid-prototyped circular-retail discovery platform that diverts stranded enterprise surplus stock into personalized, zero-guilt mystery bundles using arcade gamification, deterministic constraint matching, and tactile Y2K Neobrutalism.
+
+* **Sprint Context:** Built and shipped as an equal 3-person team in a high-intensity **24-hour hackathon sprint** (SDG Open Hack 2026 — Responsible Consumption & Production).
+* **Architecture & Technologies:** React 19, Vite 8, Node.js, Express 5, Excel Parser (`xlsx`), CSS 3D Transforms, OpenAI (`gpt-4.1-nano`), SHA-256 Hashing, Neobrutalist Design System
+* **Core Engineering:**
+  * **Deterministic 7-Stage Pipeline:** Built a zero-leak mystery flow enforcing hard budget ceilings, allergen/dietary filters, and size constraints across multi-category surplus inventories.
+  * **SHA-256 Offer Verification:** Decoupled candidate previews (`/api/drops/match`) from reveal payloads (`/api/drops/reveal`) using deterministic hash IDs, eliminating product spoilers while guaranteeing reproducible bundle calculation.
+  * **Tactile Y2K Gacha Arcade UX:** Developed physical microswitch button physics (`.button-hitbox` zero-shadow depression), CSS 3D perspective box drop/burst animations, and sequential card-pull interactions.
+  * **Resilient Hybrid AI Layer:** Integrated server-side `gpt-4.1-nano` to dynamically synthesize quiz dilemmas from live stock metadata, paired with deterministic offline fallback questions to ensure zero runtime downtime and zero price hallucinations.
+* **Media & Demos:** 🎬 [Marketing Campaign Ad Video](docs/portfolio.md#32-media--demo-video-showcase) | 🕹️ [Full Interactive Demo Walkthrough](docs/portfolio.md#32-media--demo-video-showcase)
+* **Documentation:** [Detailed Technical Case Study](docs/portfolio.md#3-case-study-rollover--circular-retail-gacha-arcade-sdg-open-hack-2026) | [Resume Deliverables](docs/resume.md#full-stack-engineer--rollover-sdg-open-hack-2026)
+
+---
+
 ### Shades of SG — AI-Powered Cultural Media Studio
-**Lead Full-Stack Engineer — AI Video Generation Pipeline (V1) & Content Consumption Experience (P2)**
+**Full-Stack Engineer — AI Video Generation Pipeline (V1) & Content Consumption Experience (P2)**
 
 An end-to-end distributed generative media pipeline and interactive cultural studio transforming traditional Singaporean folk songs into cinematic, lyric-synchronized visual narratives.
 
@@ -19,7 +36,7 @@ An end-to-end distributed generative media pipeline and interactive cultural stu
   * Deterministic chorus hash caching (`normalizeCacheKey`) reducing image generation API costs by 20% to 35%
   * Browser-based multitrack timeline editor (`VideoEditor.jsx`) with WaveSurfer.js and DeepSeek AI Copilot drawer (`Shift + A`) applying non-destructive JSON patches without playback interruption
   * Custom HTML5 synchronized caption renderer with zero-drift non-inclusive intervals and Web Audio API heritage instrument synth
-* **Documentation:** [Detailed Technical Case Study](docs/portfolio.md#2-case-study-shades-of-sg--ai-powered-cultural-media-studio) | [Resume Deliverables](docs/resume.md#lead-full-stack-engineer--shades-of-sg)
+* **Documentation:** [Detailed Technical Case Study](docs/portfolio.md#2-case-study-shades-of-sg--ai-powered-cultural-media-studio) | [Resume Deliverables](docs/resume.md#full-stack-engineer--shades-of-sg)
 
 ---
 

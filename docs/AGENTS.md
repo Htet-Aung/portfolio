@@ -39,6 +39,7 @@ Every autonomous or paired agent interacting with this repository MUST adhere to
 | :--- | :--- | :--- | :--- | :--- |
 | **2026-09-29 21:05 (SGT)** | Knowledge & Documentation Architect (`Antigravity`) | Candidate baseline profile + Project 1 (SGEN: repo `Generic-Inc/SGEN`, React 18, Flask async, aiosqlite, Web Speech API, lexical scanner, Link Guard). | - Initialized `/docs/`<br>- Created `docs/AGENTS.md`<br>- Created `docs/portfolio.md` (SGEN case study + Upcoming section)<br>- Created `docs/resume.md` (SGEN 4-bullet bank + Skills) | 1. Quantifiable metrics for SGEN (e.g., latency, payload reduction %, user count).<br>2. Details/materials for Project 2: "Shades of SG" (repo, tech stack, candidate role). |
 | **2026-10-02 16:40 (SGT)** | Full-Stack & Generative Media Architect (`Antigravity`) | Project 2 (Shades of SG: V1 AI Video Generation Pipeline & P2 Experience & Content Consumption, WaveSurfer.js, DeepSeek Copilot, AWAITING_REVIEW state machine, blocks JSONB, normalizeCacheKey). | - Updated `README.md` (Featured Projects card)<br>- Updated `docs/portfolio.md` (Added Section 2 Case Study: Shades of SG in full detail)<br>- Updated `docs/resume.md` (Added 5 recruiter-ready bullets for Shades of SG & expanded skills inventory) | None for Shades of SG. Awaiting next project intake (NYP Applied AI / Analytics Project). |
+| **2026-10-02 17:15 (SGT)** | Full-Stack & Rapid Prototyping Architect (`Antigravity`) | Project 3 (ROLLOVER: 24-hour hackathon for SDG Open Hack 2026 / SDG 12, equal 3-person team, React 19 + Vite 8, Express 5, Excel parsing via `xlsx`, SHA-256 offer verification, tactile Y2K gacha arcade UX, hybrid `gpt-4.1-nano` with offline fallback, marketing ad & interactive demo videos). | - Updated `README.md` (Added ROLLOVER Featured Project card with 24h sprint badge & video links)<br>- Updated `docs/portfolio.md` (Added Section 3 Case Study: ROLLOVER with media showcase, 7-stage architecture, and trade-offs)<br>- Updated `docs/resume.md` (Added 5 recruiter-ready bullets for ROLLOVER & expanded skills inventory) | Confirm final hosting URLs for Marketing Ad Video and Demo Walkthrough Video when published. |
 
 ---
 
@@ -46,10 +47,10 @@ Every autonomous or paired agent interacting with this repository MUST adhere to
 
 * **Current Status:** `PHASE 1: INFORMATION GATHERING & REFINEMENT (ACTIVE)`
 * **Active Working Set:**
-  * `README.md` (Hub & Project Summaries)
+  * `README.md` (Hub & Project Summaries: SGEN, Shades of SG, ROLLOVER)
   * `docs/AGENTS.md` (Governance & Log)
-  * `docs/portfolio.md` (Master Knowledge Base: SGEN & Shades of SG)
-  * `docs/resume.md` (Recruiter-Ready Bullet Bank: SGEN & Shades of SG)
+  * `docs/portfolio.md` (Master Knowledge Base: SGEN, Shades of SG, ROLLOVER)
+  * `docs/resume.md` (Recruiter-Ready Bullet Bank: SGEN, Shades of SG, ROLLOVER)
 * **Immediate Next Action:** Await user intake data regarding subsequent academic or production projects (e.g., NYP Applied AI / Analytics Academic Project).
 
 ---
