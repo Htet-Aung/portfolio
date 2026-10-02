@@ -13,13 +13,25 @@ $$\text{[Action Verb]} + \text{[Specific Tech / Architecture]} + \text{[Feature 
 
 ### Technical Skills
 * **Languages:** Python, JavaScript (ES6+), TypeScript, SQL, HTML5, CSS3
-* **Backend & Systems:** Flask (`Flask[async]`), `aiosqlite`, RESTful APIs, Asynchronous I/O, SQLite
-* **Frontend & Web APIs:** React 18, Vanilla Web Speech API (`SpeechRecognition`, `SpeechSynthesis`), IntersectionObserver API, Responsive & Accessible UI
-* **Engineering Disciplines:** Client-Side Lexical Analysis, Defensive UX / URL Interception, Web Accessibility (a11y), Single-Page Applications (SPA), Git Version Control
+* **Backend & Systems:** Node.js, Express, PostgreSQL, Sequelize, Flask (`Flask[async]`), `aiosqlite`, RESTful APIs, Asynchronous I/O, SQLite, JSONB
+* **Generative AI & Media Processing:** OpenAI Whisper, DeepSeek, OpenAI GPT Image 2, FFmpeg, Cloudinary, Prompt Engineering, Structured JSON Patches
+* **Frontend & Web APIs:** React (React 18), Vite, WaveSurfer.js, Web Audio API, Vanilla Web Speech API (`SpeechRecognition`, `SpeechSynthesis`), IntersectionObserver API, Responsive & Accessible UI
+* **Engineering Disciplines:** Distributed Media Pipelines, State Machine Orchestration, Client-Side Lexical Analysis, Defensive UX / URL Interception, Web Accessibility (a11y), Single-Page Applications (SPA), Git Version Control
 
 ---
 
 ## 2. Verified Project Bullet Bank
+
+### Lead Full-Stack Engineer — Shades of SG
+*Distributed AI Media Pipeline & Cultural Studio (React, Vite, Node.js, Express, PostgreSQL, Cloudinary, OpenAI, DeepSeek)*
+
+* **Architected** an asynchronous 5-phase generative media pipeline orchestrating audio intake (`yt-dlp`), Whisper speech-to-text, DeepSeek scene planning, GPT Image 2 rendering, and FFmpeg video assembly in Node.js/PostgreSQL.
+* **Reduced** generative image API costs by 20% to 35% by developing a deterministic chorus-hashing engine (`normalizeCacheKey`) that identifies repeating lyrical hooks and re-links Cloudinary frame assets across scenes.
+* **Eliminated** audio-caption timing drift by implementing an `AWAITING_REVIEW` state machine with drag-and-drop atomic Whisper blocks stored in PostgreSQL JSONB (`scene_segments.blocks`), dynamically recalculating scene boundaries while maintaining sub-second alignment.
+* **Engineered** a multitrack timeline video editor utilizing WaveSurfer.js and a natural language AI Copilot drawer (DeepSeek via `Shift + A`), translating conversational editing commands into structured JSON patches hot-swapped into React state without playback interruption.
+* **Built** the public interactive consumption experience, deploying a custom zero-drift HTML5 synchronized caption engine, interactive Web Audio API heritage instrument synthesizers, and real-time cultural trivia quizzes.
+
+---
 
 ### SGEN – Intergenerational Social Platform
 *Role: Posts Engine, Feed, Accessibility & Assistive Systems Developer | Stack: React 18, Python (Flask async), aiosqlite, Web Speech API*
@@ -42,10 +54,10 @@ $$\text{[Action Verb]} + \text{[Specific Tech / Architecture]} + \text{[Feature 
 
 > *Use this staging area to iterate and refine draft bullets for incoming projects before finalizing them for the resume.*
 
-### 3.1 Project: Shades of SG (Drafting Lab)
+### 3.1 Project: Applied AI / Analytics Project (NYP) (Drafting Lab)
 
 * **Raw Notes & Ingested Info:**
-  * *[Awaiting project repository, slides, or user notes]*
+  * *[Awaiting project data]*
 
 * **Draft Iteration 1 (Work-in-Progress):**
   * *[Draft bullet pending]*
@@ -57,14 +69,4 @@ $$\text{[Action Verb]} + \text{[Specific Tech / Architecture]} + \text{[Feature 
   * *Measurable Impact:* [Pending]
 
 * **Recruiter-Ready Target (Final Candidate):**
-  * *[Pending user review]*
-
----
-
-### 3.2 Project: Applied AI / Analytics Project (NYP) (Drafting Lab)
-
-* **Raw Notes & Ingested Info:**
-  * *[Awaiting project data]*
-
-* **Draft Bullets:**
   * *[Pending user review]*

@@ -114,21 +114,112 @@ This document serves as the single source of truth for all verified engineering 
 
 ---
 
-## 2. Upcoming Projects (Awaiting Intake)
+## 2. Case Study: Shades of SG — AI-Powered Cultural Media Studio
+
+### 2.1 Executive Summary & Problem Space
+Traditional cultural archives often struggle to engage younger, digital-first audiences through static song recordings and historical texts. Shades of SG addresses this cultural disconnect by pairing modern generative AI with cultural preservation, converting traditional Singaporean heritage music into lyric-synchronized cinematic music videos and gamified learning platforms.
+
+As the Lead Full-Stack Engineer owning **V1 (AI Video Generation Pipeline)** and **P2 (Experience & Content Consumption)**, I architected and implemented the end-to-end distributed media pipeline, the pre-generation human-in-the-loop review system, the in-browser multitrack timeline video editor, and the public synchronized viewing engine.
+
+> **Strict Ownership & Attribution Scope:**
+> * **Assigned Ownership (Htet):** V1 (Media Ingestion, 5-Phase Generation Engine, Scene Planning, Frame Generation with Chorus Deduplication, FFmpeg Stitching, Cultural Curation) & P2 (Multitrack Timeline Video Editor, DeepSeek Copilot Drawer, Public Video Player, Synced Captions, Web Audio API Synthesizers, Trivia Engine).
+> * **Teammate Ownership (Explicitly Excluded from Scope):** Song Metadata Studio, Canvas Rhythm Game, Community Reflection Wall (Ferlyn); Creator Dashboard, Song Management, Guided Music Lessons, Instrument Playground (Shermaine); User Auth/RBAC, Song Discovery Library, Admin Safety & Error Handling (Lia).
+
+---
+
+### 2.2 System Architecture & Pipeline Dataflow
+The platform runs as a decoupled Single Page Application (React + Vite) communicating with a Node.js/Express REST backend backed by PostgreSQL (Sequelize) and Cloudinary media persistence.
+
+```
+[Media Intake: MP3/WAV Upload or yt-dlp Stream]
+                    │
+                    ▼
+     [Phase 1: Audio & Whisper Speech Extraction]
+                    │
+                    ▼
+     [Phase 2: DeepSeek Hook-Aware Scene Planning (6.0s–7.5s Blocks)]
+                    │
+                    ▼
+      [State: AWAITING_REVIEW] ──► (Creator UI: Atomic Lyric Drag-and-Drop)
+                    │
+                    ▼
+     [Phase 3: Frame Generation (GPT Image 2 + Chorus Deduplication)]
+                    │
+                    ▼
+     [Phase 4: FFmpeg Video & Subtitle Stitching]
+                    │
+                    ▼
+     [Phase 5: Cultural Curation & Context Synthesis]
+                    │
+                    ├─► [VideoEditor: WaveSurfer.js + DeepSeek Copilot [Shift+A]]
+                    └─► [SongExperience: Zero-Drift Video Player + Web Audio API]
+```
+
+#### The 5-Phase Distributed Generation Engine
+* **Intake & Transcription (Whisper API):** Ingests raw audio files or streams via `yt-dlp`. Generates word-level timestamps saved as sub-second segments to establish immutable audio-lyric boundaries.
+* **Hook-Aware Scene Planning (DeepSeek):** Pre-groups raw transcription segments into balanced 6.0s–7.5s cinematic blocks (~28–32 scenes per standard track) to maintain narrative continuity and prevent prompt drift.
+* **Cost-Optimized Frame Generation (OpenAI GPT Image 2):** Renders visual scene frames while querying an in-memory hash cache to identify and reuse repeating chorus visuals.
+* **Asynchronous Video Assembly (FFmpeg & Cloudinary):** Stitches rendered frames, original audio, and styled subtitle layers into an optimized MP4 video stream uploaded to Cloudinary.
+* **Contextual Curation (`aiCurationPlanner.js`):** Automatically synthesizes cultural summaries, extracts Singaporean heritage instruments (Gambus, Erhu, Kompang), and drafts multi-tiered multiple-choice trivia quizzes.
+
+---
+
+### 2.3 Deep-Dive Engineering Challenges & Solutions
+
+#### Challenge 1: Runaway Generative Costs on Repetitive Song Structures
+* **The Problem:** Generating individual images for every 6-second scene across a 3.5-minute track (~30 scenes) causes high API expenses. Generating distinct images for repeating choruses and refrains produces visual discontinuity and consumes unnecessary API quota.
+* **The Solution:** Engineered a chorus deduplication hash cache in `frameGenerator.js`:
+  * Implemented `normalizeCacheKey(lyrics)` to strip punctuation, casing, and whitespace from lyrical hooks.
+  * Prior to initiating image generation calls, the engine computes the lyric hash.
+  * If a matching chorus visual exists, the pipeline re-links the existing Cloudinary asset to the new scene segment with zero redundant image generations.
+* **The Impact:** Slashed image generation API expenses by 20% to 35% per track and significantly decreased Phase 3 pipeline execution latency.
+
+#### Challenge 2: Audio-Subtitle Desynchronization During Creator Re-Planning
+* **The Problem:** Creators needed the ability to modify visual prompts and adjust scene divisions before spending image generation credits. Providing raw numeric millisecond input fields frequently led to human error, resulting in broken subtitle timings and audio desynchronization.
+* **The Solution:** Introduced the `AWAITING_REVIEW` state machine intercept in `generationController.js` and an atomic block data model:
+  * Added a `blocks` JSONB column to the `scene_segments` table in PostgreSQL.
+  * In `GenerationProgress.jsx`, each Whisper line is encapsulated as an immovable atomic block with fixed timestamps (`start_time`, `end_time`).
+  * Creators rearrange lyrics by dragging atomic pill components between scenes or splitting scenes.
+  * The frontend dynamically recalculates scene boundaries ($\text{start}=\min(\text{block.start}), \text{end}=\max(\text{block.end})$) while preserving the underlying audio-to-speech synchronization.
+  * Built an automatic prompt fallback safeguard in the `confirmScenes` endpoint: if a creator approves a newly created scene without writing a visual prompt, DeepSeek automatically backfills a contextual visual description to prevent pipeline failures.
+* **The Impact:** Completely eliminated sub-second caption drift and prevented pipeline crashes from incomplete scene edits.
+
+#### Challenge 3: In-Browser Multitrack Timeline Video Editor & DeepSeek Copilot
+* **The Problem:** Creators required post-generation editing capabilities (modifying prompts, regenerating specific scenes, propagating visual adjustments, and correcting lyrics) without re-running the entire 5-phase pipeline or dealing with clunky controls.
+* **The Solution:** Developed `VideoEditor.jsx` featuring:
+  * **WaveSurfer.js Integration:** Interactive waveform visualization, frame-by-frame filmstrip scrubbing, and keyboard shortcuts (`Space` to toggle playback, `C` for captions, `F` for fullscreen).
+  * **Global Chorus Propagation:** Built an inspector toggle that hashes the normalized lyrics of a scene, identifies all matching chorus repeats across the timeline, and updates all sibling frames to reference the new visual asset simultaneously.
+  * **Natural Language Copilot (`Shift + A`):** Built an embedded assistant drawer powered by DeepSeek (`POST /api/generation/job/:jobId/assistant-command`). Creators issue natural language instructions (e.g., *"Make Scene 4 warmer and propagate across all chorus scenes"*). The backend returns structured non-destructive JSON patches (`UPDATE_PROMPT`, `UPDATE_LYRICS`, `PROPAGATE_CHORUS`).
+  * **Zero-Interruption Hot-Swapping:** Affected scenes pulse with an amber CSS highlight (`@keyframes copilot-pulse`), and changes hot-swap directly into React state without re-initializing the WaveSurfer audio instance or resetting playback timestamps.
+
+#### Challenge 4: Zero-Drift Public Playback & Cultural Synthesis Engine
+* **The Problem:** Standard HTML5 `<track>` implementations flickered when rendering multi-line sub-block lyrics across rapid audio transitions. Cultural context text on public pages also often felt passive and unengaging.
+* **The Solution:** Engineered `SongExperience.jsx` and `CustomVideoPlayer.jsx` featuring:
+  * **Zero-Drift Caption Renderer:** Evaluates active sub-blocks dynamically using strict non-inclusive timestamp bounds ($\text{startTime} \le t < \text{endTime}$), eliminating caption overlap and render flicker.
+  * **Web Audio API Heritage Synthesizer:** Built an interactive sidebar instrument panel combining sample audio playback with synthetic Web Audio oscillator note generation, providing responsive musical feedback without external asset lag.
+  * **Interactive Cultural Trivia (`TriviaHub.jsx`):** Developed an embedded quiz viewer providing immediate answer validation, scoring, and retake workflows.
+
+---
+
+### 2.4 Database Schema & Data Integrity Highlights
+* **`generation_jobs`:** Tracks asynchronous pipeline progress across statuses (`INITIALIZING`, `TRANSCRIBING`, `PLANNING_SCENES`, `AWAITING_REVIEW`, `GENERATING_IMAGES`, `ASSEMBLING_VIDEO`, `CURATING_CONTENT`, `COMPLETED`, `FAILED`).
+* **`scene_segments`:** Stores scene timestamps, visual prompts, and the `blocks` JSONB column holding immutable Whisper sub-block metadata.
+* **`generated_frames`:** Maps rendered frames to Cloudinary media URLs, storing `prompt_hash` references for chorus reuse.
+* **`songs`:** Stores published music assets, pre-populating lyrics and cover images directly from editor handoffs.
+
+---
+
+### 2.5 Measurable Outcomes & Technical Metrics
+* **20%–35% Cost Reduction:** Deterministic chorus deduplication eliminated redundant calls to image generation APIs.
+* **100% Timing Fidelity:** Atomic Whisper block drag-and-drop preserved sub-second caption synchronization across all scene rearrangements.
+* **Sub-Second Hot-Swapping:** DeepSeek Copilot JSON patch integration allowed instant multi-scene updates without re-instantiating timeline audio or disrupting playback.
+
+---
+
+## 3. Upcoming Projects (Awaiting Intake)
 
 > *This section holds staging structures for incoming projects. When raw data, code repositories, or slide decks are provided, translate them into the standard architecture format shown above.*
 
-### 2.1 Project: Shades of SG
-* **Status:** `Awaiting Data Intake`
-* **Target Schema:**
-  * **Repository / Client:** [TBD]
-  * **Role & Ownership:** [TBD]
-  * **Architecture Overview:** [TBD]
-  * **Tech Stack & Libraries:** [TBD]
-  * **Technical Deliverables & Concurrency/Data Mechanics:** [TBD]
-  * **Engineering Trade-offs:** [TBD]
-  * **Measurable Results / Metrics:** [TBD]
-
-### 2.2 Project: Applied AI / Analytics Academic Project (NYP)
+### 3.1 Project: Applied AI / Analytics Academic Project (NYP)
 * **Status:** `Awaiting Data Intake`
 * **Target Schema:** [Pending User Input]
