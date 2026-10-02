@@ -7,6 +7,23 @@
 
 ## Featured Projects
 
+### NumPyGrad — Pure NumPy Autograd & Deep Learning Framework
+**Creator & Sole Engineer — Deep Learning Engine Built from Scratch**
+
+A lightweight, PyTorch-style deep learning framework and reverse-mode automatic differentiation engine engineered from first principles using pure Python and NumPy without external autograd dependencies.
+
+* **Architecture & Technologies:** Python 3.10+, NumPy, Dynamic Computation Graphs, Vectorized `im2col`/`col2im`, Streamlit (4,800+ lines), Pytest (152 tests)
+* **Core Engineering:**
+  * **Zero-Dependency Autograd Core:** Built a dynamic computational DAG in pure Python/NumPy tracking Jacobian-vector product closures (`_backward`) with DFS topological ordering and thread-safe execution guards (`no_grad`).
+  * **Broadcasting Reduction Calculus (`_unbroadcast`):** Implemented automated multi-dimensional tensor gradient shape normalization across broadcasted singleton and leading axes.
+  * **Vectorized Spatial Convolutions (`Conv2D` & `MaxPool2D`):** Engineered fast 2D convolutional layers via `im2col` matrix unfolding and `col2im` gradient scattering in pure NumPy, eliminating Python loop overhead ($>40\times$ speedup).
+  * **Comprehensive Layer & Optimizer Library:** Built `BatchNorm1d` (running EMA stats), `Dropout`, `CrossEntropyLoss` (log-sum-exp numerical stabilization), `AdamW` (decoupled weight decay), and single-file model persistence (`.ng` format).
+  * **4,800+ Line Interactive Streamlit Studio:** Engineered 3 interactive views: 2D Decision Boundary Explorer, Autonomous Neural Pathfinding (Dijkstra potential fields), and Multi-Digit MNIST Canvas with connected-component segmentation.
+  * **Empirical Benchmarks & Verification:** Passed 152 automated Pytest unit tests, achieved **98.04% test accuracy on MNIST** with custom CNN (52.1k params), verified gradients via finite differences ($\text{rel error} < 10^{-5}$), and executed a 60-classifier rover obstacle study.
+* **Documentation:** [Detailed Technical Case Study](docs/portfolio.md#4-case-study-numpygrad--pure-numpy-autograd--deep-learning-framework) | [Resume Deliverables](docs/resume.md#numpygrad--pure-numpy-autograd--deep-learning-framework)
+
+---
+
 ### ROLLOVER — Circular-Retail Gacha Arcade
 **Full-Stack Engineer (Equal Team of 3) — Built in 24 Hours for SDG Open Hack 2026 (Challenge 2 / SDG 12)**
 
@@ -20,7 +37,7 @@ A rapid-prototyped circular-retail discovery platform that diverts stranded ente
   * **Tactile Y2K Gacha Arcade UX:** Developed physical microswitch button physics (`.button-hitbox` zero-shadow depression), CSS 3D perspective box drop/burst animations, and sequential card-pull interactions.
   * **Resilient Hybrid AI Layer:** Integrated server-side `gpt-4.1-nano` to dynamically synthesize quiz dilemmas from live stock metadata, paired with deterministic offline fallback questions to ensure zero runtime downtime and zero price hallucinations.
 * **Media & Demos:** 🎬 [Marketing Campaign Ad Video](docs/portfolio.md#32-media--demo-video-showcase) | 🕹️ [Full Interactive Demo Walkthrough](docs/portfolio.md#32-media--demo-video-showcase)
-* **Documentation:** [Detailed Technical Case Study](docs/portfolio.md#3-case-study-rollover--circular-retail-gacha-arcade-sdg-open-hack-2026) | [Resume Deliverables](docs/resume.md#full-stack-engineer--rollover-sdg-open-hack-2026)
+* **Documentation:** [Detailed Technical Case Study](docs/portfolio.md#3-case-study-rollover--circular-retail-gacha-arcade-sdg-open-hack-2026) | [Resume Deliverables](docs/resume.md#rollover--circular-retail-gacha-arcade-sdg-open-hack-2026)
 
 ---
 
@@ -36,7 +53,7 @@ An end-to-end distributed generative media pipeline and interactive cultural stu
   * Deterministic chorus hash caching (`normalizeCacheKey`) reducing image generation API costs by 20% to 35%
   * Browser-based multitrack timeline editor (`VideoEditor.jsx`) with WaveSurfer.js and DeepSeek AI Copilot drawer (`Shift + A`) applying non-destructive JSON patches without playback interruption
   * Custom HTML5 synchronized caption renderer with zero-drift non-inclusive intervals and Web Audio API heritage instrument synth
-* **Documentation:** [Detailed Technical Case Study](docs/portfolio.md#2-case-study-shades-of-sg--ai-powered-cultural-media-studio) | [Resume Deliverables](docs/resume.md#full-stack-engineer--shades-of-sg)
+* **Documentation:** [Detailed Technical Case Study](docs/portfolio.md#2-case-study-shades-of-sg--ai-powered-cultural-media-studio) | [Resume Deliverables](docs/resume.md#shades-of-sg--ai-powered-cultural-media-studio)
 
 ---
 

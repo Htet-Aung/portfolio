@@ -362,11 +362,249 @@ The platform is built as an ultra-lean, decoupled monorepo (`apps/web/` in React
 
 ---
 
-## 4. Upcoming Projects (Awaiting Intake)
+## 4. Case Study: NumPyGrad — Pure NumPy Autograd & Deep Learning Framework
+
+### 4.1 Executive Summary & Design Philosophy
+* **Repository:** [`Htet-Aung/numpygrad`](https://github.com/Htet-Aung/numpygrad)
+* **Core Role:** Creator & Sole Engineer (First-Principles Engine Architecture, Autograd Core, Modular Layers, Optimizers, Evaluation Suite, Streamlit Studio)
+* **Mission:** Demystify neural networks by making every forward transformation, gradient accumulation hook, graph traversal step, and tensor broadcasting rule explicit, readable, and debuggable in standard Python and NumPy array operations.
+* **Pure Zero-Dependency Standard:** Contains zero external deep learning framework dependencies—no PyTorch, JAX, TensorFlow, or Keras are imported in its core engine or test suite.
+* **Deliberate Non-Goals:**
+  * *No GPU/CUDA Acceleration:* The entire engine is designed for CPU execution, prioritizing algorithmic transparency and clean NumPy mechanics over hardware-specific CUDA kernels.
+  * *No Distributed Scaling:* Optimized for single-machine comprehension, education, and rapid experimentation rather than multi-node cluster training.
+  * *Educational Framework & Technical Artifact:* Built as an applied AI engineering artifact to master deep learning systems from first principles.
+
+---
+
+### 4.2 System Architecture & Codebase Layout
+
+```
+numpygrad/
+├── .agents/skills/gradcheck-verifier/   # Skill for centered finite-difference verification
+├── app/
+│   └── app.py                          # 4,800+ line Streamlit Studio (3 interactive views)
+├── benchmarks/
+│   └── benchmark_cpu.py                # CPU latency & throughput benchmarking vs. PyTorch
+├── docs/
+│   ├── DEPLOYMENT.md                   # Streamlit Community Cloud deployment guide
+│   ├── NAVIGATION_STUDY.md             # Empirical study on classifier accuracy vs. rover safety
+│   ├── PRD.md                          # Product Requirements Document
+│   ├── RULES.md                        # Architectural rules & non-negotiables
+│   ├── TASK_PROGRESS.md                # Phase & milestone development tracker
+│   └── results/                        # CSV, JSON, and visual plots for research studies
+├── examples/
+│   ├── mnist_mlp.ng                    # Serialized pre-trained MNIST MLP checkpoint
+│   ├── plot_navigation_study.py        # Publication plotting script for rover experiments
+│   ├── study_navigation.py             # 10-seed, 60-model known-wall navigation study
+│   ├── train_iris.py                   # Multi-class Iris tabular classifier (>96% accuracy)
+│   ├── train_mnist_cnn.py              # MNIST CNN training (98.04% test accuracy)
+│   ├── train_mnist_mlp.py              # MNIST MLP training (97.16% test accuracy)
+│   └── train_synthetic_2d.py           # 2D non-linear boundary training script
+├── src/numpygrad/
+│   ├── core/
+│   │   ├── __init__.py
+│   │   └── tensor.py                   # Dynamic DAG Tensor, autograd engine, unbroadcasting
+│   ├── data/
+│   │   ├── __init__.py
+│   │   ├── dataloader.py               # DataLoader with mini-batching, shuffling & collation
+│   │   └── dataset.py                  # Dataset & TensorDataset base abstractions
+│   ├── metrics/
+│   │   ├── __init__.py
+│   │   ├── classification.py           # Accuracy and fast bincount confusion matrix
+│   │   └── evaluation.py               # Stratified splitting, Macro F1, NLL, Brier score, ECE
+│   ├── nn/
+│   │   ├── __init__.py
+│   │   ├── convolution.py              # Conv2D (im2col/col2im) & MaxPool2D (argmax routing)
+│   │   ├── layers.py                   # Linear, Sequential, Dropout, BatchNorm1d, Flatten, Activations
+│   │   ├── losses.py                   # MSELoss, CrossEntropyLoss (Log-Sum-Exp), BCEWithLogitsLoss
+│   │   ├── module.py                   # Module, Parameter, Xavier/Kaiming initializers
+│   │   └── summary.py                  # model.summary() ASCII inspector & memory estimator
+│   ├── optim/
+│   │   ├── __init__.py
+│   │   ├── adamw.py                    # AdamW with decoupled weight decay & bias correction
+│   │   ├── optimizer.py                # Base Optimizer class
+│   │   └── sgd.py                      # SGD with Polyak momentum, dampening & Nesterov
+│   ├── utils/
+│   │   ├── __init__.py
+│   │   ├── data.py                     # Convenience re-exports
+│   │   ├── gradcheck.py                # Two-sided numerical finite-difference gradient checker
+│   │   └── pathfinding.py              # Dijkstra geodesic flow fields & multi-ray rover simulator
+│   ├── serialization.py                # .ng ZIP container engine (architecture.json + weights.npz)
+│   └── __init__.py                     # Root API package exports
+├── tests/                              # Pytest test suite (152 passing unit & integration tests)
+├── dev.bat / dev.ps1                   # Single-click local development runners
+└── pyproject.toml                      # Build system & dependencies configuration
+```
+
+---
+
+### 4.3 Deep Dive into Subsystems
+
+#### A. The Autograd Core Engine (`src/numpygrad/core/tensor.py`)
+At the foundation is the `Tensor` class, acting as an active node within a dynamic, directed acyclic computation graph (DAG):
+1. **Dynamic DAG Construction:**
+   * Every tensor encapsulates underlying data (`self.data: np.ndarray`), an accumulated gradient buffer (`self.grad: Optional[np.ndarray]`), a set of parent tensors (`self._prev: Set[Tensor]`), an operation string (`self._op`), and a backward closure (`self._backward: Callable[[], None]`).
+   * Forward operations dynamically link parent dependencies and register local Jacobian-vector products (JVP).
+2. **Topological Reverse-Mode Backpropagation:**
+   * When invoking `backward(gradient=None)`, a depth-first search (`build_topo`) orders all ancestor nodes topologically.
+   * **Stale Gradient Cleansing:** Intermediate nodes (`node._prev` non-empty) have their gradients cleared prior to traversal so reused graphs do not retain stale intermediate values.
+   * Gradients propagate in reverse topological order, accumulating additively (`grad += ...`) across multi-branch pathways.
+3. **Broadcasting Reduction Calculus (`_unbroadcast`):**
+   * Automatically handles NumPy dimension broadcasting (e.g., adding a `(32, 10)` matrix and a `(10,)` bias vector).
+   * Restores gradient shapes to operand dimensions by:
+     1. Summing across leading dimensions added during broadcasting.
+     2. Summing with `keepdims=True` across axes where the target dimension was 1.
+     3. Reshaping back to target shape.
+4. **Matrix Multiplication with Vector Parity:**
+   * `__matmul__` handles 1D $\times$ 1D (dot product), 1D $\times$ 2D, 2D $\times$ 1D, and batched nD multiplications, expanding and squeezing dimensions so that analytical backpropagation remains exact.
+5. **Differentiable Primitives:**
+   * Arithmetic: `+`, `-`, `*`, `/`, `@`, `**`, unary `-`.
+   * Slicing: `__getitem__` utilizes `np.add.at(gx, item, out.grad)` to scatter gradients back into sliced arrays.
+   * Reductions: `sum` and `mean` along arbitrary axes with exact gradient shape restoration via `keepdims` or broadcast expansion.
+   * Transformations: `reshape`, `transpose`, `squeeze`, `unsqueeze`, and `concat` (`cat`).
+   * Execution Guards: `no_grad` and `enable_grad` work as context managers and function decorators backed by thread-safe `contextvars.ContextVar`.
+
+#### B. Modular Neural Network Hierarchy (`src/numpygrad/nn/`)
+Mirrors the PyTorch object model:
+* **`Module` & `Parameter`:**
+  * `Module.__setattr__` detects assignments of `Parameter` and `Module` instances, registering them into `_parameters` and `_modules`.
+  * `Module.parameters()` recursively aggregates trainable parameters across the tree.
+  * `train(mode=True)` and `eval()` propagate training state throughout child modules.
+  * Direct convenience hooks: `model.save(filepath)` and `model.summary(input_shape)` (ASCII output with parameter counts and memory estimation).
+* **Parameter Initializers:** Xavier uniform/normal (Glorot) and Kaiming uniform/normal (He).
+* **Core Layers (`layers.py`):**
+  * `Linear`: $y = xW + b$, initialized with Kaiming uniform weights and bounded uniform bias.
+  * `Sequential`: Ordered container cascading modules.
+  * `Dropout`: Inverted dropout scaling ($1 / (1 - p)$) during training and pass-through identity during evaluation.
+  * `BatchNorm1d`: Normalizes over batch and sequence axes for 2D $(N, C)$ or 3D $(N, C, L)$ tensors. Tracks running mean and variance via exponential moving averages (EMA); uses static statistics during evaluation.
+  * `Flatten`: Flattens arbitrary dimension spans (preserving batch dimension by default) with autograd gradient tracking through `reshape`.
+  * **Activations:** `ReLU`, `Sigmoid` (branch-split to prevent `exp` overflow), `Tanh`, and `GELU` (composite implementation: $0.5x(1 + \tanh(\sqrt{2/\pi}(x + 0.044715x^3)))$).
+
+#### C. Vectorized Spatial Convolutions (`src/numpygrad/nn/convolution.py`)
+Implements vision layers with vectorized sliding-window matrix operations, avoiding slow nested loops:
+* **`im2col_indices`:** Uses `np.lib.stride_tricks.as_strided` to create zero-copy memory views of image patches, transforming $(B, C, H, W)$ inputs into unfolded 2D column matrices $(B, C \cdot k_H \cdot k_W, \text{out}_H \cdot \text{out}_W)$.
+* **`col2im_indices`:** Accumulates column gradients back into spatial dimensions during the backward pass.
+* **`Conv2D`:** Performs 2D convolution as a single matrix multiplication:
+  $$\text{Forward: } Y = W_{\text{flat}} \times \text{im2col}(X) + b$$
+  $$\text{Backward: } dW = dY \times \text{col}^T, \quad db = \sum dY, \quad dX = \text{col2im}(W^T \times dY)$$
+* **`MaxPool2D`:** Extracts spatial pooling windows via stride tricks, computes window maxima, and constructs an argmax indicator mask. The backward pass normalizes tied maximums (`mask / mask_sum`) and scatters upstream gradients back to original coordinates.
+
+#### D. Losses & First-Order Optimizers (`src/numpygrad/nn/losses.py` & `src/numpygrad/optim/`)
+* **`CrossEntropyLoss`:** Combines `LogSoftmax` and negative log-likelihood in a unified formula using the **Log-Sum-Exp trick**:
+  $$\text{LSE}(z_i) = \max(z_i) + \log\left(\sum_j \exp(z_{ij} - \max(z_i))\right), \quad L_i = \text{LSE}(z_i) - z_{i, y_i}$$
+  Its analytical backward pass reduces cleanly to $p - y_{\text{one\_hot}}$ scaled by $\frac{1}{N}$, completely eliminating numerical overflow and underflow.
+* **`BCEWithLogitsLoss`:** Numerically stable binary cross-entropy with built-in sigmoid:
+  $$L_i = \max(x_i, 0) - x_i y_i + \log(1 + \exp(-|x_i|))$$
+* **`MSELoss`:** Mean squared error criterion supporting `'mean'`, `'sum'`, and `'none'` reductions.
+* **`SGD`:** Supports Polyak momentum buffers, dampening, Nesterov acceleration, and L2 weight decay.
+* **`AdamW`:** Implements Loshchilov & Hutter (2019) with decoupled weight decay ($w \leftarrow w - \eta \lambda w$) applied independently of first ($m_t$) and second ($v_t$) moment updates, complete with bias correction factors ($1 - \beta_1^t$ and $1 - \beta_2^t$).
+
+#### E. Single-File `.ng` Container Serialization (`src/numpygrad/serialization.py`)
+Defines a portable model container format:
+* A `.ng` file is a compressed ZIP archive containing:
+  1. `architecture.json`: Describes layer graph, layer types, ordering, and hyperparameters.
+  2. `weights.npz`: Compressed dictionary of NumPy arrays containing all registered parameters and running buffers (such as BatchNorm running statistics).
+* **API:** `save_model(model, filepath)` and `load_model(filepath)` provide single-line checkpoint export and import.
+
+#### F. Data Pipeline & Evaluation Metrics (`src/numpygrad/data/` & `src/numpygrad/metrics/`)
+* **Data Pipeline:** `Dataset` & `TensorDataset` with slicing, length checking, and sample collation; `DataLoader` provides mini-batching, deterministic seeding per epoch, remainder-batch dropping (`drop_last`), and automated tensor collation.
+* **Metrics:** `accuracy` and `confusion_matrix` (implemented using `np.bincount` without Scikit-Learn); `stratified_indices` generates disjoint, class-balanced train/val/test splits; `classification_metrics` evaluates Accuracy, Macro F1, Negative Log-Likelihood (NLL), Brier score, and Expected Calibration Error (ECE).
+
+#### G. Autonomous Neural Pathfinding (`src/numpygrad/utils/pathfinding.py`)
+Utilizes a neural network's classification boundary as a **continuous dynamic artificial potential field** for robotics simulation:
+1. **Neural Geodesic Flow Field (`compute_geodesic_flow`):**
+   * Computes risk probabilities across a 2D grid using the trained network.
+   * Runs an 8-connected Dijkstra distance transform from the destination through low-hazard terrain.
+   * Extracts the negative spatial gradient ($\nabla \text{dist}$) to generate a smooth flow field that guides the rover to the goal without getting trapped in local minima or dead ends.
+2. **Multi-Ray Rover Simulation (`simulate_rover_path`):**
+   * The rover casts five forward radar rays (spanning $[-50^\circ, +50^\circ]$) to evaluate boundary hazards in real time.
+   * If rays detect high-risk boundaries ($P(\text{obstacle}) > 0.5$), repulsive vectors push the rover away.
+   * Momentum smoothing ($0.80 v_{\text{new}} + 0.20 v_{\text{prev}}$) prevents jitter along obstacle corridors.
+
+---
+
+### 4.4 The Interactive Streamlit Studio (`app/app.py`)
+
+A full-featured web dashboard running across 4,800+ lines of Python (`streamlit run app/app.py`):
+
+```
+┌────────────────────────────────────────────────────────────────────────┐
+│                      NumPyGrad Interactive Studio                      │
+├──────────────────────────┬──────────────────────────┬──────────────────┤
+│ 2D Decision Boundaries   │ Autonomous Pathfinding   │ Digit Recognition│
+└──────────────────────────┴──────────────────────────┴──────────────────┘
+```
+
+1. **2D Decision Boundary Explorer:**
+   * **Presets & Custom Canvas:** Train on synthetic geometric datasets (Island in Moat, Checkerboard XOR, Corridor Maze, Double Cross, Spirals) or draw arbitrary clusters on an interactive coordinate canvas.
+   * **Stratified Splits & Early Stopping:** Evaluates an 80/10/10 split and automatically restores the checkpoint with the lowest validation loss.
+   * **Live Training & Click-to-Predict:** Watch decision contours evolve epoch by epoch. Click anywhere on the Plotly contour to evaluate class probabilities under `no_grad()` with gold star markers.
+   * **Capacity Comparison (A vs. B):** Train two architectures (e.g. 1-layer shallow vs. 3-layer deep) concurrently on identical data to observe capacity limits, underfitting, and overfitting side by side.
+   * **Engine Internals Trace:** Inspect intermediate layer activations, the Log-Sum-Exp computation, and parameter matrices.
+2. **Autonomous Neural Pathfinding:**
+   * Steer a simulated rover across the learned obstacle terrain.
+   * Interactive step scrubbing, radar ray visualizations, collision counters, and a side-by-side **Dual-Model Navigation Race** to observe how model capacity affects navigation safety.
+3. **Live Handwritten Digit Recognition:**
+   * Interactive 280x280 canvas with stroke width controls, Undo, Redo, and Clear.
+   * **Multi-Digit Segmentation:** Connected-component labeling (with a pure NumPy fallback) segments multiple handwritten digits across the canvas, normalizing each digit to standard MNIST $28 \times 28$ center-of-mass format.
+   * Runs inference through the pre-trained MLP model (`examples/mnist_mlp.ng`) and outputs top-3 class predictions and probability distributions.
+
+---
+
+### 4.5 Experimental Results & Empirical Benchmarks
+
+#### A. Known-Wall Navigation Study (`docs/NAVIGATION_STUDY.md`)
+To investigate whether higher held-out accuracy translates to safer real-world decision-making, an empirical study was conducted across 60 trained models (10 seeds $\times$ 2 hidden widths $\times$ 3 training noise levels) evaluating 120 simulated rover routes against a ground-truth geometric wall:
+
+| Width | Training Noise | Test Accuracy (Mean $\pm$ SD) | Collision-Free Success | Mean True-Wall Breaches |
+|:---:|:---:|:---:|:---:|:---:|
+| 8 | 0% | $92.1\% \pm 1.9\%$ | 85% | 0.00 |
+| 8 | 10% | $91.7\% \pm 1.2\%$ | 80% | 1.00 |
+| 8 | 20% | $89.5\% \pm 2.5\%$ | 70% | 3.55 |
+| 32 | 0% | $96.1\% \pm 1.2\%$ | 90% | 0.00 |
+| 32 | 10% | $93.2\% \pm 1.9\%$ | 100% | 0.00 |
+| 32 | 20% | $92.2\% \pm 2.2\%$ | 90% | 0.85 |
+
+* **Key Takeaway:** Wider networks consistently improved classification accuracy, but higher accuracy alone did not guarantee a safe path. In one seed, a width-32 model at 0% noise still failed a route due to local boundary geometry, demonstrating the critical difference between offline classification accuracy and closed-loop control reliability.
+
+#### B. MNIST Classification Benchmarks
+Both models were trained on 60,000 images using validation-selected checkpoints and evaluated on the 10,000-image test set:
+* **Multi-Layer Perceptron (MLP):**
+  * Architecture: `Flatten` $\rightarrow$ `Linear(784, 128)` $\rightarrow$ `ReLU` $\rightarrow$ `Linear(128, 64)` $\rightarrow$ `ReLU` $\rightarrow$ `Linear(64, 10)`
+  * Parameters: 109,386
+  * Test Accuracy: **97.16%**
+* **Convolutional Neural Network (CNN):**
+  * Architecture: `Conv2D(1, 8)` $\rightarrow$ `ReLU` $\rightarrow$ `MaxPool2D` $\rightarrow$ `Conv2D(8, 16)` $\rightarrow$ `ReLU` $\rightarrow$ `MaxPool2D` $\rightarrow$ `Flatten` $\rightarrow$ `Linear(784, 64)` $\rightarrow$ `ReLU` $\rightarrow$ `Linear(64, 10)`
+  * Parameters: 52,138 (52.3% fewer parameters than the MLP)
+  * Test Accuracy: **98.04%**
+
+#### C. Finite-Difference Verification & Test Suite (`tests/`)
+* **Finite-Difference Gradient Verification (`gradcheck.py`):** Every differentiable operation is verified against a two-sided central difference numerical gradient:
+  $$\frac{\partial f}{\partial x_i} \approx \frac{f(x + \epsilon e_i) - f(x - \epsilon e_i)}{2\epsilon}, \quad \epsilon = 10^{-5}$$
+  Relative error strictly satisfies:
+  $$\text{rel\_error} = \frac{\|\nabla_{\text{analytical}} - \nabla_{\text{numerical}}\|}{\max(\|\nabla_{\text{analytical}}\|, \|\nabla_{\text{numerical}}\|) + 10^{-15}} < 10^{-5}$$
+* **Test Suite:** **152 passing unit & integration tests** executed via Pytest in ~30 seconds on Python 3.13, covering DAG construction, topological ordering, broadcasting reductions, layer consistency, `.ng` serialization, and DataLoader collation.
+
+---
+
+### 4.6 Engineering Trade-offs & Decisions
+
+| Decision | Chosen Architecture | Alternative Considered | Engineering Rationale & Trade-off |
+| :--- | :--- | :--- | :--- |
+| **Computation Engine** | Pure NumPy & Vectorized Python | C++ Extension / PyTorch Binding | **Chosen:** Maximum algorithmic transparency and deep learning first-principles mastery; zero external C++ build tooling.<br>**Trade-off:** Lacks CUDA GPU kernel acceleration; bounded by single-node CPU throughput. |
+| **Graph Mode** | Dynamic Graph (Define-by-Run) | Static Computation Graph (Define-and-Run) | **Chosen:** Allows intuitive Pythonic debugging, arbitrary dynamic loops, and immediate tensor inspection.<br>**Trade-off:** Slightly higher per-step overhead than static graph compilers (e.g. XLA / TorchScript). |
+| **Convolution Forward** | `im2col` Spatial Unfolding | Nested Python Iteration Loops | **Chosen:** $>40\times$ speedup via BLAS matrix multiplication; unlocks viable multi-epoch training.<br>**Trade-off:** Expanded memory footprint during intermediate column matrix allocation. |
+| **Model Format** | Custom `.ng` (ZIP of JSON + NPZ) | Pickle Serialization (`.pkl`) | **Chosen:** Human-readable architecture inspection and safe deserialization without arbitrary code execution vulnerabilities.<br>**Trade-off:** Requires custom layer-by-layer serialization parser. |
+
+---
+
+## 5. Upcoming Projects (Awaiting Intake)
 
 > *This section holds staging structures for incoming projects. When raw data, code repositories, or slide decks are provided, translate them into the standard architecture format shown above.*
 
-### 4.1 Project: Applied AI / Analytics Academic Project (NYP)
+### 5.1 Project: Academic / Industry Capstone (NYP)
 * **Status:** `Awaiting Data Intake`
 * **Target Schema:** [Pending User Input]
+
+
 
