@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+  <rect width="1200" height="630" fill="#f8f7f3"/>
+  <path d="M64 151H1136M64 544H1136" stroke="#cdd2d4"/>
+  <text x="64" y="110" font-family="Arial, sans-serif" font-weight="700" font-size="60" letter-spacing="-5" fill="#171b20">h<tspan fill="#2447c6">.</tspan></text>
+  <text x="144" y="103" font-family="Arial, sans-serif" font-size="25" fill="#171b20">Htet Aung Khant</text>
+  <text x="1136" y="101" text-anchor="end" font-family="monospace" font-size="17" fill="#4f5962">Singapore / Portfolio</text>
+  <text x="64" y="277" font-family="Arial, sans-serif" font-size="70" font-weight="500" letter-spacing="-3" fill="#171b20">I build useful software</text>
+  <text x="64" y="371" font-family="Arial, sans-serif" font-size="70" font-weight="500" letter-spacing="-3" fill="#2447c6">and the systems behind it.</text>
+  <text x="67" y="449" font-family="Arial, sans-serif" font-size="24" fill="#4f5962">Software engineering + applied AI</text>
+  <text x="64" y="589" font-family="monospace" font-size="16" fill="#4f5962">NumPyGrad · Shades of SG · ROLLOVER · SGEN</text>
+  <path d="M1080 580H1135M1116 561L1135 580L1116 599" fill="none" stroke="#2447c6" stroke-width="3"/>
+</svg>

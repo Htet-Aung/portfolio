@@ -1,0 +1,103 @@
+---
+title: ROLLOVER
+projectId: rollover
+description: A mystery reveal, grounded in real inventory rules.
+intro: A circular-retail hackathon prototype that pairs an arcade-style reveal with deterministic matching, explicit constraints, and a stable server-owned offer.
+role: Full-stack engineer
+teamContext: Three-person team
+stack:
+  - React
+  - Express
+  - JavaScript
+  - xlsx
+repoUrl: https://github.com/Samuwuwuwu/SGD-Open-Hack-26-CMC
+status: published
+---
+
+import ArchitectureDiagram from '../../components/ArchitectureDiagram.astro';
+
+## The short version
+
+ROLLOVER is a team prototype built for SDG Open Hack 2026, exploring responsible consumption through circular retail. The idea is to turn discovery of surplus goods into an arcade-like mystery drop: set a budget, describe preferences, choose a sealed offer, and reveal the products.
+
+I worked as part of an equal three-person engineering team across the matching domain, React/Express integration, and tactile interface. This was a shared delivery, with the user journey and system integration developed together.
+
+The prototype uses illustrative inventory and pricing. Its product story is about a possible way to present surplus goods; the named brands in the demo are not project partners. The engineering focus was making the surprise compatible with clear constraints and a reproducible offer.
+
+## The server owns the contents
+
+The React frontend handles the journey and reveal animation. The Express backend reads a committed inventory workbook, applies constraints, and assembles candidate bundles. Pricing and eligibility stay in the matching domain rather than being chosen by the client or a language model.
+
+<ArchitectureDiagram
+  label="The matching contract"
+  flow="constraints → match → preview → reveal"
+  steps={[
+    {
+      number: '01',
+      title: 'Set constraints',
+      detail: 'Budget, sizing, and exclusions',
+    },
+    {
+      number: '02',
+      title: 'Match inventory',
+      detail: 'Filter, score, and build bundles',
+    },
+    {
+      number: '03',
+      title: 'Sealed preview',
+      detail: 'Hints without product details',
+    },
+    {
+      number: '04',
+      title: 'Verified reveal',
+      detail: 'Recompute the selected offer',
+    },
+  ]}
+  caption="The server chooses the bundle. The client selects an offer and animates its reveal; the animation does not choose or change the products."
+/>
+
+The workbook is parsed into an in-memory catalog at startup. Its structured fields describe prices, stock, sizing, categories, condition, and exclusion tags. That keeps the dataset easy to edit during a prototype sprint and gives the matching engine a consistent input.
+
+The [matching module](https://github.com/Samuwuwuwu/SGD-Open-Hack-26-CMC/blob/main/services/api/src/domain/matching.js) is separate from the API routes. That separation makes the selection rules inspectable without having to follow an animation or request handler to understand them.
+
+## Constraints before preferences
+
+A personality quiz can help a bundle feel relevant, but it should not relax the budget or introduce an item that violates an explicit exclusion.
+
+The matching path first filters the catalog against the hard constraints. It then uses preferences and category diversity to assemble differentiated offers from the eligible pool. Candidate tiers aim at different mixes and budget fractions, while remaining tied to the same catalog.
+
+When the eligible pool is small, the system can return fewer offers. That is more useful than presenting several visually different boxes that contain the same underlying bundle. This behavior also makes sparse inventory a domain condition the interface needs to handle.
+
+The important boundary is between eligibility and preference. A preference can affect ranking among eligible items; it should not make an excluded item eligible again.
+
+## Separate the preview from the reveal
+
+The mystery mechanic needs the client to know enough to make a choice without receiving the product details too early. The preview contract therefore returns aggregate information such as the offer label, total, item count, categories, and clues.
+
+`/api/drops/match` supplies those sealed previews. After the user selects an offer, `/api/drops/reveal` recomputes the deterministic selection and returns its full product records. The client can then run the box opening and card reveal sequence using the result.
+
+This division keeps the reveal behavior attached to the server's matching decision. Changing a client animation or clicking through it quickly should not become a way to choose a different bundle.
+
+It also has a clear limitation: deterministic recomputation assumes a stable inventory input. A real retail service would need stock reservations, snapshot or version handling, and a way to explain an offer that expires. Those concerns were outside the in-memory prototype.
+
+## Give the interaction some character
+
+The interface takes inspiration from capsule toys and arcade controls. Button press states, hard borders, layered CSS transforms, and a staged box opening make the reveal feel more physical than a conventional product list.
+
+The flow moves from recipient and budget to constraints, quiz, sealed offers, opening, individual card reveals, and a final haul breakdown. A quicker reveal path supports people who want the result without stepping through every card. Reduced-motion styling gives the same result with less movement.
+
+CSS was a practical fit for the limited geometry of the box and cards. It kept the interaction close to normal browser layout and avoided adding a separate 3D scene system to the prototype.
+
+The quiz adds another kind of character. A server-side language model can generate wording from eligible inventory tags, while built-in deterministic questions keep the flow usable when live generation is unavailable. The language model writes quiz copy; it does not invent the inventory, prices, or availability used by matching.
+
+## Trade-offs and next steps
+
+**A workbook speeds up prototyping.** Catalog changes are easy to make, but require a reload to become available. A production service would need transactional inventory updates and concurrent stock handling.
+
+**Recomputation keeps the prototype lean.** The backend can reproduce an offer without retaining a shopping-session record. Real checkout would introduce reservation and expiry behavior that this approach alone does not provide.
+
+**A playful reveal needs a direct path.** Motion can support the product idea, while accessible controls and a quicker reveal keep it from blocking the actual result.
+
+The next step would be to test the matching rules against a wider set of inventory edge cases, then explore how reservation and checkout change the offer contract. The prototype's strongest decision is keeping a fun frontend experience connected to explicit, server-owned facts.
+
+[Explore ROLLOVER on GitHub →](https://github.com/Samuwuwuwu/SGD-Open-Hack-26-CMC)

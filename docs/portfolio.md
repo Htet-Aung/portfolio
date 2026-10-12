@@ -26,8 +26,8 @@ This document serves as the single source of truth for all verified engineering 
 |                                                                                       |
 |  +------------------------------------+      +-------------------------------------+  |
 |  |     Infinite Scroll Feed Engine    |      |      Multilingual Assistive Layer   |  |
-|  |  - IntersectionObserver listener   |      |  - SpeechRecognition (EN/ZH/MS/TA)  |  |
-|  |  - Cursor/Batch state accumulator  |      |  - SpeechSynthesis (TTS Utterance)  |  |
+|  |  - Scroll listener / loadMore      |      |  - SpeechRecognition (EN/ZH/MS/TA)  |  |
+|  |  - Page / batch state accumulator  |      |  - SpeechSynthesis (TTS Utterance)  |  |
 |  +-----------------+------------------+      +------------------+------------------+  |
 |                    |                                            |                     |
 |                    | Fetch next batch                           | Emit text / Audio   |
@@ -48,7 +48,7 @@ This document serves as the single source of truth for all verified engineering 
 |   Flask[async] Application Core                                                       |
 |   +-------------------------------------------------------------------------------+   |
 |   | Async Feed & Post Router                                                      |   |
-|   |  - GET  /api/feed?cursor=<id>&limit=10  -> Async batch pagination              |   |
+|   |  - GET  feed endpoint?page=N           -> LIMIT / OFFSET pagination          |   |
 |   |  - POST /api/posts                     -> Non-blocking post creation          |   |
 |   |  - GET  /api/posts/<id>/comments       -> Recursive/nested comments retrieval |   |
 |   |  - POST /api/posts/<id>/comments       -> Non-blocking comment insertion      |   |
@@ -82,12 +82,13 @@ This document serves as the single source of truth for all verified engineering 
 #### A. Asynchronous Feed Router & Non-Blocking CRUD
 * **Mechanism:** Traditional Flask route handlers are synchronous and thread-bound, which risks blocking the WSGI worker during disk-bound database queries. Implemented `Flask[async]` coroutines (`async def`) coupled with `aiosqlite` asynchronous context managers (`async with aiosqlite.connect(...)`).
 * **Nested Comment Model:** Designed an adjacency list schema (`parent_id` referencing `comments.id`) to support recursive comment threads beneath posts without requiring heavy external graph databases.
-* **Concurrency:** By delegating I/O operations to Python’s `asyncio` event loop via `aiosqlite`, concurrent feed requests execute without starving the worker thread pool.
+* **Concurrency:** `aiosqlite` supplies awaitable database operations within the request handler. An async Flask handler still occupies a worker for the request under ordinary WSGI deployment; this implementation alone does not establish higher concurrent-request throughput.
 
 #### B. Batch-Paginated Infinite Scrolling
-* **Mechanism:** Built an infinite scrolling feed component in React 18 leveraging `IntersectionObserver` to trigger incremental data fetches when sentinel elements intersect the viewport.
-* **Data Flow:** Requests fetch chunks constrained by `limit` and `cursor` (e.g., `last_seen_post_id`), preventing full-table scans and payload bloat.
-* **State Management:** Appended new chunks into the feed state array with deduplication checks, keeping initial page load payloads minimal and avoiding memory degradation over long user browsing sessions.
+* **Mechanism:** The React feed hook uses a scroll listener to call `loadMore()` near the end of the content, with an in-flight guard to limit overlapping requests.
+* **Data Flow:** Requests use `?page=N`; Flask queries use `LIMIT` and `OFFSET`. The public implementation does not use cursor pagination or `IntersectionObserver`.
+* **State Management:** Appended batches are deduplicated by post ID. Page, loading, and end-of-feed state reset when the endpoint changes. Incremental loading limits initial fetch size, while accumulated posts still grow in memory and the DOM.
+* **Source correction (2026-10-10):** Checked [`infinite_feed.js`](https://github.com/Generic-Inc/SGEN/blob/main/src/client/src/static/infinite_feed.js) and [`posts.py`](https://github.com/Generic-Inc/SGEN/blob/main/src/server/modules/posts.py). Earlier notes describing cursor queries and observer sentinels were inaccurate.
 
 #### C. Multilingual Assistive Voice Layer
 * **Speech-to-Text (`SpeechRecognition`):** Integrated browser-native `SpeechRecognition` API supporting 4 official languages of Singapore: English (`en-SG`/`en-US`), Mandarin Chinese (`zh-CN`), Malay (`ms-MY`), and Tamil (`ta-SG`). Implemented interim result streaming into the post composition input area with error fallback handling for non-supported browsers.
@@ -241,14 +242,14 @@ The platform runs as a decoupled Single Page Application (React + Vite) communic
 |  Duration: 60s High-Energy Promo                        Duration: 3m Full Flow Walkthrough    |
 |  Focus: Dopamine unboxing, value proposition,           Focus: Budget ceiling -> Quiz ->      |
 |         retailer brand protection & circularity               Box unboxing -> Haul inspection |
-|  Link: [Watch Marketing Ad (1080p)]                     Link: [Watch Live Walkthrough]        |
+|  Link: pending public URL                                Link: pending public URL             |
 +-----------------------------------------------------------------------------------------------+
 ```
 
 * 🎬 **Marketing Campaign Ad Video:** High-velocity video spot highlighting how circular retail can feel like an arcade unboxing game rather than a preachy environmental lecture, detailing retailer brand-protection modes and multi-brand cross-category drops.  
-  *(Embed/Link: `docs/assets/rollover_ad_campaign.mp4` / [Watch Campaign Video](#))*
+  *(Media asset and public playback URL pending.)*
 * 🕹️ **Full Interactive Demo Walkthrough:** Complete screen recording covering the 7-step customer journey: entering recipient and budget limits, explicit allergen/size constraints, inventory-driven personality quiz, 4-tier sealed box comparisons, CSS 3D box drop/burst unboxing, sequential card pulls, and detailed haul inspection with open-source photo attributions.  
-  *(Embed/Link: `docs/assets/rollover_demo_walkthrough.mp4` / [Watch Demo Walkthrough](#))*
+  *(Media asset and public playback URL pending.)*
 
 ---
 
@@ -605,6 +606,4 @@ Both models were trained on 60,000 images using validation-selected checkpoints 
 ### 5.1 Project: Academic / Industry Capstone (NYP)
 * **Status:** `Awaiting Data Intake`
 * **Target Schema:** [Pending User Input]
-
-
 

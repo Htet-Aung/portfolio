@@ -1,0 +1,50 @@
+---
+import Arrow from './Arrow.astro';
+interface Props {
+  label?: string;
+  flow?: string;
+  steps?: Array<{ number: string; title: string; detail: string }>;
+  caption?: string;
+}
+const {
+  label = 'The training loop',
+  flow = 'forward → loss → backward → step',
+  caption = 'Tensor operations build the graph during the forward pass. The loss seeds a backward traversal; the optimizer then updates the model parameters.',
+  steps = [
+    { number: '01', title: 'Tensor', detail: 'Data + gradient + parents' },
+    {
+      number: '02',
+      title: 'Dynamic graph',
+      detail: 'Operations record dependencies',
+    },
+    {
+      number: '03',
+      title: 'Backward pass',
+      detail: 'Reverse topological traversal',
+    },
+    {
+      number: '04',
+      title: 'Optimizer',
+      detail: 'Update registered parameters',
+    },
+  ],
+} = Astro.props;
+---
+
+<figure class="architecture-figure">
+  <div class="diagram-label">
+    <span class="eyebrow">{label}</span>
+    <code>{flow}</code>
+  </div>
+  <ol class="architecture-steps">
+    {steps.map((step, i) => (
+      <li>
+        <span class="step-number">{step.number}</span>
+        <strong>{step.title}</strong>
+        <span>{step.detail}</span>
+        {i < steps.length - 1 && <Arrow />}
+      </li>
+    ))}
+  </ol>
+  <figcaption>{caption}</figcaption>
+</figure>

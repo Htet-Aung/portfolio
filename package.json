@@ -1,0 +1,35 @@
+{
+  "name": "htet-portfolio",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=22.12.0"
+  },
+  "scripts": {
+    "dev": "astro dev --host 127.0.0.1",
+    "start": "astro dev --host 127.0.0.1",
+    "check": "astro check",
+    "build": "astro build",
+    "preview": "astro preview --host 127.0.0.1",
+    "verify": "node scripts/verify-build.mjs",
+    "test": "node --test scripts/deployment-config.test.mjs",
+    "social:generate": "node scripts/generate-social-card.mjs",
+    "format": "prettier --write src scripts .github astro.config.mjs package.json tsconfig.json",
+    "format:check": "prettier --check src scripts .github astro.config.mjs package.json tsconfig.json"
+  },
+  "dependencies": {
+    "@astrojs/mdx": "8.0.3",
+    "@fontsource/ibm-plex-mono": "5.3.0",
+    "@fontsource/inter": "5.3.0",
+    "astro": "7.3.8"
+  },
+  "devDependencies": {
+    "@astrojs/check": "0.9.10",
+    "parse5": "8.0.1",
+    "prettier": "3.9.10",
+    "prettier-plugin-astro": "1.1.1",
+    "sharp": "0.35.5",
+    "typescript": "~5.9.3"
+  }
+}

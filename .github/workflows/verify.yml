@@ -1,0 +1,40 @@
+name: Verify portfolio
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
+        with:
+          node-version: '24'
+          cache: npm
+      - run: npm ci
+      - run: npm run format:check
+      - run: npm test
+      - run: npm run check
+      - run: npm run build
+      - run: npm run verify
+      - name: Verify production metadata fixture
+        env:
+          SITE_URL: https://example.com
+          SITE_INDEXING: 'true'
+        run: |
+          npm run build -- --outDir .local/release-fixture
+          npm run verify -- .local/release-fixture
+      - name: Verify inherited settings on a preview branch
+        env:
+          SITE_URL: https://example.com
+          SITE_INDEXING: 'true'
+          CF_PAGES: '1'
+          CF_PAGES_BRANCH: ci-preview
+        run: |
+          npm run build -- --outDir .local/preview-fixture
+          npm run verify -- .local/preview-fixture

@@ -1,0 +1,23 @@
+---
+import SiteLayout from '../layouts/SiteLayout.astro';
+import Arrow from '../components/Arrow.astro';
+---
+
+<SiteLayout
+  title="Page not found — Htet Aung Khant"
+  description="This page could not be found. Return to Htet's selected work."
+  noindex
+>
+  <section class="container not-found">
+    <p class="eyebrow">404 / A small detour</p>
+    <h1>
+      This page
+      <br />
+      isn't here<span class="accent">.</span>
+    </h1>
+    <p>You can head back to my work, or get in touch below.</p>
+    <a class="button button-primary" href="/">
+      Back to home <Arrow />
+    </a>
+  </section>
+</SiteLayout>

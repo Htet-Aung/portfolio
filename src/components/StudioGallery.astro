@@ -1,0 +1,58 @@
+---
+import { Image } from 'astro:assets';
+import boundary from '../assets/work/numpygrad/studio_decision_boundary.png';
+import digits from '../assets/work/numpygrad/studio_mnist_canvas.png';
+import navigation from '../assets/work/numpygrad/studio_neural_pathfinding.png';
+
+const captures = [
+  {
+    image: boundary,
+    name: 'Decision boundary explorer',
+    file: 'studio_decision_boundary.png',
+    alt: 'NumPyGrad studio with model controls, a learned boundary through a corridor-shaped dataset, and loss and accuracy curves.',
+    description:
+      'Training controls sit beside the learned boundary and convergence curves. The numbers shown belong to the captured session.',
+  },
+  {
+    image: digits,
+    name: 'Handwritten digit recognition',
+    file: 'studio_mnist_canvas.png',
+    alt: 'NumPyGrad drawing canvas containing handwritten digits six and seven, with separate predictions for the two connected components.',
+    description:
+      'Canvas input is segmented into individual digits and presented with a separate prediction for each component.',
+  },
+  {
+    image: navigation,
+    name: 'Neural pathfinding',
+    file: 'studio_neural_pathfinding.png',
+    alt: 'NumPyGrad rover view showing a corridor map, start and target markers, route controls, and radar diagnostics.',
+    description:
+      'A learned obstacle field is paired with route controls and diagnostics to inspect the rover simulation.',
+  },
+];
+---
+
+<div class="studio-gallery">
+  {captures.map((capture) => (
+    <figure class="studio-capture">
+      <Image
+        src={capture.image}
+        alt={capture.alt}
+        widths={[480, 960, 1440]}
+        sizes="(max-width: 767px) calc(100vw - 40px), (max-width: 1100px) calc(100vw - 319px), 760px"
+        format="webp"
+        loading="lazy"
+        decoding="async"
+      />
+      <figcaption>
+        <strong>{capture.name}</strong>
+        <p>{capture.description}</p>
+        <a
+          href={`https://github.com/Htet-Aung/numpygrad/blob/main/docs/${capture.file}`}
+        >
+          Original repository capture
+        </a>
+      </figcaption>
+    </figure>
+  ))}
+</div>

@@ -1,0 +1,12 @@
+---
+import type { HTMLAttributes } from 'astro/types';
+interface Props extends HTMLAttributes<'pre'> {}
+const { 'aria-label': label = 'Code example', ...attributes } = Astro.props;
+---
+
+<pre
+  {...attributes}
+  tabindex="0"
+  role="region"
+  aria-label={label}
+><slot /></pre>

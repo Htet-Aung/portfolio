@@ -1,0 +1,101 @@
+---
+title: SGEN
+projectId: sgen
+description: A social feed with more ways to take part.
+intro: An intergenerational social platform bringing posts, comments, browser speech tools, slang explanations, and clearer outbound-link choices into one feed.
+role: Feed & assistive systems developer
+teamContext: Team project
+stack:
+  - React
+  - Flask
+  - SQLite
+  - Web Speech API
+repoUrl: https://github.com/Generic-Inc/SGEN
+status: published
+---
+
+import ArchitectureDiagram from '../../components/ArchitectureDiagram.astro';
+
+## The short version
+
+SGEN is a team social platform aimed at making conversations between generations easier to join. The work combines an ordinary feed with tools for people who may prefer speaking to typing, listening to reading, or getting a quick explanation of unfamiliar slang.
+
+My focus was the posts and feed workflow and its assistive layers. I worked on post and comment interactions, incremental feed loading, speech input and read-aloud, dictionary-based slang explanations, and an outbound-link confirmation experience. The wider platform was a team deliverable.
+
+The goal was to bring those tools into the existing conversation rather than make people switch to a separate assistance flow every time they wanted to read or reply.
+
+## Keep the feed and assistance connected
+
+The React client requests posts from Flask API handlers backed by SQLite storage. The feed hook manages loading, pagination, and appending results. Assistive features then act on the same post content that the normal interface displays.
+
+<ArchitectureDiagram
+  label="The feed and assistive layers"
+  flow="request → query → render → assist"
+  steps={[
+    {
+      number: '01',
+      title: 'Request a page',
+      detail: 'Loading and end-of-feed state',
+    },
+    { number: '02', title: 'Fetch posts', detail: 'Flask handlers and SQLite' },
+    {
+      number: '03',
+      title: 'Render the feed',
+      detail: 'Posts, replies, and actions',
+    },
+    {
+      number: '04',
+      title: 'Offer assistance',
+      detail: 'Speech, explanations, link choice',
+    },
+  ]}
+  caption="Feed data comes from the API. Browser speech tools and dictionary explanations add ways to interact with the rendered content without replacing the ordinary reading and typing path."
+/>
+
+Post and comment actions stay connected to their records rather than creating a second data model for assistance. A read-aloud action reads the post text; dictation updates the composition input; a slang explanation augments an unfamiliar phrase.
+
+This is a useful design boundary: assistance changes how someone interacts with the content, while the underlying conversation remains the same.
+
+## Load more without duplicating posts
+
+The current feed implementation uses page-based requests. A scroll listener calls `loadMore()` when the scroll position approaches the end of the content. The backend uses `LIMIT` and `OFFSET` to return the next batch.
+
+The hook tracks the current page, whether more posts are available, and whether a request is already in flight. A request guard helps avoid overlapping calls caused by repeated scroll events. When a batch arrives, its post IDs are compared with the IDs already in state before new records are appended.
+
+These details matter because the interface can otherwise show duplicate posts or repeatedly request the same page. Changing the feed endpoint resets the page and post state so that a different community starts from its first batch.
+
+The [feed hook](https://github.com/Generic-Inc/SGEN/blob/main/src/client/src/static/infinite_feed.js) makes that behavior inspectable. The implementation is page-based; it does not use cursor pagination or an intersection-observer sentinel.
+
+For a larger or rapidly changing feed, I would consider keyset pagination, cancellation or stale-response handling when switching feeds, and virtualization for long sessions. Incremental loading limits the first request, but does not by itself bound the amount of content eventually kept in the DOM.
+
+## Let people speak and listen
+
+The composition interface offers browser speech recognition with language selection and interim text. Dictation feeds into the same input that supports ordinary typing, so the person can review or correct the result before submitting a post.
+
+Read-aloud uses `SpeechSynthesisUtterance` for the post's text. Playback state needs cleanup when a component is removed or another utterance begins; otherwise audio can continue after the interface has moved on.
+
+The browser APIs are a lightweight integration point, but speech recognition and the available voices vary across browsers, devices, and languages. They are enhancements to the typing and reading paths, not a guarantee of equivalent voice support everywhere. The language options also do not mean every recognition result is correct.
+
+Keeping those limitations visible in the implementation helped me treat voice as another input and output method with fallbacks, rather than a replacement for the base interface.
+
+## Explain a term, make a link choice clearer
+
+The slang highlighter matches post text against a local dictionary. Matched terms can present a short explanation without a server round trip. Longer phrases are considered before shorter terms so a phrase is not needlessly split into separate matches.
+
+This approach is predictable and easy to inspect, while requiring the dictionary to be maintained. It is a vocabulary aid, not a general interpretation system for every context in which a word might appear.
+
+The same content layer handles outbound links through a confirmation dialog. It shows the destination and asks the person to choose whether to continue. That creates an opportunity to inspect an unfamiliar address before leaving the app.
+
+A confirmation step is not a phishing detector and should not imply that a destination has been verified as safe. Its value is the clearer decision at the point of navigation. The [content component](https://github.com/Generic-Inc/SGEN/blob/main/src/client/src/components/sub%20components/slang_highlighter.jsx) contains the dictionary highlighting and link interaction.
+
+## Trade-offs and next steps
+
+**Async handlers express the database workflow.** Awaiting database operations keeps the route code clear, but does not establish a throughput guarantee. Request capacity still depends on the server deployment and storage behavior.
+
+**SQLite fits the prototype.** It keeps persistence simple, with write concurrency and query performance becoming more important as usage grows.
+
+**Local explanations have a maintenance cost.** A dictionary avoids an extra service call, while needing deliberate updates and context-aware wording.
+
+Next, I would test the assistive controls with keyboard and screen-reader users, broaden browser coverage for speech, and strengthen the feed's behavior around rapid context changes. The principle I would keep is offering help where the conversation already happens.
+
+[Explore SGEN on GitHub →](https://github.com/Generic-Inc/SGEN)

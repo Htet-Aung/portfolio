@@ -1,0 +1,116 @@
+---
+import { getCollection, render } from 'astro:content';
+import type { CollectionEntry } from 'astro:content';
+import SiteLayout from '../../layouts/SiteLayout.astro';
+import ProjectCover from '../../components/ProjectCover.astro';
+import Arrow from '../../components/Arrow.astro';
+import { projects } from '../../data/projects';
+import { site } from '../../data/site';
+import { getPublishedProjects } from '../../data/work';
+import CodeBlock from '../../components/CodeBlock.astro';
+
+export async function getStaticPaths() {
+  const entries = await getCollection(
+    'work',
+    ({ data }) => data.status === 'published',
+  );
+  return entries.map((entry) => ({
+    params: { slug: entry.id },
+    props: { entry },
+  }));
+}
+
+interface Props {
+  entry: CollectionEntry<'work'>;
+}
+const { entry } = Astro.props;
+const { Content, headings } = await render(entry);
+const { data } = entry;
+const contents = headings.filter((heading) => heading.depth === 2);
+const project = projects.find(({ id }) => id === data.projectId)!;
+const published = (await getPublishedProjects()).filter(
+  (item) => item.caseStudy,
+);
+const nextProject =
+  published[
+    (published.findIndex(({ id }) => id === data.projectId) + 1) %
+      published.length
+  ];
+---
+
+<SiteLayout title={`${data.title} — ${site.name}`} description={data.intro}>
+  <div class="container case-page">
+    <header class="case-header">
+      <a class="text-link back-link" href="/#work">
+        <Arrow direction="left" />
+        Back to selected work
+      </a>
+      <p class="eyebrow">
+        Case study {project.number} / {project.category}
+      </p>
+      <h1>
+        {data.title}
+        <span class="accent">.</span>
+      </h1>
+      <p class="case-deck">{data.description}</p>
+      <p class="case-intro">{data.intro}</p>
+      <div class="case-metadata">
+        <div>
+          <span class="mono">My role</span>
+          <strong>{data.role}</strong>
+        </div>
+        <div>
+          <span class="mono">Collaboration</span>
+          <strong>{data.teamContext}</strong>
+        </div>
+        <div>
+          <span class="mono">Built with</span>
+          <strong>{data.stack.join(' · ')}</strong>
+        </div>
+        {data.repoUrl && (
+          <a class="text-link" href={data.repoUrl}>
+            View source <Arrow direction="up-right" />
+          </a>
+        )}
+      </div>
+    </header>
+    <ProjectCover project={data.projectId} large />
+    <div class="case-body">
+      <aside class="case-contents">
+        <nav aria-label="On this page">
+          <p class="eyebrow">On this page</p>
+          <ol>
+            {contents.map((heading, i) => (
+              <li>
+                <a href={`#${heading.slug}`}>
+                  <span class="mono">{String(i + 1).padStart(2, '0')}</span>
+                  {heading.text}
+                </a>
+              </li>
+            ))}
+          </ol>
+        </nav>
+        {data.repoUrl && (
+          <a class="text-link contents-source" href={data.repoUrl}>
+            Explore the repository <Arrow direction="up-right" />
+          </a>
+        )}
+      </aside>
+      <article class="prose">
+        <Content components={{ pre: CodeBlock }} />
+      </article>
+    </div>
+    <div class="case-end">
+      <div>
+        <p class="eyebrow">Next project / {nextProject.category}</p>
+        <h2>
+          {nextProject.title}
+          <span class="accent">.</span>
+        </h2>
+      </div>
+      <a class="button button-primary" href={nextProject.caseStudy}>
+        Read next case study <Arrow />
+      </a>
+    </div>
+  </div>
+</SiteLayout>

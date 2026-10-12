@@ -1,0 +1,103 @@
+---
+title: NumPyGrad
+projectId: numpygrad
+description: A deep learning engine, built from first principles.
+intro: A Python and NumPy framework that makes the mechanics of learning visible — from the computation graph to the optimizer step.
+role: Creator & sole engineer
+teamContext: Solo project
+stack:
+  - Python
+  - NumPy
+  - Streamlit
+  - Pytest
+repoUrl: https://github.com/Htet-Aung/numpygrad
+status: published
+---
+
+import ArchitectureDiagram from '../../components/ArchitectureDiagram.astro';
+import StudioGallery from '../../components/StudioGallery.astro';
+
+## The short version
+
+Deep learning libraries make it easy to train a model. I wanted to understand the machinery they usually hide: how an operation becomes part of a graph, how gradients find their way back to shared inputs, and how those gradients become a parameter update.
+
+I built NumPyGrad as a solo project, using Python and NumPy for the core engine. It includes reverse-mode automatic differentiation, a modular layer library, vectorized convolutions, optimizers, and model serialization. A Streamlit studio connects those internals to decision boundaries, handwritten-digit recognition, and simulated rover navigation.
+
+The result is a framework I can inspect from end to end. The goal was to make the path from a tensor operation to a trained model understandable.
+
+## A system you can follow
+
+The core separates three responsibilities. A `Tensor` owns data and tracks dependencies. Layers compose tensors into a model and register trainable parameters. Optimizers update those parameters after the backward pass.
+
+<ArchitectureDiagram />
+
+Every forward operation records its parent tensors and a local backward function. Calling `backward()` orders the reachable graph, then visits it in reverse. That keeps a node's gradient contributions together before its own backward function runs.
+
+The model API builds on this foundation. `Module` and `Parameter` registration allow nested layers to expose their trainable values. Training and evaluation modes propagate through the same hierarchy, so dropout and batch normalization can behave differently at inference time.
+
+## Getting gradients right
+
+The difficult part of autograd is often the ordinary-looking expression. An input can be used by two branches. A bias vector can be broadcast across an entire batch. A slice can select the same index more than once. Each needs a backward rule that respects what the forward operation actually did.
+
+### Shared inputs need accumulation
+
+If two paths lead back to the same tensor, both contribute to its derivative. The engine adds contributions into the gradient buffer rather than replacing it. Reverse topological traversal ensures downstream paths are processed before moving farther upstream.
+
+Intermediate gradient buffers are cleared before a new backward traversal. This separates reused graph bookkeeping from the deliberate accumulation of leaf parameter gradients across training steps.
+
+### Broadcasting needs an inverse
+
+Adding a bias of shape `(10,)` to a batch of shape `(32, 10)` is natural in NumPy. During backpropagation, the bias needs a gradient of shape `(10,)`, with the batch contributions summed together.
+
+I implemented `_unbroadcast` to reduce newly introduced leading axes and axes expanded from singleton dimensions, then reshape the result to the operand's original shape. That lets arithmetic operations share one consistent shape-restoration rule.
+
+### Verify the mathematics independently
+
+The gradient checker compares analytical derivatives with centered finite differences: perturb an input in each direction and compare the change in the scalar output. This is useful because the numerical check does not reuse the engine's backward implementation.
+
+The test suite also exercises graph ordering, branching, broadcast reductions, layers, and serialization. The [gradient checker](https://github.com/Htet-Aung/numpygrad/blob/main/src/numpygrad/utils/gradcheck.py) and [tests](https://github.com/Htet-Aung/numpygrad/tree/main/tests) are the places to inspect those checks.
+
+## Making convolution practical
+
+A direct convolution implementation spends a lot of time looping over image patches in Python. I used `im2col` to unfold those patches into a matrix, then expressed convolution as a matrix multiplication handled by NumPy's numerical backend.
+
+```text
+Image patches → im2col → matrix multiplication → feature maps
+Input gradients ← col2im ← backward matrix multiplication
+```
+
+The backward pass computes weight gradients from the unfolded input, then uses `col2im` to accumulate overlapping patch gradients into the original image coordinates. Overlap matters: a pixel can belong to several receptive fields, and each contribution must be added back.
+
+This design trades intermediate memory for vectorized computation. It keeps the operation readable while avoiding a Python loop for every multiply. The [convolution module](https://github.com/Htet-Aung/numpygrad/blob/main/src/numpygrad/nn/convolution.py) contains both directions of that transformation.
+
+## From engine to experiment
+
+I wanted the engine to be usable beyond a small gradient demonstration. The surrounding library includes `Linear`, `Conv2D`, `MaxPool2D`, `BatchNorm1d`, dropout, and activation functions, plus SGD and AdamW optimizers.
+
+Cross-entropy uses the log-sum-exp formulation to reduce numerical instability when logits have large magnitudes. AdamW applies weight decay separately from the moment-based gradient update. Model checkpoints use a `.ng` archive with readable architecture metadata and NumPy weight arrays, keeping the structure and learned parameters together.
+
+The Streamlit studio then gives the framework three ways to be explored:
+
+- **Decision boundaries:** train on geometric datasets, compare model capacity, and inspect how predictions change across the input space.
+- **Digit recognition:** segment handwritten input, normalize it to the model's expected format, and inspect class predictions.
+- **Neural pathfinding:** combine a learned obstacle boundary with a geodesic flow field and observe the resulting rover route.
+
+The navigation work raised a useful question: does a stronger classifier necessarily make a safer controller? Aggregate accuracy alone cannot explain every route failure. The shape of a boundary and the behavior of the controller also matter. That distinction is documented in the [navigation study](https://github.com/Htet-Aung/numpygrad/blob/main/docs/NAVIGATION_STUDY.md).
+
+## Inside the studio
+
+These captures come from the NumPyGrad project repository. They show how the same engine supports boundary exploration, digit inference, and a navigation simulation. Displayed predictions and training statistics describe the captured sessions.
+
+<StudioGallery />
+
+## Trade-offs and next steps
+
+**Transparency over hardware reach.** NumPyGrad is a CPU-oriented learning and experimentation framework. That makes tensor operations easy to inspect, while limiting the scale of workloads it can run comfortably.
+
+**Dynamic graphs over compilation.** Define-by-run graph construction follows ordinary Python execution and makes debugging direct. It also carries graph bookkeeping overhead on each forward pass.
+
+**A readable format with explicit support.** JSON architecture metadata and NumPy arrays make a checkpoint easier to inspect than an opaque Python object. The loader still needs an explicit mapping for each supported layer, and that mapping has to evolve with the library.
+
+Next, I would focus on clearer profiling of graph overhead and intermediate convolution memory, alongside more examples that trace a complete training step. The part I want to preserve is the ability to follow a prediction all the way back to the parameters that produced it.
+
+[Explore NumPyGrad on GitHub →](https://github.com/Htet-Aung/numpygrad)

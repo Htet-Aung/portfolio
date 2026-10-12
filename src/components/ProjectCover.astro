@@ -1,0 +1,179 @@
+---
+import type { ProjectId } from '../data/projects';
+interface Props {
+  project: ProjectId;
+  large?: boolean;
+}
+const { project, large = false } = Astro.props;
+
+const layers = [
+  { x: 104, ys: [93, 161, 229] },
+  { x: 228, ys: [59, 127, 195, 263] },
+  { x: 352, ys: [93, 161, 229] },
+  { x: 476, ys: [127, 195] },
+];
+---
+
+<div
+  class:list={['project-cover', `cover-${project}`, { 'cover-large': large }]}
+  aria-hidden="true"
+>
+  {project === 'numpygrad' && (
+    <>
+      <div class="cover-topline">
+        <span>NumPyGrad / Computational graph</span>
+        <span>Forward → Backward</span>
+      </div>
+      <svg class="network-graphic" viewBox="0 0 580 322" fill="none">
+        {layers
+          .slice(0, -1)
+          .map((layer, i) =>
+            layer.ys.map((y) =>
+              layers[i + 1].ys.map((nextY) => (
+                <path
+                  d={`M${layer.x} ${y}L${layers[i + 1].x} ${nextY}`}
+                  stroke="currentColor"
+                  stroke-opacity=".22"
+                />
+              )),
+            ),
+          )}
+        <path
+          d="M104 161 228 127 352 161 476 127"
+          stroke="currentColor"
+          stroke-width="2"
+        />
+        {layers.map((layer, i) =>
+          layer.ys.map((y, j) => (
+            <>
+              <circle
+                cx={layer.x}
+                cy={y}
+                r="18"
+                fill="#2447c6"
+                stroke="currentColor"
+                stroke-opacity={j === 1 ? '1' : '.6'}
+              />
+              <text
+                x={layer.x}
+                y={y + 4}
+                text-anchor="middle"
+                fill="currentColor"
+                font-size="12"
+                font-family="monospace"
+              >
+                {i === 0 ? 'x' : i === 3 ? 'y' : 'Σ'}
+              </text>
+            </>
+          )),
+        )}
+        <text
+          x="104"
+          y="309"
+          text-anchor="middle"
+          fill="currentColor"
+          font-size="11"
+          letter-spacing="1.8"
+          font-family="monospace"
+        >
+          INPUT
+        </text>
+        <text
+          x="290"
+          y="309"
+          text-anchor="middle"
+          fill="currentColor"
+          font-size="11"
+          letter-spacing="1.8"
+          font-family="monospace"
+        >
+          HIDDEN LAYERS
+        </text>
+        <text
+          x="476"
+          y="309"
+          text-anchor="middle"
+          fill="currentColor"
+          font-size="11"
+          letter-spacing="1.8"
+          font-family="monospace"
+        >
+          OUTPUT
+        </text>
+      </svg>
+      <div class="cover-bottomline">
+        <span>Built from first principles</span>
+        <span>∂L / ∂w</span>
+      </div>
+    </>
+  )}
+  {project === 'shades-of-sg' && (
+    <>
+      <div class="cover-topline">
+        <span>Shades of SG / Cultural media</span>
+        <span>Sound → Story</span>
+      </div>
+      <div class="shades-wordmark">
+        shades<span>of sg.</span>
+      </div>
+      <div class="waveform">
+        {Array.from({ length: 49 }, (_, i) => (
+          <span
+            style={`--bar: ${18 + Math.abs(Math.sin(i * 0.64) * Math.cos(i * 0.17)) * 78}%`}
+          ></span>
+        ))}
+      </div>
+      <div class="cover-bottomline">
+        <span>Heritage, reimagined</span>
+        <span>♪</span>
+      </div>
+    </>
+  )}
+  {project === 'rollover' && (
+    <>
+      <div class="cover-topline">
+        <span>ROLLOVER / Circular retail</span>
+        <span>Play → Roll → Reveal</span>
+      </div>
+      <div class="rollover-wordmark">
+        ROLL
+        <br />
+        <span>OVER</span>
+        <svg viewBox="0 0 70 70" fill="none">
+          <path
+            d="M13 38a24 24 0 1 0 9-22M12 12v19h19"
+            stroke="currentColor"
+            stroke-width="5"
+          />
+        </svg>
+      </div>
+      <div class="cover-bottomline">
+        <span>Good product. New possibility.</span>
+        <span>↻</span>
+      </div>
+    </>
+  )}
+  {project === 'sgen' && (
+    <>
+      <div class="cover-topline">
+        <span>SGEN / Across generations</span>
+        <span>A little more connected</span>
+      </div>
+      <div class="sgen-graphic">
+        <span class="speech-bubble speech-one">
+          hello<span>EN</span>
+        </span>
+        <span class="speech-bubble speech-two">
+          你好<span>ZH</span>
+        </span>
+        <span class="sgen-wordmark">
+          sgen<span>↗</span>
+        </span>
+      </div>
+      <div class="cover-bottomline">
+        <span>Different generations. Shared stories.</span>
+        <span>✳</span>
+      </div>
+    </>
+  )}
+</div>

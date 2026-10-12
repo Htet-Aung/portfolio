@@ -1,0 +1,83 @@
+---
+import Arrow from './Arrow.astro';
+import { site } from '../data/site';
+
+const onHome = Astro.url.pathname === '/';
+const links = [
+  { label: 'Work', href: onHome ? '#work' : '/#work' },
+  {
+    label: 'About',
+    href: '/about/',
+    current: Astro.url.pathname === '/about/',
+  },
+  {
+    label: 'Resume',
+    href: '/resume/',
+    current: Astro.url.pathname === '/resume/',
+  },
+  { label: 'Contact', href: '#contact' },
+];
+---
+
+<header class="site-header">
+  <div class="container header-inner">
+    <a class="brand" href="/">
+      <span class="brand-mark" aria-hidden="true">
+        h<span>.</span>
+      </span>
+      <span class="brand-name">{site.name}</span>
+    </a>
+    <nav class="desktop-nav" aria-label="Main navigation">
+      {links.map((link) => (
+        <a href={link.href} aria-current={link.current ? 'page' : undefined}>
+          {link.label}
+        </a>
+      ))}
+    </nav>
+    <details class="mobile-nav">
+      <summary>
+        Menu{' '}
+        <span class="menu-icon" aria-hidden="true">
+          <span></span>
+          <span></span>
+        </span>
+      </summary>
+      <nav aria-label="Mobile navigation">
+        {links.map((link) => (
+          <a href={link.href} aria-current={link.current ? 'page' : undefined}>
+            {link.label}
+            <Arrow />
+          </a>
+        ))}
+      </nav>
+    </details>
+  </div>
+</header>
+
+<script>
+  document
+    .querySelectorAll<HTMLDetailsElement>('.mobile-nav')
+    .forEach((menu) => {
+      const summary = menu.querySelector('summary');
+      menu.addEventListener('keydown', (event) => {
+        if (event.key === 'Escape' && menu.open) {
+          menu.open = false;
+          summary?.focus();
+        }
+      });
+      menu.querySelectorAll('a').forEach((link) => {
+        link.addEventListener('click', () => {
+          menu.open = false;
+        });
+      });
+      document.addEventListener('click', (event) => {
+        if (event.target instanceof Node && !menu.contains(event.target))
+          menu.open = false;
+      });
+      window
+        .matchMedia('(min-width: 768px)')
+        .addEventListener('change', (event) => {
+          if (event.matches) menu.open = false;
+        });
+    });
+</script>

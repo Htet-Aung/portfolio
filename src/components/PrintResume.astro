@@ -1,0 +1,23 @@
+---
+import Arrow from './Arrow.astro';
+---
+
+<button
+  class="button button-primary print-button"
+  type="button"
+  data-print-resume
+  hidden
+>
+  Print / save PDF <Arrow />
+</button>
+<noscript>
+  <p class="print-help">Use your browser's Print command to save a PDF.</p>
+</noscript>
+<script>
+  document
+    .querySelectorAll<HTMLButtonElement>('[data-print-resume]')
+    .forEach((button) => {
+      button.hidden = false;
+      button.addEventListener('click', () => window.print());
+    });
+</script>

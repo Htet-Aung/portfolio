@@ -1,0 +1,52 @@
+---
+import type { Project } from '../data/projects';
+import Arrow from './Arrow.astro';
+import ProjectCover from './ProjectCover.astro';
+interface Props {
+  project: Project;
+}
+const { project } = Astro.props;
+---
+
+<article class="project-card">
+  <ProjectCover project={project.id} />
+  <div class="project-card-body">
+    <div class="project-category">
+      <span>{project.category}</span>
+      <span>{project.number}</span>
+    </div>
+    <h3>
+      {project.caseStudy ? (
+        <a href={project.caseStudy}>
+          {project.title}
+          <Arrow direction="up-right" />
+        </a>
+      ) : (
+        project.title
+      )}
+    </h3>
+    <p class="project-summary">{project.summary}</p>
+    <p class="project-role">
+      {project.role}
+      {project.teamContext &&
+        project.teamContext !== 'Solo project' &&
+        ` · ${project.teamContext}`}
+    </p>
+    <ul class="stack-list" aria-label={`${project.title} technologies`}>
+      {project.stack.slice(0, 3).map((tech) => (
+        <li>{tech}</li>
+      ))}
+    </ul>
+    {project.caseStudy ? (
+      <a class="text-link project-action" href={project.caseStudy}>
+        Read case study <Arrow />
+      </a>
+    ) : project.repoUrl ? (
+      <a class="text-link project-action" href={project.repoUrl}>
+        Explore the source <Arrow direction="up-right" />
+      </a>
+    ) : (
+      <p class="project-action project-pending">Case study coming soon</p>
+    )}
+  </div>
+</article>

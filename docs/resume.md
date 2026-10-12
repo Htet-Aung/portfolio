@@ -18,7 +18,7 @@ $$\text{[Action Verb]} + \text{[Specific Tech / Architecture]} + \text{[Feature 
 * **Machine Learning & Deep Learning:** Automatic Differentiation (Autograd), Computational Graphs (DAG), Reverse-Mode Backpropagation, Vectorized Convolutions (`im2col`/`col2im`), Numerical Gradient Checking (`gradcheck`), Model Quantization/Serialization, NumPy, Pytest, Streamlit
 * **Generative AI & Media Pipelines:** OpenAI Whisper (Speech-to-Text), DeepSeek, OpenAI GPT Image 2, OpenAI (`gpt-4.1-nano`), FFmpeg Audio/Video Stitching, Cloudinary, Prompt Engineering, Structured JSON Patches, Deterministic LLM Fallback Engines
 * **Backend & Distributed Systems:** Node.js, Express 5, PostgreSQL, Sequelize ORM, Flask (`Flask[async]`), `aiosqlite`, RESTful APIs, Asynchronous I/O, SQLite, JSONB, Excel Workbook Parsing (`xlsx`), SHA-256 Cryptographic Verification
-* **Frontend & Browser APIs:** React (React 18 & 19), Vite (Vite 8), WaveSurfer.js, Web Audio API (Synthesizers & Oscillators), Vanilla Web Speech API (`SpeechRecognition`, `SpeechSynthesis`), IntersectionObserver API, CSS 3D Transforms, Responsive & Accessible UI (WCAG / a11y)
+* **Frontend & Browser APIs:** React (React 18 & 19), Vite (Vite 8), WaveSurfer.js, Web Audio API (Synthesizers & Oscillators), Vanilla Web Speech API (`SpeechRecognition`, `SpeechSynthesis`), CSS 3D Transforms, Responsive & Accessible UI (WCAG / a11y)
 * **Engineering Disciplines:** Rapid Hackathon Prototyping (24h Sprint Delivery), State Machine Orchestration, Client-Side Lexical Tokenization, Defensive URL Interception, Git Version Control
 
 ---
@@ -61,8 +61,8 @@ $$\text{[Action Verb]} + \text{[Specific Tech / Architecture]} + \text{[Feature 
 ### SGEN — Intergenerational Social Platform
 *Posts Engine, Feed, Accessibility & Assistive Systems Developer | Stack: React 18, Python (Flask async), aiosqlite, Web Speech API*
 
-* **Engineered** an asynchronous RESTful feed engine using `Flask[async]` and `aiosqlite` to handle non-blocking CRUD operations for posts and nested comment trees, eliminating worker thread blocking under concurrent database I/O.
-* **Architected** batch-paginated infinite scrolling in React 18 using `IntersectionObserver`, implementing cursor-constrained chunk queries that minimized initial network payloads and eliminated DOM rendering lag during long-session browsing.
+* **Engineered** RESTful post and comment workflows using async Flask handlers and awaitable `aiosqlite` queries, including nested comment records.
+* **Built** page-based infinite scrolling in React 18 using a scroll listener, an in-flight request guard, and post-ID deduplication, backed by `LIMIT`/`OFFSET` queries. The verified implementation does not use cursor pagination or `IntersectionObserver`.
 * **Integrated** the browser-native Web Speech API (`SpeechRecognition` & `SpeechSynthesis`) to deliver real-time voice-to-text dictation across 4 languages (English, Mandarin, Malay, Tamil) and modulated inline text-to-speech playback, removing keyboard dependency for senior users.
 * **Developed** a zero-latency client-side lexical scanner tokenizing word boundaries against localized Gen-Z dictionaries for instant definition popovers, coupled with an outbound "Link Guard" domain interceptor and age-adaptive UI (`age > 60`) with one-tap Smart Reply Chips.
 

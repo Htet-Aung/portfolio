@@ -1,0 +1,47 @@
+---
+import Arrow from './Arrow.astro';
+import { site } from '../data/site';
+---
+
+<footer class="site-footer" id="contact">
+  <div class="container">
+    <div class="contact-top">
+      <div>
+        <p class="eyebrow">Let's connect</p>
+        <h2>
+          Have something
+          <br />
+          in mind?
+        </h2>
+      </div>
+      <div class="contact-links">
+        <p>
+          A role, a project, or a good conversation.
+          <br />
+          I'd be happy to hear from you.
+        </p>
+        <a class="email-link" href={`mailto:${site.email}`}>
+          Email me <Arrow direction="up-right" />
+        </a>
+        <span class="contact-address">{site.email}</span>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>
+        © {new Date().getFullYear()} {site.name}
+      </span>
+      <span class="footer-location">Based in Singapore</span>
+      <div>
+        <a href="/resume/">
+          Resume <Arrow />
+        </a>
+        <a href={site.github}>
+          GitHub <Arrow direction="up-right" />
+        </a>
+        <a href="#top">
+          Back to top <Arrow direction="up-right" />
+        </a>
+      </div>
+    </div>
+  </div>
+</footer>

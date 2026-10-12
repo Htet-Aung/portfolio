@@ -1,0 +1,161 @@
+---
+import SiteLayout from '../layouts/SiteLayout.astro';
+import Arrow from '../components/Arrow.astro';
+import { education } from '../data/resume';
+import { site } from '../data/site';
+
+const capabilities = [
+  {
+    number: '01',
+    title: 'Interfaces that help',
+    text: 'Make a workflow easier to understand and use, with attention to language, input methods, and clear feedback.',
+    links: [
+      { title: 'SGEN', href: '/work/sgen/' },
+      { title: 'ROLLOVER', href: '/work/rollover/' },
+    ],
+  },
+  {
+    number: '02',
+    title: 'Workflows that hold together',
+    text: 'Connect services, data, and human review so that a useful feature becomes a coherent end-to-end experience.',
+    links: [{ title: 'Shades of SG', href: '/work/shades-of-sg/' }],
+  },
+  {
+    number: '03',
+    title: 'Internals you can explain',
+    text: 'Work through the mechanisms beneath an abstraction, then make the reasoning and trade-offs inspectable.',
+    links: [{ title: 'NumPyGrad', href: '/work/numpygrad/' }],
+  },
+];
+const approach = [
+  {
+    title: 'Start with the person using it',
+    text: 'What are they trying to do? Where does the current experience make that harder?',
+  },
+  {
+    title: 'Follow the data through the system',
+    text: 'Be clear about what each component owns, how state moves, and where a decision is made.',
+  },
+  {
+    title: 'Check the decision, not just the demo',
+    text: 'Use tests and observable behavior to explain what works, where it falls short, and what should change next.',
+  },
+];
+---
+
+<SiteLayout
+  title={`About — ${site.name}`}
+  description="Get to know Htet Aung Khant's engineering focus, Applied AI & Analytics background, and approach to building software."
+>
+  <div class="container inner-page about-page">
+    <header class="inner-page-header">
+      <p class="eyebrow">About / A little context</p>
+      <h1>
+        Curious about
+        <br />
+        the whole system<span class="accent">.</span>
+      </h1>
+      <p class="inner-page-intro">
+        I'm Htet, a Singapore-based developer drawn to both the experience on
+        the screen and the engineering that makes it possible.
+      </p>
+    </header>
+    <section class="about-profile" aria-labelledby="background-title">
+      <div>
+        <h2 id="background-title">
+          From interface
+          <br />
+          to internals.
+        </h2>
+        <p>
+          My projects have taken me from an intergenerational social feed to a
+          cultural media workflow, a circular-retail prototype, and a deep
+          learning engine built from first principles.
+        </p>
+        <p>
+          I like understanding how those pieces fit together: how an interaction
+          changes state, how the backend makes a decision, and how the result
+          gets back to the person using it.
+        </p>
+      </div>
+      <dl class="profile-notes">
+        <div>
+          <dt>Based in</dt>
+          <dd>{site.location}</dd>
+        </div>
+        <div>
+          <dt>Background</dt>
+          <dd>
+            {education.program}
+            <span>
+              {education.institution}, {education.location}
+            </span>
+          </dd>
+        </div>
+        <div>
+          <dt>Interested in</dt>
+          <dd>
+            Software engineering & applied AI
+            <span>Frontend, backend, and the connections between them.</span>
+          </dd>
+        </div>
+      </dl>
+    </section>
+    <section class="capability-section" aria-labelledby="capabilities-title">
+      <div class="section-heading">
+        <div>
+          <p class="eyebrow">Focus, with evidence</p>
+          <h2 id="capabilities-title">
+            What I bring to a project<span class="accent">.</span>
+          </h2>
+        </div>
+      </div>
+      <div class="capability-grid">
+        {capabilities.map((item) => (
+          <article class="capability-card">
+            <span class="mono capability-number">{item.number} /</span>
+            <h3>{item.title}</h3>
+            <p>{item.text}</p>
+            <div class="capability-links">
+              {item.links.map((link) => (
+                <a class="text-link" href={link.href}>
+                  {link.title}
+                  <Arrow />
+                </a>
+              ))}
+            </div>
+          </article>
+        ))}
+      </div>
+    </section>
+    <section class="working-section" aria-labelledby="approach-title">
+      <div>
+        <p class="eyebrow">How I approach the work</p>
+        <h2 id="approach-title">
+          Make the reasoning
+          <br />
+          visible.
+        </h2>
+      </div>
+      <ol class="working-steps">
+        {approach.map((step, i) => (
+          <li>
+            <span class="mono">0{i + 1}</span>
+            <div>
+              <h3>{step.title}</h3>
+              <p>{step.text}</p>
+            </div>
+          </li>
+        ))}
+      </ol>
+    </section>
+    <div class="inner-page-actions">
+      <a class="button button-primary" href="/resume/">
+        View my resume <Arrow />
+      </a>
+      <a class="text-link" href="/#work">
+        Explore selected work <Arrow />
+      </a>
+    </div>
+  </div>
+</SiteLayout>
