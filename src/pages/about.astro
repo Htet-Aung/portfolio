@@ -168,6 +168,21 @@ const approach = [
       </ol>
     </section>
 
+    <section class="about-tools" aria-labelledby="tools-title">
+      <p class="eyebrow">Across software and analytics</p>
+      <h2 id="tools-title">
+        Software and analytical skills<span class="accent">.</span>
+      </h2>
+      <dl class="resume-skills">
+        {skills.map((skill) => (
+          <div>
+            <dt>{skill.label}</dt>
+            <dd>{skill.items}</dd>
+          </div>
+        ))}
+      </dl>
+    </section>
+
     <section class="community-section" aria-labelledby="community-title">
       <div class="section-heading">
         <div>
@@ -187,84 +202,52 @@ const approach = [
         <article class="community-card">
           <div class="community-card-header">
             <span class="mono community-role">
-              Executive Committee · Head of Publicity &amp; Core Organizer
+              Executive Committee · Head of Publicity · Year 2 Sem 1 – Present
             </span>
-            <h3>NYP AI Club</h3>
+            <h3>NYP AI</h3>
             <p class="community-lead">
-              Member of the Executive Committee directing multi-channel outreach
+              Executive Committee of NYP AI directing multi-channel outreach
               across Instagram, Telegram, Discord, and WhatsApp Community
-              channels. Beyond publicity, I serve as a core organizer across the
-              entire event lifecycle — leading concept ideation, authoring
-              official administrative proposals, managing event logistics, and
-              coordinating live on-the-ground execution.
+              channels, while collaborating with the team on event planning,
+              proposals, and logistics.
             </p>
           </div>
 
           <div class="community-event">
             <div class="community-event-details">
-              <h4>
-                Featured Masterclass: Powering the Future — Networks &amp; AI by
-                Nokia
-              </h4>
+              <h4>Powering the Future — Networks &amp; AI by Nokia</h4>
               <p>
-                Co-organized and spearheaded publicity for an intensive 2-day
-                systems engineering masterclass (18 hours across 18–19 June)
-                hosted in NYP Specialized Lab L.534, featuring{' '}
-                <strong>Thomas Corre</strong>, Regional PLM &amp; Consulting
-                Engineer at Nokia (certified Google Cloud Professional Cloud
-                Architect &amp; Nokia Service Routing Architect). Curated for 51
-                selected diploma students with networking and AI backgrounds,
-                the workshop explored how modern AI compute clusters rely on
-                high-bandwidth Data Centre fabric topologies:
+                Co-organized and led publicity for an intensive 2-day systems
+                engineering masterclass (18 hours across 18–19 June) hosted at
+                NYP, featuring <strong>Thomas Corre</strong>, Regional PLM &amp;
+                Consulting Engineer at Nokia (certified Google Cloud
+                Professional Cloud Architect &amp; Nokia Service Routing
+                Architect). Curated for 50+ selected diploma students with
+                networking and AI backgrounds, the sessions explored how modern
+                AI compute clusters rely on high-bandwidth data centre
+                infrastructure:
               </p>
-              <ul class="prose" style="margin-block: 12px 18px;">
+              <ul class="community-list">
                 <li>
-                  <strong>Data Centre Fabric &amp; AI Infrastructure:</strong>{' '}
-                  Deconstructed spine-and-leaf topologies, non-blocking
-                  interconnects, and the networking throughput demands essential
-                  to training and serving large-scale distributed AI models
-                  without latency bottlenecks.
+                  <strong>Connecting Students with Industry:</strong>{' '}
+                  Collaborated with Nokia engineering leadership to bring
+                  real-world network architecture into the student community,
+                  giving peers direct access to enterprise engineering insights
+                  and mentorship.
                 </li>
                 <li>
-                  <strong>Hands-on Digital Twins via Containerlab:</strong>{' '}
-                  Guided students through spinning up and configuring
-                  enterprise-grade virtual network digital twins directly from
-                  the terminal.
+                  <strong>Multi-Channel Promotion &amp; Full Turnout:</strong>{' '}
+                  Spearheaded promotional outreach across student message
+                  channels, cohort broadcasts, and social platforms (@nyp_ai) to
+                  fill all 50+ workshop seats.
                 </li>
                 <li>
-                  <strong>Cloud-Scale Routing Protocols:</strong> Hands-on
-                  configuration of the core protocols underpinning modern cloud
-                  networks, implementing BGP (Border Gateway Protocol), EVPN
-                  (Ethernet VPN), and VXLAN (Virtual Extensible LAN) for
-                  scalable overlay/underlay fabrics.
-                </li>
-                <li>
-                  <strong>Real-Time Telemetry &amp; Observability:</strong>{' '}
-                  Implemented live streaming telemetry collection using gNMI
-                  (gRPC Network Management Interface), feeding live metrics into
-                  Prometheus and Grafana dashboards for automated network
-                  monitoring.
-                </li>
-                <li>
-                  <strong>
-                    Practical Checkpoints &amp; Nokia Certification:
-                  </strong>{' '}
-                  Mentored participants through multi-checkpoint lab challenges
-                  and end-of-day technical quizzes, validating lab
-                  configurations to award official co-issued Nokia
-                  e-certificates.
+                  <strong>Lab Mentorship &amp; Event Support:</strong> Supported
+                  attendees during hands-on digital twin exercises and lab
+                  checkpoints, helping participants troubleshoot setups
+                  alongside the speaker to earn co-issued Nokia e-certificates.
                 </li>
               </ul>
-              <p>
-                As Head of Publicity, I authored the official marketing
-                collateral schedule in the proposal — coordinating
-                lecturer-broadcast Outlook email blasts, cross-platform message
-                blasts across WhatsApp (SIT Club 26/27), Telegram (NYP AI), and
-                Discord, and authoring the high-converting Instagram campaign
-                (@nyp_ai) highlighting Thomas Corre's industry credentials to
-                fully book all 51 lab seats. On event days, I directed live
-                photography and media documentation across both 9-hour sessions.
-              </p>
             </div>
             <figure class="community-figure">
               <Image
@@ -284,43 +267,33 @@ const approach = [
           </div>
 
           <div class="community-subevent">
-            <h4>Flagship Engagement: Project Starbound (The AI Frontier)</h4>
+            <h4>
+              NYP AI Engagement Session – Project Starbound: The AI Frontier
+            </h4>
             <p>
-              Core organizer for the club's flagship 100+ participant
-              orientation and engagement session, welcoming fresh cohorts
-              through an immersive space-exploration theme. My contributions
-              covered end-to-end management, ideation, and execution:
+              Helped organize NYP AI's orientation and engagement session for
+              100+ students, welcoming new cohorts through an interactive,
+              space-exploration theme:
             </p>
-            <ul class="prose" style="margin-block: 12px 18px;">
+            <ul class="community-list">
               <li>
-                <strong>Ideation &amp; Activity Design:</strong> Conceived the
-                overarching galactic mission narrative and co-developed
-                interactive learning challenges — including{' '}
-                <em>Galactic Consensus</em> (structured debates on space-age AI
-                ethics and algorithmic governance), <em>Starfield AI</em>{' '}
-                (interactive machine learning quizzes), and{' '}
-                <em>The Nebula Hunt</em> (a campus-wide cryptographic QR
-                scavenger hunt across the School of IT).
+                <strong>Interactive Community Activities:</strong> Co-designed
+                accessible, team-based activities — including friendly debates
+                on AI ethics (<em>Galactic Consensus</em>), interactive machine
+                learning trivia (<em>Starfield AI</em>), and a campus-wide
+                scavenger hunt (<em>The Nebula Hunt</em>) — to help new students
+                connect and break the ice.
               </li>
               <li>
-                <strong>Proposal &amp; Operational Planning:</strong>{' '}
-                Co-authored the official administrative proposal, established
-                comprehensive run-of-show timelines and risk management
-                protocols, secured venue bookings across the P1 Convention
-                Centre and Block L, and directed dry-run rehearsals with
-                facilitators.
+                <strong>Collaborative Event Planning:</strong> Contributed to
+                run-of-show scheduling, venue logistics across campus, and
+                facilitator briefings to create an organized and welcoming
+                experience for incoming cohorts.
               </li>
               <li>
-                <strong>Day-of Event Management:</strong> Supervised live
-                operations, crowd control, timekeeping, and facilitator stations
-                on event day to ensure seamless activity rotations and high
-                participant engagement.
-              </li>
-              <li>
-                <strong>Multi-Channel Publicity Blitz:</strong> Designed and
-                executed the campaign rollout across WhatsApp communities,
-                Telegram channels, Instagram, School of IT display screens, and
-                academic broadcast mailings.
+                <strong>Cohort Outreach:</strong> Coordinated publicity across
+                WhatsApp communities, Telegram channels, Instagram, and School
+                of IT display screens to welcome students across diplomas.
               </li>
             </ul>
           </div>
@@ -329,86 +302,47 @@ const approach = [
         <article class="community-card">
           <div class="community-card-header">
             <span class="mono community-role">
-              Subcommittee Lead &amp; Workshop Presenter
+              Subcommittee · Year 1 Sem 1 – Sem 2
             </span>
-            <h3>NYP Google Developer Group (GDG)</h3>
+            <h3>NYP Google Developer Group (GDGoC)</h3>
             <p class="community-lead">
-              Lead developer initiatives and cloud architecture workshops,
-              guiding student builders through modern containerization,
-              infrastructure-as-code, and serverless deployment workflows.
+              Part of the GDGoC NYP subcommittee supporting technical workshops,
+              hands-on developer sessions, and outreach initiatives on cloud
+              architecture, containerization, and programming logic.
             </p>
           </div>
 
           <div class="community-event">
             <div class="community-event-details">
-              <h4>
-                Featured Workshop: Serverless Containers with Google Cloud Run @
-                NUS
-              </h4>
+              <h4>Cloud &amp; AI Workshops @ NUS</h4>
               <p>
-                Delivered a technical cloud architecture workshop hosted
-                on-campus at the{' '}
+                Delivered an interactive workshop as part of the{' '}
+                <strong>Cloud &amp; AI Workshops</strong>, organized jointly by{' '}
+                <strong>GDGoC NYP × Developer Group @ NUS Computing</strong> and
+                hosted on-campus at the{' '}
                 <strong>National University of Singapore (NUS)</strong>. As one
-                of two lead presenters, I taught and coached{' '}
-                <strong>NUS university students</strong> through the mechanics
-                of serverless containerization — guiding them step-by-step from
-                raw source code and multi-stage Docker builds to production
-                microservices running on Google Cloud Run.
+                of three presenters, I guided university students through
+                container basics and serverless cloud workflows:
               </p>
-              <ul class="prose" style="margin-block: 12px 18px;">
+              <ul class="community-list">
                 <li>
-                  <strong>
-                    Serverless Compute vs. Traditional Infrastructure:
-                  </strong>{' '}
-                  Contrasted the overhead of dedicated virtual machines (idle
-                  compute costs, manual OS patching, slow multi-minute
-                  autoscaling) against Cloud Run's request-driven pricing and
-                  automatic scale-to-zero capabilities. Analyzed architectural
-                  trade-offs across Google Cloud compute primitives — evaluating
-                  when to choose Cloud Run versus Cloud Run Functions (event
-                  triggers), Google Compute Engine (raw VMs), Google App Engine,
-                  and GKE Autopilot (complex multi-container orchestration).
+                  <strong>Step-by-Step Cloud Walkthroughs:</strong> Co-presented
+                  practical demonstrations breaking down container concepts and
+                  serverless architecture into clear, approachable steps —
+                  taking attendees from source code to live services on Google
+                  Cloud Run.
                 </li>
                 <li>
-                  <strong>Multi-Stage Production Dockerfiles:</strong> Broke
-                  down containerization best practices line-by-line,
-                  demonstrating a production multi-stage build: compiling the
-                  Single Page App inside a <code>node:25-alpine</code> builder
-                  container with <code>pnpm</code> frozen lockfiles (
-                  <code>--frozen-lockfile</code>) for deterministic builds, then
-                  packaging solely the compiled distribution into a lean{' '}
-                  <code>nginx:alpine</code> runtime with custom SPA routing
-                  fallback (<code>try_files $uri $uri/ /index.html</code>)
-                  listening on port 8080 to achieve minimal container images and
-                  rapid cold starts.
+                  <strong>Live Peer Coaching &amp; Troubleshooting:</strong>{' '}
+                  Mentored attendees during hands-on exercises in Google Cloud
+                  Shell, helping them debug deployment issues and build
+                  confidence working with cloud tools.
                 </li>
                 <li>
-                  <strong>
-                    GCP Managed Service Pipelines &amp; Terminal CLI:
-                  </strong>{' '}
-                  Coached attendees hands-on inside Google Cloud Shell through
-                  the command-line deployment workflow using{' '}
-                  <code>gcloud run deploy --source .</code>. Explained the
-                  critical GCP APIs invoked under the hood:{' '}
-                  <strong>Google Artifact Registry</strong> (
-                  <code>artifactregistry.google.apis.com</code>) for container
-                  image versioning, <strong>Cloud Build</strong> (
-                  <code>cloudbuild.googleapis.com</code>) for remote cloud
-                  compilation without local Docker daemons, and{' '}
-                  <strong>Cloud Run</strong> (<code>run.googleapis.com</code>)
-                  for managed ingress routing and automated autoscaling.
-                </li>
-                <li>
-                  <strong>
-                    Services vs. Revisions &amp; Operational Governance:
-                  </strong>{' '}
-                  Explained the core architectural distinction between
-                  persistent Services (stable public URLs) and immutable
-                  Revisions (version-controlled snapshots enabling blue-green
-                  rollbacks and traffic splitting). Covered regional deployments
-                  (<code>asia-southeast1</code> Singapore), IAM unauthenticated
-                  invocation policies, and safe service teardown to manage cloud
-                  credits responsibly.
+                  <strong>Cross-Campus Tech Community:</strong> Collaborated
+                  with the NUS Computing developer community to facilitate
+                  shared peer learning between polytechnic and university
+                  students.
                 </li>
               </ul>
             </div>
@@ -416,7 +350,21 @@ const approach = [
               <figure class="community-figure">
                 <Image
                   src={gdgPresenting}
-                  alt="Htet presenting the Google Cloud Run Workshop to NUS students at the National University of Singapore"
+                  alt="GDGoC NYP team alongside the Developer Group @ NUS Computing team at NUS"
+                  widths={[480, 800]}
+                  sizes="(max-width: 768px) calc(100vw - 40px), 330px"
+                  format="webp"
+                  quality={85}
+                />
+                <figcaption>
+                  The representing GDGoC NYP team alongside the Developer Group
+                  @ NUS Computing team at the workshop venue.
+                </figcaption>
+              </figure>
+              <figure class="community-figure">
+                <Image
+                  src={gdgTeam}
+                  alt="Kicking off the workshop presentation and teaching session for attendees at NUS Computing"
                   widths={[480, 800]}
                   sizes="(max-width: 768px) calc(100vw - 40px), 330px"
                   format="webp"
@@ -424,59 +372,60 @@ const approach = [
                   class="community-img-presenting"
                 />
                 <figcaption>
-                  Presenting serverless container architecture and guiding NUS
-                  university students through terminal commands, multi-stage
-                  Docker builds, and live Cloud Run deployments.
-                </figcaption>
-              </figure>
-              <figure class="community-figure">
-                <Image
-                  src={gdgTeam}
-                  alt="NYP Google Developer Group organizing and presenter team at NUS"
-                  widths={[480, 800]}
-                  sizes="(max-width: 768px) calc(100vw - 40px), 330px"
-                  format="webp"
-                  quality={85}
-                />
-                <figcaption>
-                  The NYP Google Developer Group organizing team at the NUS
-                  venue following the delivery of the Google Cloud Run Workshop
-                  2026.
+                  Starting the workshop presentation and teaching session for
+                  students at the NUS Computing venue.
                 </figcaption>
               </figure>
             </div>
+          </div>
+
+          <div class="community-subevent">
+            <h4>NYP Course Advising – Programming Logic</h4>
+            <p>
+              Represented GDGoC NYP as a station presenter during NYP's course
+              advising outreach, introducing visiting secondary school students
+              to the fundamentals of computational thinking and programming:
+            </p>
+            <ul class="community-list">
+              <li>
+                <strong>Making Logic Approachable:</strong> Demystified core
+                programming concepts using intuitive real-world analogies,
+                helping beginners understand how software makes decisions
+                without getting bogged down by dry syntax.
+              </li>
+              <li>
+                <strong>Interactive Problem-Solving:</strong> Guided students
+                through hands-on logic activities — such as designing
+                conditional rules for an automated smart lamp — encouraging them
+                to reason through inputs, conditions, and outcomes.
+              </li>
+              <li>
+                <strong>Inspiring Young Learners:</strong> Shared personal
+                enthusiasm for technology and polytechnic studies, answering
+                questions and creating an encouraging, low-pressure space for
+                kids taking their very first steps into coding.
+              </li>
+            </ul>
           </div>
         </article>
 
         <article class="community-card community-card-compact">
           <div class="community-card-header">
-            <span class="mono community-role">Cohort Representative</span>
-            <h3>Class Representative (Year 1)</h3>
+            <span class="mono community-role">
+              Class AA2502 · Year 1 Sem 1 – Sem 2
+            </span>
+            <h3>Class Representative</h3>
             <p>
-              Coordinated cohort feedback and bridged communication with
-              academic mentors across both Year 1 semesters, while organizing
-              class bonding events to foster strong peer support and
-              collaboration within the diploma.
+              Coordinated class feedback and bridged communication with academic
+              mentors across both Year 1 semesters, while organizing class
+              bonding events to foster strong peer support and collaboration
+              among classmates.
             </p>
           </div>
         </article>
       </div>
     </section>
 
-    <section class="about-tools" aria-labelledby="tools-title">
-      <p class="eyebrow">Across software and analytics</p>
-      <h2 id="tools-title">
-        Software and analytical skills<span class="accent">.</span>
-      </h2>
-      <dl class="resume-skills">
-        {skills.map((skill) => (
-          <div>
-            <dt>{skill.label}</dt>
-            <dd>{skill.items}</dd>
-          </div>
-        ))}
-      </dl>
-    </section>
     <div class="inner-page-actions">
       <a class="button button-primary" href="/resume/">
         View my resume <Arrow />

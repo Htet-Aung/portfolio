@@ -38,7 +38,6 @@ const sectionId = (name: string) => `resume-${name}`;
       Software development · Applied AI · Data analytics
     </p>
     <ul class="resume-contact">
-      <li>{site.location}</li>
       <li>
         <a href={`tel:${resumeContact.phone.replaceAll(' ', '')}`}>
           {resumeContact.phone}
@@ -46,6 +45,15 @@ const sectionId = (name: string) => `resume-${name}`;
       </li>
       <li>
         <a href={`mailto:${resumeContact.email}`}>{resumeContact.email}</a>
+      </li>
+      <li>
+        <a
+          href={resumeContact.portfolio}
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          htet-ak.pages.dev
+        </a>
       </li>
       <li>
         <a href={site.github} target="_blank" rel="noopener noreferrer">
@@ -138,7 +146,10 @@ const sectionId = (name: string) => `resume-${name}`;
       ))}
     </div>
   </section>
-  <section class="resume-section" aria-labelledby={sectionId('education')}>
+  <section
+    class="resume-section resume-section-education"
+    aria-labelledby={sectionId('education')}
+  >
     <h2 id={sectionId('education')}>Education</h2>
     <div class="resume-education">
       {educationHistory.map((item) => (
@@ -167,9 +178,21 @@ const sectionId = (name: string) => `resume-${name}`;
     <div class="resume-leadership">
       {leadership.map((item) => (
         <section class="resume-leadership-item">
-          <p>
-            <strong>{item.title}</strong> · {item.description}
+          <p class="resume-leadership-heading">
+            <strong>
+              {item.name}
+              {item.role && ` — ${item.role}`}
+            </strong>
+            {item.detail && ` · ${item.detail}`}
+            {item.period && ` (${item.period})`}
           </p>
+          {item.events && item.events.length > 0 && (
+            <ul class="resume-leadership-events">
+              {item.events.map((event) => (
+                <li>{event}</li>
+              ))}
+            </ul>
+          )}
         </section>
       ))}
     </div>

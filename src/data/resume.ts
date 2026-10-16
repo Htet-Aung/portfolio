@@ -8,6 +8,7 @@ export const resumeContact = {
   phone: '+65 8115 3761',
   email: site.email,
   linkedin: 'https://www.linkedin.com/in/htet-ak/',
+  portfolio: 'https://htet-ak.pages.dev',
 };
 
 export const education = {
@@ -182,31 +183,52 @@ export const educationHistory = [
 
 export const certificates = [
   'Snowflake SnowPro Associate: Platform',
-  'ServiceNow Certified System Administrator',
   'AWS Training & Certification: Fundamentals of Machine Learning and Artificial Intelligence',
   'Anthropic AI Fluency: Framework & Foundations',
   'IBM SkillsBuild: User Experience Design Fundamentals',
 ];
 
-export const leadership = [
+export interface LeadershipItem {
+  name: string;
+  role?: string;
+  detail?: string;
+  period?: string;
+  events?: string[];
+}
+
+export const leadership: LeadershipItem[] = [
   {
-    title: 'Class Representative, Year 1',
-    description:
-      'Organized class bonding events and coordinated student cohort feedback across both Year 1 semesters.',
+    name: 'NYP AI',
+    role: 'Head of Publicity',
+    detail: 'Executive Committee',
+    period: 'Year 2 Sem 1 – Present',
+    events: [
+      'Powering the Future (Networks & AI by Nokia): Co-organized 2-day systems engineering masterclass, led publicity to fill 50+ seats, and assisted student lab checkpoints.',
+      'Project Starbound: Co-developed space-themed orientation challenges and debates on AI ethics for 100+ incoming students.',
+    ],
   },
   {
-    title: 'NYP AI — Executive Committee (Head of Publicity & Core Organizer)',
-    description:
-      'Co-led overall ideation, proposal planning, and day-of operations for flagship engagement sessions (Project Starbound: The AI Frontier) and industry masterclasses (Nokia Networks & AI); directed multi-channel publicity across Instagram, Telegram, Discord, and WhatsApp.',
+    name: 'NYP Google Developer Group (GDGoC)',
+    role: 'Subcommittee',
+    period: 'Year 1 Sem 1 – Sem 2',
+    events: [
+      'Cloud & AI Workshops @ NUS: Co-presented Google Cloud Run and containerization to university students in hands-on deployment walkthroughs.',
+      'NYP Course Advising: Introduced computational thinking and programming logic to visiting secondary school students through interactive problem-solving.',
+    ],
   },
   {
-    title: 'NYP Google Developer Group (GDG) — Subcommittee Lead & Presenter',
-    description:
-      'Presented a technical Cloud Run masterclass hosted at NUS, coaching university students through multi-stage Docker builds, serverless container architecture, Artifact Registry, and Cloud Build deployment pipelines.',
+    name: 'Class Representative',
+    detail: 'Class AA2502',
+    period: 'Year 1 Sem 1 – Sem 2',
+    events: [
+      'Coordinated class feedback with academic mentors and organized class bonding events across both Year 1 semesters.',
+    ],
   },
   {
-    title: 'SDG Open Hack 2026 — Semi-finalist',
-    description:
-      'Built and pitched ROLLOVER with a three-person NYP team in a 24-hour circular-retail hackathon.',
+    name: 'SDG Open Hack 2026',
+    role: 'NYP Semi-finalist',
+    events: [
+      'Co-built and pitched ROLLOVER with a three-person team in a 24-hour circular-retail hackathon.',
+    ],
   },
 ];
