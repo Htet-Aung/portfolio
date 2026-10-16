@@ -1,8 +1,8 @@
----
+﻿---
 title: NumPyGrad
 projectId: numpygrad
-description: A deep learning engine, built from first principles.
-intro: A Python and NumPy framework that makes the mechanics of learning visible — from the computation graph to the optimizer step.
+description: A deep learning framework you can train, inspect, and explore through an interactive studio.
+intro: I built the learning engine in Python and NumPy, then made it usable through a Streamlit studio. Visitors can train a decision boundary, probe predictions, inspect the mathematics, compare models, navigate a simulated rover, and draw digits for recognition—all using my own tensor, layer, and inference implementations.
 role: Creator & sole engineer
 teamContext: Solo project
 stack:
@@ -15,89 +15,135 @@ status: published
 ---
 
 import ArchitectureDiagram from '../../components/ArchitectureDiagram.astro';
-import StudioGallery from '../../components/StudioGallery.astro';
+import NumPyGradCapture from '../../components/NumPyGradCapture.astro';
+import RoverRecording from '../../components/RoverRecording.astro';
 
-## The short version
+## Making the mechanics of learning visible
 
-Deep learning libraries make it easy to train a model. I wanted to understand the machinery they usually hide: how an operation becomes part of a graph, how gradients find their way back to shared inputs, and how those gradients become a parameter update.
+NumPyGrad began with a question: could I build the machinery behind a neural network, then give people a way to explore what it actually does? I implemented reverse-mode automatic differentiation, trainable layers, optimizers, and checkpoint serialization in Python and NumPy. The core learning computations run without an external deep learning framework.
 
-I built NumPyGrad as a solo project, using Python and NumPy for the core engine. It includes reverse-mode automatic differentiation, a modular layer library, vectorized convolutions, optimizers, and model serialization. A Streamlit studio connects those internals to decision boundaries, handwritten-digit recognition, and simulated rover navigation.
+The Streamlit studio turns that engine into an interactive product. Its three main views are **2D Decision Boundaries**, **Autonomous Neural Pathfinding**, and **Handwritten Digit Recognition**. The first view contains the training workspace, coordinate inference, computation trace, and model comparison. The journey below follows those interactions, then moves into the rover and drawing canvas.
 
-The result is a framework I can inspect from end to end. The goal was to make the path from a tensor operation to a trained model understandable.
+This connects several parts of my engineering work: implementing the mathematics, evaluating models, making their behavior inspectable, and handling the input and presentation needed for a usable application. The six screenshots and rover recording on this page were supplied directly from my studio sessions.
 
-## A system you can follow
+## 1. Train a boundary and watch the model learn
 
-The core separates three responsibilities. A `Tensor` owns data and tracks dependencies. Layers compose tensors into a model and register trainable parameters. Optimizers update those parameters after the backward pass.
+The first screen lets a visitor choose a dataset, adjust its sample count and noise, configure a network, and start training. The supplied example uses **Corridor Maze**, 500 points, and a **2 → 32 → 32 → 2** ReLU network. Batch normalization and dropout are available alongside optimizer and learning-rate controls.
+
+<NumPyGradCapture capture="training" />
+
+The contour map shows where the model places its class boundary; the adjacent curves show training loss and validation accuracy as learning progresses. Connecting these views makes the result interpretable: the visitor can see whether lower loss produces a boundary that follows the winding corridor.
+
+### Evaluation is part of the training workflow
+
+I split the observations into separate training, validation, and test partitions, approximately **80/10/10** in this configuration. For sufficiently populated corridor regions, the splitter stratifies by spatial region as well as class, helping keep narrow sections represented in evaluation. The captured run contains **398 training, 51 validation, and 51 test points**.
+
+The studio saves the state with the lowest validation loss and restores it before final test evaluation. In this session it selects **epoch 94**, rather than automatically using the last epoch. The capture reports **100% held-out accuracy**, macro F1 **1.000**, Brier score **0.009**, and expected calibration error **0.021**. These are results for the captured synthetic dataset and split.
+
+Reporting probability-quality measures alongside accuracy makes evaluation more useful: correct labels and well-behaved confidence scores are different properties. Checkpoint selection also separates the choice of model state from the held-out test assessment.
+
+### The engine behind Start Training
+
+Each mini-batch passes through my `Linear` and activation layers, then the numerically stable `CrossEntropyLoss`. Calling `loss.backward()` traverses a dynamic computation graph in reverse topological order before SGD or AdamW updates the registered parameters.
 
 <ArchitectureDiagram />
 
-Every forward operation records its parent tensors and a local backward function. Calling `backward()` orders the reachable graph, then visits it in reverse. That keeps a node's gradient contributions together before its own backward function runs.
+The backward rules handle cases that matter in ordinary networks. Shared inputs accumulate contributions from every downstream branch. `_unbroadcast` sums batch contributions back into a bias tensor's original shape. The `Module` hierarchy registers parameters and propagates training or evaluation mode through nested layers, giving dropout and batch normalization the appropriate behavior.
 
-The model API builds on this foundation. `Module` and `Parameter` registration allow nested layers to expose their trainable values. Training and evaluation modes propagate through the same hierarchy, so dropout and batch normalization can behave differently at inference time.
+I checked those mechanics with centered finite-difference gradient comparisons and automated tests for graph ordering, branching, broadcasting, layers, and serialization. The [gradient checker](https://github.com/Htet-Aung/numpygrad/blob/main/src/numpygrad/utils/gradcheck.py) and [test suite](https://github.com/Htet-Aung/numpygrad/tree/main/tests) provide independent ways to inspect the implementation. This is the foundation that makes the studio's training results meaningful.
 
-## Getting gradients right
+## 2. Probe a prediction at a new coordinate
 
-The difficult part of autograd is often the ordinary-looking expression. An input can be used by two branches. A bias vector can be broadcast across an entire batch. A slice can select the same index more than once. Each needs a backward rule that respects what the forward operation actually did.
+After training, a visitor can click the boundary plot, move the X1 and X2 sliders, or choose a preset such as the origin or a decision-border point. The active point appears on the map, while a prediction card and probability bars update alongside it. A logging control keeps selected test coordinates available for inspection.
 
-### Shared inputs need accumulation
+<NumPyGradCapture capture="inference" />
 
-If two paths lead back to the same tensor, both contribute to its derivative. The engine adds contributions into the gradient buffer rather than replacing it. Reverse topological traversal ensures downstream paths are processed before moving farther upstream.
+At **(0, 0)** in this session, the model predicts Class 1 with a **99.14% softmax score**, versus 0.86% for Class 0. That score exposes how strongly the model favors its prediction; it is not a guarantee that a new point is classified correctly.
 
-Intermediate gradient buffers are cleared before a new backward traversal. This separates reused graph bookkeeping from the deliberate accumulation of leaf parameter gradients across training steps.
+The same trained network evaluates a coordinate tensor of shape `(1, 2)` through its layers. I run the forward pass in evaluation mode inside `no_grad()`, which prevents autograd dependency recording and backward-graph retention during inference. This keeps prediction separate from training work and avoids building a graph that the interaction will never use.
 
-### Broadcasting needs an inverse
+The interaction gives the boundary plot a practical purpose: visitors can investigate confident regions and uncertain borders instead of only looking at a finished chart.
 
-Adding a bias of shape `(10,)` to a batch of shape `(32, 10)` is natural in NumPy. During backpropagation, the bias needs a gradient of shape `(10,)`, with the batch contributions summed together.
+## 3. Open the computation trace and inspect the internals
 
-I implemented `_unbroadcast` to reduce newly introduced leading axes and axes expanded from singleton dimensions, then reshape the result to the operand's original shape. That lets arithmetic operations share one consistent shape-restoration rule.
+The **Engine Internals & Computation Trace** drawer follows the active prediction into the implementation. It exposes intermediate layer outputs, the stable softmax calculation, parameter diagnostics, raw weights, and gradient-flow telemetry.
 
-### Verify the mathematics independently
+<NumPyGradCapture capture="internals" />
 
-The gradient checker compares analytical derivatives with centered finite differences: perturb an input in each direction and compare the change in the scalar output. This is useful because the numerical check does not reuse the engine's backward implementation.
+### Follow the numerical calculation
 
-The test suite also exercises graph ordering, branching, broadcast reductions, layers, and serialization. The [gradient checker](https://github.com/Htet-Aung/numpygrad/blob/main/src/numpygrad/utils/gradcheck.py) and [tests](https://github.com/Htet-Aung/numpygrad/tree/main/tests) are the places to inspect those checks.
+The displayed logits are approximately `[-2.6856, 2.0665]`. Subtracting their maximum gives `[-4.7521, 0]` before exponentiation and normalization. This shift preserves the softmax result while avoiding overflow for large positive logits. The same numerical-stability principle underpins the engine's log-sum-exp cross-entropy calculation.
 
-## Making convolution practical
+### Inspect what the model learned
 
-A direct convolution implementation spends a lot of time looping over image patches in Python. I used `im2col` to unfold those patches into a matrix, then expressed convolution as a matrix multiplication handled by NumPy's numerical backend.
+The parameter table shows the layer shapes, means, standard deviations, L2 norms, and sparsity, with a selector for viewing the actual weight arrays. For this model, the weight matrices have shapes **[2, 32]**, **[32, 32]**, and **[32, 2]**, accompanied by their bias tensors.
+
+The gradient chart shows parameter-gradient norms recorded immediately after backpropagation on the final training mini-batch. Those values help investigate uneven or weak gradient flow across layers. They describe that training step; the inference weights come from the separately restored validation checkpoint.
+
+Building these views required exposing useful state from the tensor and module APIs. The result is a debugging and teaching surface where a reader can connect a prediction to the numerical operations and parameters that produced it.
+
+## 4. Compare model configurations on the same experiment
+
+Switching to **Model Capacity Comparison (A vs B)** lets a visitor configure two models and train them together. Both use the same split and mini-batch sequence, then retain their own best-validation checkpoints. The screen compares boundaries, convergence curves, held-out diagnostics, and predictions for a shared coordinate.
+
+<NumPyGradCapture capture="comparison" />
+
+The supplied session compares a **one-layer, four-neuron Tanh model with SGD** against a **two-layer, 32-neuron ReLU model with AdamW**. The shallow configuration's loss plateaus and its accuracy remains lower, while the larger configuration learns the corridor more successfully.
+
+At the origin, their predictions disagree: Model A selects Class 0 with a **62.7% score**; Model B selects Class 1 with a **99.7% score**. A shared test point makes the difference tangible, while the maps show how it arises across the wider input space.
+
+The shared data and training batches make the configurations easier to compare. Because architecture, activation, and optimizer all change in this example, it illustrates the behavior of the complete configurations rather than isolating depth alone. This demonstrates experiment design and comparative diagnostics alongside the implementation of multi-model training.
+
+## 5. Use the learned boundary to guide a rover
+
+The second top-level view turns the classifier into an input for navigation. Class 0 represents free space; the model's Class 1 score supplies a hazard field. A visitor sets a start and target, adjusts simulation controls, launches a mission, and uses the player to inspect the trajectory and sensor rays step by step.
+
+<NumPyGradCapture capture="rover" />
+
+The captured mission follows the corridor from **(−1.74, 1.85)** toward **(−1.45, −1.45)** and reports Goal Reached after **140 steps**. The recording below shows the rover moving through the route, with its orange trail and forward radar updating along the way.
+
+<RoverRecording />
+
+### Connecting prediction to a controller
+
+The controller combines three mechanisms:
+
+- **Global guidance:** the model evaluates a **45 × 45 grid**. An eight-connected Dijkstra distance transform works backward from the goal over hazard-weighted traversal costs; the negative distance gradient supplies a direction through the corridor.
+- **Local avoidance:** five forward rays span **−50° to +50°** and query the model under `no_grad()`. Higher-hazard endpoints contribute a repulsive steering vector.
+- **Smoother movement:** the steering blends **80% of the new direction with 20% of the previous direction**, then normalizes it before the next step.
+
+The mission view exposes route length, steps, model hazard, and inference counts, making controller behavior inspectable alongside the movement. Its displayed **5.8% maximum hazard** is a model score along this particular route; reaching the goal in the demo does not establish safety on arbitrary maps.
+
+I also investigated that distinction in a separate [navigation study](https://github.com/Htet-Aung/numpygrad/blob/main/docs/NAVIGATION_STUDY.md): **60 trained models and 120 routes**, evaluated against a known synthetic obstacle map. A stronger classifier did not guarantee success on every route. Connecting model quality to a downstream outcome demonstrates why classification metrics alone are insufficient for evaluating a navigation system.
+
+## 6. Draw digits and follow the recognition pipeline
+
+The journey ends in **Handwritten Digit Recognition**. Visitors draw one or more separated digits, adjust brush width, and use undo, redo, or clear while inspecting the result. The studio presents the recognized sequence, the normalized digit images, top candidates, and a probability breakdown for each digit.
+
+<NumPyGradCapture capture="digits" />
+
+The supplied example contains **6 and 7**. They are segmented left to right and recognized as **“67”**, with displayed softmax scores of **100.0%** and **99.8%** for those drawings.
+
+### Preparing freehand input for the model
+
+The input pipeline thresholds the drawn strokes, labels connected components, filters small speckles, and merges nearby or overlapping strokes that may belong to one digit. A Python/NumPy component-labeling fallback is available when SciPy is absent. The resulting boxes are ordered left to right.
+
+Each crop is resized to fit within **20 × 20 pixels** while preserving its aspect ratio, placed in a **28 × 28** image, shifted toward the center using its pixel mass, and normalized to `[0, 1]`. These steps bridge the gap between a freely positioned canvas drawing and the input format expected by the MNIST model.
 
 ```text
-Image patches → im2col → matrix multiplication → feature maps
-Input gradients ← col2im ← backward matrix multiplication
+Canvas strokes → component boxes → left-to-right digit crops
+  → aspect-preserving resize → 28 × 28 centering → normalization
+  → saved model inference → per-digit predictions
 ```
 
-The backward pass computes weight gradients from the unfolded input, then uses `col2im` to accumulate overlapping patch gradients into the original image coordinates. Overlap matters: a pixel can belong to several receptive fields, and each contribution must be added back.
+### Loading and running a model built on the same engine
 
-This design trades intermediate memory for vectorized computation. It keeps the operation readable while avoiding a Python loop for every multiply. The [convolution module](https://github.com/Htet-Aung/numpygrad/blob/main/src/numpygrad/nn/convolution.py) contains both directions of that transformation.
+The studio loads `examples/mnist_mlp.ng` through my model serializer. Its architecture flattens the image into 784 inputs and applies **784 → 128 → 64 → 10** linear layers with ReLU activations. Inference runs in evaluation mode under `no_grad()`, then softmax supplies the displayed class scores.
 
-## From engine to experiment
+The `.ng` archive keeps JSON architecture metadata and NumPy parameter arrays together, allowing the loader to reconstruct supported layers and restore their weights. This connects preprocessing, persistence, inference, and presentation in one usable application.
 
-I wanted the engine to be usable beyond a small gradient demonstration. The surrounding library includes `Linear`, `Conv2D`, `MaxPool2D`, `BatchNorm1d`, dropout, and activation functions, plus SGD and AdamW optimizers.
+The broader engine also supports convolutional models. I implemented `im2col` to turn image patches into a matrix multiplication and `col2im` to accumulate overlapping input-gradient contributions. That trades intermediate memory for vectorized computation; the canvas shown here specifically uses the saved MLP.
 
-Cross-entropy uses the log-sum-exp formulation to reduce numerical instability when logits have large magnitudes. AdamW applies weight decay separately from the moment-based gradient update. Model checkpoints use a `.ng` archive with readable architecture metadata and NumPy weight arrays, keeping the structure and learned parameters together.
-
-The Streamlit studio then gives the framework three ways to be explored:
-
-- **Decision boundaries:** train on geometric datasets, compare model capacity, and inspect how predictions change across the input space.
-- **Digit recognition:** segment handwritten input, normalize it to the model's expected format, and inspect class predictions.
-- **Neural pathfinding:** combine a learned obstacle boundary with a geodesic flow field and observe the resulting rover route.
-
-The navigation work raised a useful question: does a stronger classifier necessarily make a safer controller? Aggregate accuracy alone cannot explain every route failure. The shape of a boundary and the behavior of the controller also matter. That distinction is documented in the [navigation study](https://github.com/Htet-Aung/numpygrad/blob/main/docs/NAVIGATION_STUDY.md).
-
-## Inside the studio
-
-These captures come from the NumPyGrad project repository. They show how the same engine supports boundary exploration, digit inference, and a navigation simulation. Displayed predictions and training statistics describe the captured sessions.
-
-<StudioGallery />
-
-## Trade-offs and next steps
-
-**Transparency over hardware reach.** NumPyGrad is a CPU-oriented learning and experimentation framework. That makes tensor operations easy to inspect, while limiting the scale of workloads it can run comfortably.
-
-**Dynamic graphs over compilation.** Define-by-run graph construction follows ordinary Python execution and makes debugging direct. It also carries graph bookkeeping overhead on each forward pass.
-
-**A readable format with explicit support.** JSON architecture metadata and NumPy arrays make a checkpoint easier to inspect than an opaque Python object. The loader still needs an explicit mapping for each supported layer, and that mapping has to evolve with the library.
-
-Next, I would focus on clearer profiling of graph overhead and intermediate convolution memory, alongside more examples that trace a complete training step. The part I want to preserve is the ability to follow a prediction all the way back to the parameters that produced it.
+NumPyGrad remains a CPU-oriented framework for learning and experimentation. Dynamic graphs make the computation easy to follow, while adding bookkeeping overhead; larger convolution workloads also need care with intermediate memory. Across the studio, the engineering goal is consistent: make a working model usable while keeping its inputs, computations, evaluation, and outputs open to inspection.
 
 [Explore NumPyGrad on GitHub →](https://github.com/Htet-Aung/numpygrad)

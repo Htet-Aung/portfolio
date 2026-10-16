@@ -1,0 +1,46 @@
+---
+import { getImage } from 'astro:assets';
+import posterImage from '../assets/work/numpygrad/rover-poster.png';
+const poster = await getImage({
+  src: posterImage,
+  width: 1280,
+  format: 'webp',
+  quality: 90,
+});
+---
+
+<figure class="studio-capture rover-recording">
+  <video
+    controls
+    playsinline
+    preload="none"
+    width="1600"
+    height="1000"
+    poster={poster.src}
+    aria-label="NumPyGrad rover route recording"
+    aria-describedby="rover-recording-caption"
+  >
+    <source src="/media/numpygrad/rover-mission.mp4" type="video/mp4" />
+    <track
+      kind="captions"
+      src="/media/numpygrad/rover-route.vtt"
+      srclang="en"
+      label="Route description"
+    />
+    <p>
+      <a href="/media/numpygrad/rover-mission.mp4">Watch the rover recording</a>
+    </p>
+  </video>
+  <figcaption id="rover-recording-caption">
+    <strong>Watch the rover follow the corridor to its target</strong>
+    <p>
+      In this silent recording, the rover advances through the winding corridor,
+      leaving an orange trail as its forward sensor rays update. Playback
+      continues from the first turn to the red target near the lower left. The
+      mission reports Goal Reached after 140 steps.
+    </p>
+    <a href="/media/numpygrad/rover-mission.mp4" download>
+      Download the recording
+    </a>
+  </figcaption>
+</figure>

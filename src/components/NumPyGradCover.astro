@@ -1,0 +1,66 @@
+---
+import { Image, getImage } from 'astro:assets';
+import { numpygradCaptures } from '../data/numpygrad-captures';
+interface Props {
+  large?: boolean;
+}
+const { large = false } = Astro.props;
+const item = numpygradCaptures.training;
+const full = large
+  ? await getImage({ src: item.image, format: 'webp', quality: 95 })
+  : undefined;
+---
+
+<div
+  class:list={[
+    'analytics-cover',
+    'numpygrad-cover',
+    { 'analytics-cover-large': large },
+  ]}
+>
+  <div class="analytics-cover-heading">
+    <span>NumPyGrad / Interactive studio</span>
+    <span>Built on NumPy</span>
+  </div>
+  <Image
+    src={item.image}
+    alt={item.alt}
+    widths={[480, 960, 1280]}
+    sizes={
+      large
+        ? '(max-width: 767px) calc(100vw - 40px), 1120px'
+        : '(max-width: 767px) calc(100vw - 40px), 544px'
+    }
+    format="webp"
+    quality={85}
+    loading="lazy"
+    decoding="async"
+  />
+  <div class="analytics-cover-footer">
+    <p class="analytics-cover-detail">
+      Train · Inspect · Compare · Navigate · Draw
+    </p>
+    {full && (
+      <a
+        href={full.src}
+        target="_blank"
+        rel="noopener noreferrer"
+        aria-label={`View full-size figure: ${item.title} (opens in a new tab)`}
+      >
+        View full-size figure
+      </a>
+    )}
+  </div>
+</div>
+
+<style>
+  .numpygrad-cover img {
+    object-fit: cover;
+    object-position: top center;
+    background: transparent;
+    border: 1px solid #d8deed;
+  }
+  .numpygrad-cover.analytics-cover-large img {
+    object-fit: contain;
+  }
+</style>

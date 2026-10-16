@@ -4,6 +4,20 @@ import Arrow from '../components/Arrow.astro';
 import ProjectCard from '../components/ProjectCard.astro';
 import { getPublishedProjects } from '../data/work';
 const visibleProjects = await getPublishedProjects();
+const groups = [
+  {
+    id: 'software',
+    title: 'Software & AI',
+    description:
+      'Applications, creative workflows, and the systems behind them.',
+  },
+  {
+    id: 'analytics',
+    title: 'Data & Analytics',
+    description:
+      'From messy inputs to dashboards, predictions, and statistical findings.',
+  },
+];
 ---
 
 <SiteLayout>
@@ -14,7 +28,7 @@ const visibleProjects = await getPublishedProjects();
       <span class="eyebrow-divider" aria-hidden="true">
         /
       </span>
-      <span>Software engineering + applied AI</span>
+      <span>Software + AI + analytics</span>
     </p>
     <h1 id="hero-title">
       I build useful software
@@ -22,9 +36,9 @@ const visibleProjects = await getPublishedProjects();
     </h1>
     <div class="hero-bottom">
       <p>
-        I'm Htet. I work across full-stack products, media workflows, and
-        machine learning systems. I care about how things work, and who they
-        work for.
+        I'm Htet. I build full-stack products, AI workflows, and data tools.
+        From a video editor to a Power BI dashboard, I care about how things
+        work and what they help people understand.
       </p>
       <div class="hero-actions">
         <a class="button button-primary" href="#work">
@@ -49,9 +63,9 @@ const visibleProjects = await getPublishedProjects();
         <span>Human-guided media workflows</span>
         <Arrow direction="up-right" />
       </a>
-      <a href="/work/sgen/">
+      <a href="/work/hospital-operations/">
         <span class="proof-number">03 /</span>
-        <span>Accessible product experiences</span>
+        <span>Data into decision support</span>
         <Arrow direction="up-right" />
       </a>
     </div>
@@ -64,7 +78,7 @@ const visibleProjects = await getPublishedProjects();
   >
     <div class="section-heading">
       <div>
-        <p class="eyebrow">A few things I've built</p>
+        <p class="eyebrow">Things I've built and explored</p>
         <h2 id="work-title">
           Selected work<span class="accent">.</span>
         </h2>
@@ -75,11 +89,38 @@ const visibleProjects = await getPublishedProjects();
         The same curiosity.
       </p>
     </div>
-    <div class="project-grid">
-      {visibleProjects.map((project) => (
-        <ProjectCard project={project} />
+    <nav class="work-group-links" aria-label="Project areas">
+      {groups.map((group) => (
+        <a href={`#${group.id}-work`}>
+          {group.title}
+          <span>
+            {String(
+              visibleProjects.filter((project) => project.group === group.id)
+                .length,
+            ).padStart(2, '0')}
+          </span>
+        </a>
       ))}
-    </div>
+    </nav>
+    {groups.map((group) => (
+      <section
+        class="work-group"
+        id={`${group.id}-work`}
+        aria-labelledby={`${group.id}-title`}
+      >
+        <div class="work-group-heading">
+          <h3 id={`${group.id}-title`}>{group.title}</h3>
+          <p>{group.description}</p>
+        </div>
+        <div class="project-grid">
+          {visibleProjects
+            .filter((project) => project.group === group.id)
+            .map((project) => (
+              <ProjectCard project={project} />
+            ))}
+        </div>
+      </section>
+    ))}
   </section>
 
   <section
@@ -104,9 +145,9 @@ const visibleProjects = await getPublishedProjects();
         makes it possible.
       </p>
       <p>
-        That has taken me from building an accessible social feed to shaping a
-        media generation workflow, and down to writing the gradient engine
-        behind a neural network.
+        That has taken me from an accessible social feed and a music video
+        editor to a gradient engine, hospital dashboards, and predictive
+        modeling. I enjoy working through both the software and the data.
       </p>
       <p>
         My background is in Applied AI & Analytics at Nanyang Polytechnic.
@@ -121,7 +162,7 @@ const visibleProjects = await getPublishedProjects();
         <ul>
           <li>Full-stack development</li>
           <li>Machine learning systems</li>
-          <li>Accessible interfaces</li>
+          <li>Data analytics & visualization</li>
         </ul>
       </div>
     </div>

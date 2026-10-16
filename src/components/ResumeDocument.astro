@@ -1,0 +1,177 @@
+---
+import Arrow from './Arrow.astro';
+import { site } from '../data/site';
+import type { Project } from '../data/projects';
+import {
+  resumeContact,
+  educationHistory,
+  skills,
+  projectStacks,
+  resumeHighlights,
+  profile,
+  selectedProjectIds,
+  additionalProjects,
+  certificates,
+  leadership,
+} from '../data/resume';
+interface Props {
+  projects: Project[];
+}
+const { projects } = Astro.props;
+const work = selectedProjectIds.map((id) =>
+  projects.find((project) => project.id === id)!,
+);
+const additionalWork = additionalProjects.map((item) => ({
+  ...item,
+  project: projects.find((project) => project.id === item.id)!,
+}));
+const sectionId = (name: string) => `resume-${name}`;
+---
+
+<article class="resume-document" aria-label={`${site.name}'s resume`}>
+  <header class="resume-identity">
+    <h2 class="resume-name">
+      {site.name}
+      <span class="accent">.</span>
+    </h2>
+    <p class="resume-focus">
+      Software development · Applied AI · Data analytics
+    </p>
+    <ul class="resume-contact">
+      <li>{site.location}</li>
+      <li>
+        <a href={`tel:${resumeContact.phone.replaceAll(' ', '')}`}>
+          {resumeContact.phone}
+        </a>
+      </li>
+      <li>
+        <a href={`mailto:${resumeContact.email}`}>{resumeContact.email}</a>
+      </li>
+      <li>
+        <a href={site.github} target="_blank" rel="noopener noreferrer">
+          github.com/Htet-Aung
+        </a>
+      </li>
+      <li>
+        <a
+          href={resumeContact.linkedin}
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          linkedin.com/in/htet-ak
+        </a>
+      </li>
+    </ul>
+  </header>
+  <section class="resume-section" aria-labelledby={sectionId('summary')}>
+    <h2 id={sectionId('summary')}>Summary</h2>
+    <p>{profile}</p>
+  </section>
+  <section class="resume-section" aria-labelledby={sectionId('skills')}>
+    <h2 id={sectionId('skills')}>Technical skills</h2>
+    <dl class="resume-skills">
+      {skills.map((skill) => (
+        <div>
+          <dt>{skill.label}</dt>
+          <dd>{skill.items}</dd>
+        </div>
+      ))}
+    </dl>
+  </section>
+  <section class="resume-section" aria-labelledby={sectionId('projects')}>
+    <h2 id={sectionId('projects')}>Selected projects</h2>
+    <div class="resume-projects">
+      {work.map((project) => (
+        <section class="resume-project" aria-labelledby={sectionId(project.id)}>
+          <div class="resume-project-heading">
+            <h3 id={sectionId(project.id)}>
+              <a
+                href={project.caseStudy}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                {project.title}
+                <Arrow direction="up-right" />
+              </a>
+            </h3>
+            <span class="resume-project-stack">
+              {projectStacks[project.id]}
+            </span>
+          </div>
+          <p class="resume-project-role">
+            {project.role}
+            {project.teamContext !== 'Solo project' &&
+              ` · ${project.teamContext}`}
+          </p>
+          <ul>
+            {resumeHighlights[project.id].map((bullet) => (
+              <li>{bullet}</li>
+            ))}
+          </ul>
+        </section>
+      ))}
+    </div>
+  </section>
+  <section
+    class="resume-section"
+    aria-labelledby={sectionId('additional-projects')}
+  >
+    <h2 id={sectionId('additional-projects')}>Additional projects</h2>
+    <div class="resume-additional-projects">
+      {additionalWork.map(({ project, summary }) => (
+        <section
+          class="resume-additional-project"
+          aria-labelledby={sectionId(project.id)}
+        >
+          <h3 id={sectionId(project.id)}>
+            <a
+              href={project.caseStudy}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              {project.title}
+              <Arrow direction="up-right" />
+            </a>
+          </h3>
+          <p>{summary}</p>
+        </section>
+      ))}
+    </div>
+  </section>
+  <section class="resume-section" aria-labelledby={sectionId('education')}>
+    <h2 id={sectionId('education')}>Education</h2>
+    <div class="resume-education">
+      {educationHistory.map((item) => (
+        <section class="resume-education-item">
+          <div class="resume-education-heading">
+            <strong>{item.institution}</strong>
+            <span>{item.dates}</span>
+          </div>
+          <p>
+            {item.qualification} · {item.details}
+          </p>
+        </section>
+      ))}
+    </div>
+  </section>
+  <section class="resume-section" aria-labelledby={sectionId('certificates')}>
+    <h2 id={sectionId('certificates')}>Certificates</h2>
+    <ul class="resume-list resume-certificates">
+      {certificates.map((cert) => (
+        <li>{cert}</li>
+      ))}
+    </ul>
+  </section>
+  <section class="resume-section" aria-labelledby={sectionId('leadership')}>
+    <h2 id={sectionId('leadership')}>Leadership &amp; activities</h2>
+    <div class="resume-leadership">
+      {leadership.map((item) => (
+        <section class="resume-leadership-item">
+          <p>
+            <strong>{item.title}</strong> · {item.description}
+          </p>
+        </section>
+      ))}
+    </div>
+  </section>
+</article>

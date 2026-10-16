@@ -1,101 +1,127 @@
 ---
 title: Shades of SG
 projectId: shades-of-sg
-description: Heritage music, shaped into visual stories.
-intro: A cultural media platform connecting audio transcription, human scene review, image generation, editing, and synchronized playback.
-role: Generation pipeline & editing experience
+description: From a song to a music video, with the creator in control.
+intro: An AI music video studio with scene planning, a browser-based timeline editor, and Shades Assistant for refining visuals and lyrics in natural language.
+role: Media pipeline, video editor & AI assistant
 teamContext: Team project
 stack:
   - React
   - Node.js
   - PostgreSQL
+  - AI APIs
   - FFmpeg
   - WaveSurfer.js
+repoUrl: https://github.com/Shades-of-SG/Shades-of-SG
 status: published
 ---
 
 import ArchitectureDiagram from '../../components/ArchitectureDiagram.astro';
+import ShadesCapture from '../../components/ShadesCapture.astro';
 
 ## The short version
 
-Shades of SG explores how Singaporean heritage music can become a more engaging digital experience. The platform pairs songs with lyric-synchronized visuals and cultural context, while giving creators a way to review and edit what the generation pipeline produces.
+Shades of SG is a music video creation studio. A creator brings a song, the app transcribes its lyrics and proposes visual scenes, and a generation pipeline assembles those scenes into a video. A compact browser-based editor then lets the creator change individual frames, correct lyrics, preview the result, and export it. Shades Assistant adds a conversational way to critique a scene or request an edit.
 
-Within the team, I owned the media generation pipeline and the editing and playback experience. That included transcription and scene planning, the review step before image generation, chorus reuse, video assembly, a waveform-based editor, and synchronized public playback. Authentication, discovery, dashboards, and other platform modules were teammate-owned work.
+The platform serves a general music audience: the song's lyrics, mood, and creative direction guide the visuals. Alongside the finished video, creators can publish song context, quizzes, and interactive instrument content for listeners to explore.
 
-The central engineering problem was connecting generation to an editable workflow. Creators needed control over the story without having to rebuild every asset or manually repair the timing after each change.
+Within the team, I built the media generation pipeline and the editing and playback experience, including the scene-review interface, timeline editor, and AI assistant integration. Authentication, discovery, dashboards outside the generation workflow, and other platform modules were teammates' work.
 
-## A workflow with a review point
+The engineering challenge was making generation editable. A creator should be able to change one scene without starting the entire song again, and keep lyrics aligned with the audio throughout the process.
 
-The React frontend talks to a Node.js/Express backend, with PostgreSQL tracking jobs and scene metadata. Generated media is stored in Cloudinary, while FFmpeg assembles images, audio, and subtitle layers into the video output.
+## Start a song and follow its progress
+
+The Generation Studio dashboard brings new-song intake and generation jobs into one place. Creators can supply a YouTube URL or upload an MP3/WAV file, enter the title and artist, and start a job. The backend creates the song record, prepares the audio, and dispatches it to the generation pipeline.
+
+Job cards show the track, artist, and current status. Counts and filter tabs help creators find work that is processing, completed, or failed. While jobs are queued or processing, the dashboard refreshes their status every three seconds. A creator can open the progress view, continue into the editor when a video is ready, or delete a job through a confirmation dialog.
+
+<ShadesCapture capture="dashboard" />
+
+The React frontend talks to a Node.js/Express backend. PostgreSQL retains job state and scene metadata, Cloudinary stores the media, and FFmpeg assembles the final video. The automated pipeline has five phases: audio transcription, scene planning, image generation, video assembly, and song-content curation. Scene planning deliberately pauses for creator review before image generation begins.
 
 <ArchitectureDiagram
-  label="The creator-led workflow"
-  flow="audio → plan → review → assemble"
+  label="The creator workflow"
+  flow="song → scenes → video → final edit"
   steps={[
     {
       number: '01',
       title: 'Transcribe',
-      detail: 'Audio becomes timed lyric blocks',
+      detail: 'Audio becomes timestamped lyrics',
     },
     {
       number: '02',
-      title: 'Plan scenes',
-      detail: 'Lyrics guide the visual prompts',
+      title: 'Plan & review',
+      detail: 'The creator shapes each scene',
     },
     {
       number: '03',
-      title: 'Creator review',
-      detail: 'Fix grouping before rendering',
+      title: 'Generate',
+      detail: 'Images and audio become a video',
     },
     {
       number: '04',
-      title: 'Generate & assemble',
-      detail: 'Frames, video, cultural context',
+      title: 'Edit & publish',
+      detail: 'Refine frames, lyrics, and context',
     },
   ]}
-  caption="The creator reviews the plan before image generation. Later editing works with the same scene and lyric metadata used for assembly and playback."
+  caption="The review pause sits before image generation. The editor later uses the same scenes and lyric timestamps for preview, export, and public playback."
 />
 
-The backend records the current stage of each generation job. Transcription creates timestamped text. Scene planning groups that text into visual moments. An `AWAITING_REVIEW` state then pauses the workflow before rendering images. After confirmation, the pipeline creates frames, assembles the video, and prepares cultural context.
+## Review the story before rendering
 
-Keeping review as an explicit state made the handoff between automation and creator decisions part of the system, rather than an exception the interface had to work around.
+At the `AWAITING_REVIEW` stage, the scene editor presents the proposed visual prompts and timestamped lyric blocks. Creators can rewrite a prompt, request a new concept, correct a misheard lyric, add or remove scenes, and drag lyric blocks between them. Confirming the plan resumes image generation and video assembly.
 
-## Preserve the timing, edit the grouping
+Each lyric pill retains its original audio timestamps. Moving it changes which scene it belongs to; the scene's start and end times are recalculated from its earliest and latest blocks. That lets a creator reorganize the story without manually rebuilding subtitle timing.
 
-Scene planning and transcription answer different questions. Transcription says when a lyric is heard. Scene planning decides which lyrics belong together visually. Letting a creator edit both through raw time fields makes those responsibilities easy to confuse.
+<ShadesCapture capture="review" />
 
-I treated each transcription line as a timestamped block. Creators could move those blocks between scenes, while the underlying audio timestamps remained attached to the lyric. The scene boundaries were recalculated from the earliest block start and latest block end.
+I stored those blocks in PostgreSQL `JSONB` so the review screen, editor, and player could share the same timing data. The confirmation path also fills in missing visual prompts, handling the case where a creator adds a scene but has not written its description yet.
 
-PostgreSQL's `JSONB` scene-block field retained the structured timing data. That gave the review interface a way to reorganize the story without asking the creator to reconstruct the timing by hand.
+Repeated choruses introduce another useful connection. Matching lyric groups can share a visual prompt and reuse generated image assets, avoiding duplicate generation. Creators can propagate a revised visual motif across the chorus scenes when they want those repetitions to stay consistent.
 
-New scenes also needed valid prompts. The confirmation path included a fallback to fill a missing visual description before rendering. This addressed the practical case where a creator split a scene but had not yet written a prompt for the new segment.
+## A video editor in the browser
 
-## Reuse a chorus without losing control
+Once generation completes, the timeline editor puts a 16:9 preview, scene-thumbnail filmstrip, and WaveSurfer.js audio waveform together. Creators can play, pause, seek, and move between scenes while seeing how the visuals line up with the song.
 
-Repeated choruses are a useful opportunity for reuse. Generating another image for the same lyrical hook can spend another call and make a repeated musical moment look unnecessarily different.
+Selecting a frame opens its editing controls. A creator can change its visual prompt and regenerate that scene's image, or upload a custom image. Lyric corrections and caption controls sit alongside the scene edits. On export, the app assembles the revised video with FFmpeg and lets the creator choose whether captions are burned into the MP4.
 
-The frame generator normalizes a lyric-based cache key by reducing differences in punctuation, casing, and whitespace. When the key matches a previously generated chorus, a later scene can reference the existing media asset instead of requesting a new one.
+The scene data and player have separate responsibilities. I kept edits in React state and updated the affected frames and lyric blocks without recreating the waveform player. Editing the timeline stays distinct from compiling the final video, which requires a backend media-processing step.
 
-This choice makes repeated sections visually consistent, but it also creates an editing question: should replacing one chorus image replace all of its repetitions? The editor exposes that as a creator choice. A propagation action locates the matching lyric groups and updates their frame references together.
+## Shades Assistant: advice that becomes an edit
 
-The trade-off is that matching text does not always imply identical creative intent. A useful next improvement would be a clearer way to keep one repeated scene visually distinct when the story calls for it.
+Shades Assistant lives inside the editor, available through its button or the `Shift + A` shortcut. It receives the song's title, artist, theme, lyrics, active scene, and surrounding scene prompts and timestamps, so a request can refer to the video being edited.
 
-## Editing without rebuilding the player
+It supports four kinds of interaction:
 
-The editor uses WaveSurfer.js for the audio waveform and timeline navigation. Scene prompts, frames, lyric blocks, and playback position have related roles, but changing one scene's metadata should not recreate the audio instance.
+- **Creative feedback:** critique an opening frame or explain whether a scene fits the song's mood.
+- **Visual edits:** turn a request such as “Make Scene 3 a rainy night with softer lighting” into a revised prompt.
+- **Lyric corrections:** fix transcription errors in a scene's text.
+- **Chorus propagation:** carry a visual style or motif across repeated chorus scenes.
 
-I kept editor changes in React state and applied updates to the relevant scenes. A DeepSeek-powered assistant drawer returned structured actions such as prompt updates, lyric edits, and chorus propagation. Those patches used the same editing operations as the interface instead of treating an assistant response as a replacement for the whole project.
+<ShadesCapture capture="editor" />
 
-That separation matters for predictability. A creator can keep listening while changing a visual prompt, and the application can identify which scene an edit affects. The assistant helps express the edit; the application still owns how the edit changes the data.
+Advice appears as a chat response. An editing request produces an actionable patch card that the creator can review and apply with **Apply Changes**. The assistant proposes the edit; the creator decides when it enters the timeline.
 
-Public playback uses the timestamped lyric blocks to determine which caption is active. A half-open interval, `start <= time < end`, keeps adjacent blocks from being active at the same boundary. The same experience includes cultural context, instrument interactions through the Web Audio API, and trivia.
+I connected the assistant's structured actions to the existing scene-editing API. Applied patches update the affected frames and caption state, keeping the editor's playback position intact. This makes the assistant part of the editing workflow rather than a separate chat box whose output has to be copied manually.
 
-## Trade-offs and next steps
+## Publish more than a video
 
-**Structured jobs create more state to manage.** Explicit generation stages make progress and review easier to follow, while requiring careful handling of confirmation, failures, and re-entry into a stage. I would next focus on clearer recovery and retry behavior around the media services.
+The curation screen gives creators a final place to review the song's supporting content. They can edit or regenerate a short article, revise quiz questions and answer choices, and choose instruments from a catalog with audio previews. These features add context and interaction around the music without restricting the studio to a particular genre or audience.
 
-**Reuse needs a visible exception.** Chorus caching reduces duplicate work, but creators need control when repeated text should lead to a different visual. Reuse and propagation should be understandable decisions in the editor.
+The public song page brings the finished video and synchronized lyrics together with the track details and song article. Instrument cards play audio samples or synthesized notes, while the quiz offers immediate answer feedback and a completion score.
 
-**A generated patch still needs application rules.** Assistant output is useful only when its actions are constrained to the operations the editor can support. Stronger patch validation and an undo history would make those edits easier to inspect and reverse.
+<ShadesCapture capture="player" />
 
-The part I would keep is the shared scene model connecting planning, review, editing, assembly, and playback. That continuity is what turns a sequence of media services into a workflow a creator can actually use.
+For captions, the player uses the timestamped lyric blocks to choose the active line. A half-open interval, `start <= time < end`, avoids displaying two adjacent blocks at the same boundary. The same timing model therefore carries through planning, editing, export, and playback.
+
+## Engineering decisions and next steps
+
+**Pause before spending generation work.** Making review an explicit job state gives creators a chance to fix scene grouping and prompts before requesting images. It also means the backend must handle a job that waits for human input and later resumes.
+
+**Reuse images while keeping creative control.** A normalized lyric cache key lets repeated choruses reference an existing asset. Repeated words can still deserve different imagery, so propagation needs to remain an understandable editing choice.
+
+**Keep assistant edits inspectable.** Structured actions and an explicit apply step make changes easier to follow. An undo history and clearer recovery when a multi-scene edit only partly succeeds would strengthen this workflow further.
+
+The shared scene model is the core of the project: it connects AI generation, human review, a working video editor, and the published experience through one set of scenes and lyric timestamps.
+
+[Explore Shades of SG on GitHub →](https://github.com/Shades-of-SG/Shades-of-SG)

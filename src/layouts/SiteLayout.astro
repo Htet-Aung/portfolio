@@ -16,7 +16,7 @@ interface Props {
   noindex?: boolean;
 }
 const {
-  title = `${site.name} — Software & applied AI`,
+  title = `${site.name} — Software, AI & analytics`,
   description = site.description,
   noindex = false,
 } = Astro.props;
@@ -50,6 +50,9 @@ const structuredData =
               'Software engineering',
               'Applied AI',
               'Full-stack development',
+              'Business intelligence',
+              'Predictive analytics',
+              'Statistical analysis',
             ],
           },
           ...(deployment.siteUrl

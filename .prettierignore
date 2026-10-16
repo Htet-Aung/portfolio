@@ -3,4 +3,7 @@ dist/
 .astro/
 .local/
 docs/
+.agents/
+.gemini/
+.vercel/
 package-lock.json

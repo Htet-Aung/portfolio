@@ -15,7 +15,7 @@ const { project } = Astro.props;
       <span>{project.category}</span>
       <span>{project.number}</span>
     </div>
-    <h3>
+    <h4>
       {project.caseStudy ? (
         <a href={project.caseStudy}>
           {project.title}
@@ -24,16 +24,11 @@ const { project } = Astro.props;
       ) : (
         project.title
       )}
-    </h3>
+    </h4>
+    <p class="project-kind">{project.descriptor}</p>
     <p class="project-summary">{project.summary}</p>
-    <p class="project-role">
-      {project.role}
-      {project.teamContext &&
-        project.teamContext !== 'Solo project' &&
-        ` · ${project.teamContext}`}
-    </p>
     <ul class="stack-list" aria-label={`${project.title} technologies`}>
-      {project.stack.slice(0, 3).map((tech) => (
+      {project.stack.map((tech) => (
         <li>{tech}</li>
       ))}
     </ul>

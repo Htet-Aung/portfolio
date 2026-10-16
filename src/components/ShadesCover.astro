@@ -1,0 +1,68 @@
+---
+import { Image, getImage } from 'astro:assets';
+import coverImage from '../assets/work/shades-of-sg/cover.png';
+
+interface Props {
+  large?: boolean;
+}
+
+const { large = false } = Astro.props;
+
+const full = large
+  ? await getImage({ src: coverImage, format: 'webp', quality: 95 })
+  : undefined;
+---
+
+<div
+  class:list={[
+    'analytics-cover',
+    'shades-cover',
+    { 'analytics-cover-large': large },
+  ]}
+>
+  <div class="analytics-cover-heading">
+    <span>Shades of SG / AI video studio</span>
+    <span>Music · Memory · Culture</span>
+  </div>
+  <Image
+    src={coverImage}
+    alt="Shades of SG home platform portal showing Singapore music, memories, and culture discovery features."
+    widths={[480, 960, 1280]}
+    sizes={
+      large
+        ? '(max-width: 767px) calc(100vw - 40px), 1120px'
+        : '(max-width: 767px) calc(100vw - 40px), 544px'
+    }
+    format="webp"
+    quality={85}
+    loading="lazy"
+    decoding="async"
+  />
+  <div class="analytics-cover-footer">
+    <p class="analytics-cover-detail">
+      Explore songs · Generate video · Timeline editor · Community reflection
+    </p>
+    {full && (
+      <a
+        href={full.src}
+        target="_blank"
+        rel="noopener noreferrer"
+        aria-label="View full-size figure: Shades of SG Home Portal (opens in a new tab)"
+      >
+        View full-size figure
+      </a>
+    )}
+  </div>
+</div>
+
+<style>
+  .shades-cover img {
+    object-fit: cover;
+    object-position: top center;
+    background: #0f1422;
+    border: 1px solid #1a2235;
+  }
+  .shades-cover.analytics-cover-large img {
+    object-fit: contain;
+  }
+</style>

@@ -1,10 +1,10 @@
----
+﻿---
 title: ROLLOVER
 projectId: rollover
-description: A mystery reveal, grounded in real inventory rules.
-intro: A circular-retail hackathon prototype that pairs an arcade-style reveal with deterministic matching, explicit constraints, and a stable server-owned offer.
+description: Surplus discovery with a playful reveal and dependable matching rules.
+intro: A surplus-retail arcade that turns a shopper’s limits and preferences into mystery bundles, carrying the same offer through comparison, opening, and a transparent haul summary.
 role: Full-stack engineer
-teamContext: Three-person team
+teamContext: Equal three-person engineering team · 24-hour hackathon
 stack:
   - React
   - Express
@@ -14,90 +14,95 @@ repoUrl: https://github.com/Samuwuwuwu/SGD-Open-Hack-26-CMC
 status: published
 ---
 
-import ArchitectureDiagram from '../../components/ArchitectureDiagram.astro';
+import RolloverCapture from '../../components/RolloverCapture.astro';
+import RolloverDemo from '../../components/RolloverDemo.astro';
 
-## The short version
+## Turn surplus discovery into something people want to explore
 
-ROLLOVER is a team prototype built for SDG Open Hack 2026, exploring responsible consumption through circular retail. The idea is to turn discovery of surplus goods into an arcade-like mystery drop: set a budget, describe preferences, choose a sealed offer, and reveal the products.
+Surplus goods can still be useful, but finding the right buyer requires more than displaying a clearance list. ROLLOVER explores a different experience: describe who you’re shopping for, set your limits, answer a playful quiz, and discover a bundle through an arcade-style reveal. The challenge is keeping the surprise relevant, affordable, and easy to inspect.
 
-I worked as part of an equal three-person engineering team across the matching domain, React/Express integration, and tactile interface. This was a shared delivery, with the user journey and system integration developed together.
+I co-built the prototype during the 24-hour SDG Open Hack 2026 sprint as part of an equal three-person engineering team. We shared the matching domain, React/Express integration, and interface delivery. My contribution sits within that joint full-stack effort: connecting the product journey to inventory rules and state that remain consistent as users move through the app.
 
-The prototype uses illustrative inventory and pricing. Its product story is about a possible way to present surplus goods; the named brands in the demo are not project partners. The engineering focus was making the surprise compatible with clear constraints and a reproducible offer.
+The result is an end-to-end discovery prototype, from setup to a saved session pick. The following screens show how the experience works and the engineering decisions that support it. Inventory and pricing are illustrative; the demo’s brands are examples. The SDG 12 idea is to encourage a second life for usable goods, with no measured waste-reduction outcome claimed.
 
-## The server owns the contents
+## 1. Start with a clear invitation
 
-The React frontend handles the journey and reveal animation. The Express backend reads a committed inventory workbook, applies constraints, and assembles candidate bundles. Pricing and eligibility stay in the matching domain rather than being chosen by the client or a language model.
+“Good stuff. New game.” introduces the premise before asking the user to configure anything. The capsule-machine illustration, bright colors, strong outlines, and physical-looking controls establish the surplus arcade’s identity. A single **Start my drop** action gives the page a clear next step.
 
-<ArchitectureDiagram
-  label="The matching contract"
-  flow="constraints → match → preview → reveal"
-  steps={[
-    {
-      number: '01',
-      title: 'Set constraints',
-      detail: 'Budget, sizing, and exclusions',
-    },
-    {
-      number: '02',
-      title: 'Match inventory',
-      detail: 'Filter, score, and build bundles',
-    },
-    {
-      number: '03',
-      title: 'Sealed preview',
-      detail: 'Hints without product details',
-    },
-    {
-      number: '04',
-      title: 'Verified reveal',
-      detail: 'Recompute the selected offer',
-    },
-  ]}
-  caption="The server chooses the bundle. The client selects an offer and animates its reveal; the animation does not choose or change the products."
-/>
+The cover repeats here because this screen sets up the whole interaction. Its left-hand rail previews the seven stages—Who, Budget, Category, Quiz, Boxes, Reveal, and Summary—and later marks progress and lets users return to available stages. That gives an unfamiliar shopping format a visible structure: the personality comes from the visual system, while the route through the experience stays understandable.
 
-The workbook is parsed into an in-memory catalog at startup. Its structured fields describe prices, stock, sizing, categories, condition, and exclusion tags. That keeps the dataset easy to edit during a prototype sprint and gives the matching engine a consistent input.
+<RolloverCapture capture="start" />
 
-The [matching module](https://github.com/Samuwuwuwu/SGD-Open-Hack-26-CMC/blob/main/services/api/src/domain/matching.js) is separate from the API routes. That separation makes the selection rules inspectable without having to follow an animation or request handler to understand them.
+## 2. Set the limits before shaping the surprise
 
-## Constraints before preferences
+The user first chooses **For me** or **Someone else**, then sets a spending ceiling. On **Shape the mix**, they select categories and choose whether to include preloved goods. Size, dietary preferences, and excluded allergens provide more specific boundaries where relevant. Recipient choice also changes how the quiz addresses the person receiving the drop.
 
-A personality quiz can help a bundle feel relevant, but it should not relax the budget or introduce an item that violates an explicit exclusion.
+These choices become domain inputs. The Express backend reads an Excel inventory workbook with `xlsx`, normalizing product records into an in-memory catalog. Before building bundles, it checks active status, stock, valid affordable prices, and the requested category, condition, size, and food restrictions. Keeping these rules on the server connects the interface’s promises to the products it can actually offer.
 
-The matching path first filters the catalog against the hard constraints. It then uses preferences and category diversity to assemble differentiated offers from the eligible pool. Candidate tiers aim at different mixes and budget fractions, while remaining tied to the same catalog.
+This distinction matters: a quiz answer can make an eligible item more appealing, but it cannot make a disallowed size or excluded allergen acceptable. Editing the setup clears the existing offers and reveals so the user’s new limits cannot be paired with an old result. That is the kind of state handling needed when a multi-step form becomes a real product workflow.
 
-When the eligible pool is small, the system can return fewer offers. That is more useful than presenting several visually different boxes that contain the same underlying bundle. This behavior also makes sparse inventory a domain condition the interface needs to handle.
+<RolloverCapture capture="setup" />
 
-The important boundary is between eligibility and preference. A preference can affect ranking among eligible items; it should not make an excluded item eligible again.
+## 3. Gather preferences through a quiz people might enjoy
 
-## Separate the preview from the reveal
+Instead of presenting a long product-preference checklist, ROLLOVER lets users choose a familiar topic and answer scenario questions. In this capture, a **Movies & TV** prompt asks which role they would take during an Interstellar docking scene. The choices express different inclinations; they are not scored as right or wrong answers.
 
-The mystery mechanic needs the client to know enough to make a choice without receiving the product details too early. The preview contract therefore returns aggregate information such as the offer label, total, item count, categories, and clues.
+Each answer carries tags from eligible inventory. The topic and previous answers inform subsequent prompts, while selected tags later contribute to product relevance scores. The quiz therefore has a purpose beyond decoration: it translates a conversational interaction into structured inputs the matching engine can use.
 
-`/api/drops/match` supplies those sealed previews. After the user selects an offer, `/api/drops/reveal` recomputes the deterministic selection and returns its full product records. The client can then run the box opening and card reveal sequence using the result.
+The quiz service supports inventory-constrained AI wording, curated questions, and a deterministic fallback. Generated responses are checked for four labeled options with distinct, allowed tags before use. If generation is unavailable or unsuitable, built-in questions keep the journey moving. The model’s role is limited to quiz content; product names, prices, availability, and bundle construction come from the catalog and matching code. This keeps an optional AI interaction from becoming a dependency for completing the experience.
 
-This division keeps the reveal behavior attached to the server's matching decision. Changing a client animation or clicking through it quickly should not become a way to choose a different bundle.
+<RolloverCapture capture="quiz" />
 
-It also has a clear limitation: deterministic recomputation assumes a stable inventory input. A real retail service would need stock reservations, snapshot or version handling, and a way to explain an offer that expires. Those concerns were outside the in-memory prototype.
+## 4. Compare meaningful offers while keeping the reveal intact
 
-## Give the interaction some character
+The quiz leads to sealed bundles with names such as **Little lift**, **The remix**, **Wild card**, and **Full rotation**. Before choosing, the user sees price, item count, categories, color hints, and teasers. In this screenshot, **The remix** offers four finds for **$65.10** under a **$1,000** limit. The ceiling is a limit, rather than a requirement to spend it all.
 
-The interface takes inspiration from capsule toys and arcade controls. Button press states, hard borders, layered CSS transforms, and a staged box opening make the reveal feel more physical than a conventional product list.
+Underneath those cards, the matcher starts with the eligible pool, scores quiz relevance, and constructs bundles around affordable anchor items. Different profiles target different budget fractions and item counts. Category variety and overlap penalties help the offers provide distinct choices; duplicate bundles are skipped, and a sparse catalog can produce fewer than four candidates. Totals are calculated in integer cents to avoid floating-point drift in the budget checks.
 
-The flow moves from recipient and budget to constraints, quiz, sealed offers, opening, individual card reveals, and a final haul breakdown. A quicker reveal path supports people who want the result without stepping through every card. Reduced-motion styling gives the same result with less movement.
+The preview API, `/api/drops/match`, returns enough information to compare offers while leaving full product records for the reveal response. This is a useful product boundary: shoppers can assess cost and general fit before choosing, while the discovery mechanic still has something to uncover. It also shows how recommendation logic, money handling, and an API contract work together to support a visible feature.
 
-CSS was a practical fit for the limited geometry of the box and cards. It kept the interaction close to normal browser layout and avoided adding a separate 3D scene system to the prototype.
+<RolloverCapture capture="boxes" />
 
-The quiz adds another kind of character. A server-side language model can generate wording from eligible inventory tags, while built-in deterministic questions keep the flow usable when live generation is unavailable. The language model writes quiz copy; it does not invent the inventory, prices, or availability used by matching.
+## 5. Make the opening satisfying and the result consistent
 
-## Trade-offs and next steps
+Selecting a box moves into the staged opening: a layered CSS box, lid movement, and confetti give the transition a physical quality. The frontend requests the selected offer’s products while the animation runs. It advances when both the opening is complete and the server response is available, preventing the next screen from arriving without its contents.
 
-**A workbook speeds up prototyping.** Catalog changes are easy to make, but require a reload to become available. A production service would need transactional inventory updates and concurrent stock handling.
+`/api/drops/reveal` recomputes the candidates from the request facts and looks up the selected offer ID. That ID is derived from a SHA-256 hash of the bundle and matching inputs. With a stable catalog and the same inputs, the preview and revealed products refer to the same offer. The animation presents that result; it does not select the products.
 
-**Recomputation keeps the prototype lean.** The backend can reproduce an offer without retaining a shopping-session record. Real checkout would introduce reservation and expiry behavior that this approach alone does not provide.
+Users can skip the opening, return to the boxes, or retry a failed reveal. Request IDs prevent a late response from replacing the result after the user has moved away or chosen another box. Reduced-motion styling also supports the transition. Together, these details make the polished interaction usable beyond the ideal sequence of clicks.
 
-**A playful reveal needs a direct path.** Motion can support the product idea, while accessible controls and a quicker reveal keep it from blocking the actual result.
+<RolloverCapture capture="opening" />
 
-The next step would be to test the matching rules against a wider set of inventory edge cases, then explore how reservation and checkout change the offer contract. The prototype's strongest decision is keeping a fun frontend experience connected to explicit, server-owned facts.
+## 6. Reveal individual finds without losing progress
+
+After the box opens, its contents appear as sealed product cards. Users can uncover them in their preferred order, watch the **finds revealed** counter update, or choose **Reveal all** to move faster. The screenshot captures the moment before any of the four cards has been opened.
+
+The client stores each opened drop and its card-reveal progress against the offer ID. Going back to compare boxes and returning to a previously opened offer preserves its discoveries. This makes exploration possible without forcing users to repeat the opening or losing track of which products they have already seen.
+
+The interaction also handles focus as cards open, directing keyboard users toward the next card or summary action. Buttons use a stationary hit area with a visually moving face, so their pressed effect does not move the target away from the pointer. These are small implementation decisions with a practical result: a tactile interface that remains controllable.
+
+<RolloverCapture capture="cards" />
+
+## 7. Turn the surprise into a transparent haul
+
+The summary brings the selected bundle back into a conventional, inspectable format. The same four finds and **$65.10** total carry through from the sealed preview. Each expandable item exposes its product details, including condition, materials, category, and surplus reason; size, food, and image-attribution information are available where relevant.
+
+Here, the expanded Casio watch entry explains the product and its overstock status. That detail connects the circular-retail premise to the individual item: users can understand what they have found and why it belongs in a surplus drop. It also gives the catalog’s structured fields a visible purpose after matching is complete.
+
+**Compare boxes** supports reconsidering the selection, **Replay opening** repeats the presentation, and **Save this drop** marks the pick for the current session. The prototype ends at that decision. Reservation, payment, account persistence, and fulfillment would require additional systems before it could operate as a retail service.
+
+<RolloverCapture capture="summary" />
+
+## What this project demonstrates
+
+ROLLOVER brought product design, frontend interaction, backend rules, and AI integration into one coherent journey under a short delivery window. The strongest part is the connection between them: setup changes invalidate old offers, preferences rank eligible inventory, the preview carries through to the reveal, and returning to a box preserves progress. Those behaviors make the interface more than a collection of animated screens.
+
+The architecture also reflects the prototype’s scope. A spreadsheet catalog made stock easy to edit during the sprint, and a separate matching module kept eligibility and bundle logic inspectable. CSS suited the box geometry without introducing a separate 3D rendering system. Deterministic recomputation kept the backend lean, but a changing production catalog would need versioned offers, expiry, and transactional stock reservations. These choices show full-stack judgment about where to invest effort and what a successful prototype still needs to become a service.
+
+## Watch the complete journey
+
+The full recording brings the flow together, including the setup screens, quiz transitions, individual product reveals, and a return to compare a second offer. It uses a different configuration from the screenshots, so the budget and products vary.
+
+<RolloverDemo />
 
 [Explore ROLLOVER on GitHub →](https://github.com/Samuwuwuwu/SGD-Open-Hack-26-CMC)

@@ -1,0 +1,37 @@
+---
+import { Image, getImage } from 'astro:assets';
+import {
+  numpygradCaptures,
+  type NumPyGradCaptureId,
+} from '../data/numpygrad-captures';
+interface Props {
+  capture: NumPyGradCaptureId;
+}
+const item = numpygradCaptures[Astro.props.capture];
+const full = await getImage({ src: item.image, format: 'webp', quality: 95 });
+---
+
+<figure class="studio-capture numpygrad-capture">
+  <Image
+    src={item.image}
+    alt={item.alt}
+    widths={[480, 960, 1440]}
+    sizes="(max-width: 767px) calc(100vw - 40px), (max-width: 1100px) calc(100vw - 319px), 760px"
+    format="webp"
+    quality={90}
+    loading="lazy"
+    decoding="async"
+  />
+  <figcaption>
+    <strong>{item.title}</strong>
+    <p>{item.caption}</p>
+    <a
+      href={full.src}
+      target="_blank"
+      rel="noopener noreferrer"
+      aria-label={`View full-size figure: ${item.title} (opens in a new tab)`}
+    >
+      View full-size figure
+    </a>
+  </figcaption>
+</figure>

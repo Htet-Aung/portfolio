@@ -1,0 +1,66 @@
+---
+import { Image, getImage } from 'astro:assets';
+import { rolloverCaptures } from '../data/rollover-captures';
+interface Props {
+  large?: boolean;
+}
+const { large = false } = Astro.props;
+const item = rolloverCaptures.start;
+const full = large
+  ? await getImage({ src: item.image, format: 'webp', quality: 95 })
+  : undefined;
+---
+
+<div
+  class:list={[
+    'analytics-cover',
+    'rollover-cover',
+    { 'analytics-cover-large': large },
+  ]}
+>
+  <div class="analytics-cover-heading">
+    <span>ROLLOVER / The surplus arcade</span>
+    <span>Good stuff. New game.</span>
+  </div>
+  <Image
+    src={item.image}
+    alt={item.alt}
+    widths={[480, 960, 1280]}
+    sizes={
+      large
+        ? '(max-width: 767px) calc(100vw - 40px), 1120px'
+        : '(max-width: 767px) calc(100vw - 40px), 544px'
+    }
+    format="webp"
+    quality={85}
+    loading="lazy"
+    decoding="async"
+  />
+  <div class="analytics-cover-footer">
+    <p class="analytics-cover-detail">
+      Set your limits · Shape the mix · Open your drop
+    </p>
+    {full && (
+      <a
+        href={full.src}
+        target="_blank"
+        rel="noopener noreferrer"
+        aria-label={`View full-size figure: ${item.title} (opens in a new tab)`}
+      >
+        View full-size figure
+      </a>
+    )}
+  </div>
+</div>
+
+<style>
+  .rollover-cover img {
+    object-fit: cover;
+    object-position: top center;
+    background: transparent;
+    border: 1px solid #d8deed;
+  }
+  .rollover-cover.analytics-cover-large img {
+    object-fit: contain;
+  }
+</style>

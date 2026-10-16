@@ -55,6 +55,33 @@ test('Cloudflare preview branches stay unindexed even if indexing is inherited',
     false,
   );
 });
+test('Vercel preview branches stay unindexed even if indexing is inherited', () => {
+  const env = {
+    SITE_URL: 'https://example.com',
+    SITE_INDEXING: 'true',
+    VERCEL: '1',
+  };
+  assert.equal(
+    getDeployment({ ...env, VERCEL_ENV: 'preview' }).indexable,
+    false,
+  );
+  assert.equal(
+    getDeployment({
+      ...env,
+      VERCEL_ENV: 'production',
+      VERCEL_GIT_COMMIT_REF: 'feature',
+    }).indexable,
+    false,
+  );
+  assert.equal(
+    getDeployment({
+      ...env,
+      VERCEL_ENV: 'production',
+      VERCEL_GIT_COMMIT_REF: 'main',
+    }).indexable,
+    true,
+  );
+});
 test('only preview output applies a global noindex response header', () => {
   assert.match(deploymentHeaders(false), /X-Robots-Tag: noindex, nofollow/);
   assert.doesNotMatch(

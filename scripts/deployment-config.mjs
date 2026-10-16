@@ -24,7 +24,11 @@ export function getDeployment(env = process.env) {
   }
   const productionBranch = env.PRODUCTION_BRANCH || 'main';
   const preview =
-    env.CF_PAGES === '1' && env.CF_PAGES_BRANCH !== productionBranch;
+    (env.CF_PAGES === '1' && env.CF_PAGES_BRANCH !== productionBranch) ||
+    (env.VERCEL === '1' &&
+      (env.VERCEL_ENV === 'preview' ||
+        (env.VERCEL_GIT_COMMIT_REF &&
+          env.VERCEL_GIT_COMMIT_REF !== productionBranch)));
   const indexable =
     env.SITE_INDEXING === 'true' && !preview && env.NODE_ENV !== 'development';
   if (indexable && !siteUrl) {
@@ -40,8 +44,7 @@ export function deploymentHeaders(indexable) {
   X-Frame-Options: DENY
   Referrer-Policy: strict-origin-when-cross-origin
   Permissions-Policy: camera=(), microphone=(), geolocation=(), payment=()
-${indexable ? '' : '  X-Robots-Tag: noindex, nofollow\n'}
-/404.html
+${indexable ? '' : '  X-Robots-Tag: noindex, nofollow\n'}\n/404.html
   X-Robots-Tag: noindex, follow
 
 /_astro/*

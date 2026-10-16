@@ -1,9 +1,9 @@
 export const site = {
   name: 'Htet Aung Khant',
   shortName: 'Htet',
-  email: 'htetagkhant2906@gmail.com',
+  email: 'htet.ak@outlook.sg',
   github: 'https://github.com/Htet-Aung',
   location: 'Singapore',
   description:
-    'Htet Aung Khant builds full-stack products, media workflows, and machine learning systems. Explore selected projects and engineering decisions.',
+    'Htet Aung Khant builds software, AI workflows, and data tools. Explore full-stack projects, business intelligence dashboards, predictive models, and statistical research.',
 } as const;

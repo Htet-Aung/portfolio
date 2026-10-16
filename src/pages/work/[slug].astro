@@ -29,7 +29,7 @@ const { data } = entry;
 const contents = headings.filter((heading) => heading.depth === 2);
 const project = projects.find(({ id }) => id === data.projectId)!;
 const published = (await getPublishedProjects()).filter(
-  (item) => item.caseStudy,
+  (item) => item.caseStudy && item.group === project.group,
 );
 const nextProject =
   published[
@@ -64,7 +64,7 @@ const nextProject =
           <strong>{data.teamContext}</strong>
         </div>
         <div>
-          <span class="mono">Built with</span>
+          <span class="mono">Tools & methods</span>
           <strong>{data.stack.join(' · ')}</strong>
         </div>
         {data.repoUrl && (
@@ -91,7 +91,12 @@ const nextProject =
           </ol>
         </nav>
         {data.repoUrl && (
-          <a class="text-link contents-source" href={data.repoUrl}>
+          <a
+            class="text-link contents-source"
+            href={data.repoUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
             Explore the repository <Arrow direction="up-right" />
           </a>
         )}

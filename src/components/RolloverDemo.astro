@@ -1,0 +1,47 @@
+---
+import { getImage } from 'astro:assets';
+import posterImage from '../assets/work/rollover/demo-poster.png';
+const poster = await getImage({
+  src: posterImage,
+  width: 1280,
+  format: 'webp',
+  quality: 90,
+});
+---
+
+<figure class="studio-capture rollover-demo">
+  <video
+    controls
+    playsinline
+    preload="none"
+    width="1600"
+    height="1000"
+    poster={poster.src}
+    aria-label="ROLLOVER complete app walkthrough"
+    aria-describedby="rollover-demo-caption"
+  >
+    <source src="/media/rollover/full-demo.mp4" type="video/mp4" />
+    <track
+      kind="captions"
+      src="/media/rollover/journey.vtt"
+      srclang="en"
+      label="Journey description"
+    />
+    <p>
+      <a href="/media/rollover/full-demo.mp4">Watch the ROLLOVER walkthrough</a>
+    </p>
+  </video>
+  <figcaption id="rollover-demo-caption">
+    <strong>The complete journey in 55 seconds</strong>
+    <p>
+      This silent recording moves from the starting screen through recipient,
+      budget, category setup, and a Music quiz. It compares sealed offers, opens
+      two different boxes, reveals their individual products, inspects the haul
+      details, and saves a pick. This is a separate run from the screenshots,
+      using an $805 limit and different bundles.
+    </p>
+    <a href="/media/rollover/full-demo.mp4" download>
+      Download the full demo
+    </a>
+  </figcaption>
+</figure>

@@ -14,6 +14,8 @@ npm.cmd run dev
 
 Open [localhost:4321](http://localhost:4321/). Review [About](http://localhost:4321/about/), [Resume](http://localhost:4321/resume/), and the [NumPyGrad](http://localhost:4321/work/numpygrad/), [Shades of SG](http://localhost:4321/work/shades-of-sg/), [ROLLOVER](http://localhost:4321/work/rollover/), and [SGEN](http://localhost:4321/work/sgen/) case studies.
 
+Data & Analytics adds [Hospital Operations](http://localhost:4321/work/hospital-operations/), [Retail Customer Analytics](http://localhost:4321/work/retail-data/), [Workout Energy Prediction](http://localhost:4321/work/workout-prediction/), and [Student Wellbeing Study](http://localhost:4321/work/student-wellbeing/). One resume presents four selected projects with concise bullets and four additional projects with short summaries and case-study links.
+
 ```powershell
 npm.cmd run check
 npm.cmd test
@@ -24,9 +26,9 @@ npm.cmd run format:check
 
 The site uses Astro static output, strict TypeScript, MDX content collections, scoped content metadata, and locally bundled Inter/IBM Plex Mono fonts. `src/data/site.ts` holds identity/contact details; `src/data/projects.ts` holds project summaries; `src/content/work/` holds case-study narratives. Decorative project covers are SVG/CSS diagrams and typography, not product screenshots.
 
-Local and preview builds carry `noindex`. Production metadata uses the configured `SITE_URL`; explicitly enabling `SITE_INDEXING=true` produces canonical URLs, a seven-page sitemap, crawler rules, social cards, and structured data. Cloudflare preview branches remain unindexed. See [deployment instructions](docs/deployment.md) for the host settings and release checks.
+Local and preview builds carry `noindex`. Production metadata uses the configured `SITE_URL`; explicitly enabling `SITE_INDEXING=true` produces canonical URLs, an eleven-page sitemap, crawler rules, social cards, and structured data. Cloudflare preview branches remain unindexed. See [deployment instructions](docs/deployment.md) for the host settings and release checks.
 
-The HTML resume supports browser printing and Save as PDF. Genuine NumPyGrad screenshots are optimized locally by Astro; their MIT license is included in `public/media/numpygrad-LICENSE.txt`. Other projects use decorative covers until cleared media is available. There are no runtime AI calls or external font requests. The social preview is authored SVG typography exported locally to PNG; run `npm.cmd run social:generate` after changing its source.
+The single HTML resume supports browser printing and Save as PDF. NumPyGrad, owner-supplied Shades of SG screenshots, and 13 extracted analytics report figures are optimized locally by Astro; see `public/media/README.md` for attribution and the NumPyGrad MIT license. Software project covers are decorative, while analytics covers use authentic report figures. There are no runtime AI calls or external font requests. The social preview is authored SVG typography exported locally to PNG; run `npm.cmd run social:generate` after changing its source.
 
 ---
 
@@ -55,30 +57,33 @@ A lightweight, PyTorch-style deep learning framework and reverse-mode automatic 
 A rapid-prototyped circular-retail discovery platform that diverts stranded enterprise surplus stock into personalized, zero-guilt mystery bundles using arcade gamification, deterministic constraint matching, and tactile Y2K Neobrutalism.
 
 * **Sprint Context:** Built and shipped as an equal 3-person team in a high-intensity **24-hour hackathon sprint** (SDG Open Hack 2026 — Responsible Consumption & Production).
-* **Architecture & Technologies:** React 19, Vite 8, Node.js, Express 5, Excel Parser (`xlsx`), CSS 3D Transforms, OpenAI (`gpt-4.1-nano`), SHA-256 Hashing, Neobrutalist Design System
+* **Architecture & Technologies:** React 19, Vite 8, Node.js, Express 5, Excel Parser (`xlsx`), CSS 3D Transforms, AI API integration, SHA-256 Hashing, Neobrutalist Design System
 * **Core Engineering:**
   * **Deterministic 7-Stage Pipeline:** Built a zero-leak mystery flow enforcing hard budget ceilings, allergen/dietary filters, and size constraints across multi-category surplus inventories.
   * **SHA-256 Offer Verification:** Decoupled candidate previews (`/api/drops/match`) from reveal payloads (`/api/drops/reveal`) using deterministic hash IDs, eliminating product spoilers while guaranteeing reproducible bundle calculation.
   * **Tactile Y2K Gacha Arcade UX:** Developed physical microswitch button physics (`.button-hitbox` zero-shadow depression), CSS 3D perspective box drop/burst animations, and sequential card-pull interactions.
-  * **Resilient Hybrid AI Layer:** Integrated server-side `gpt-4.1-nano` to dynamically synthesize quiz dilemmas from live stock metadata, paired with deterministic offline fallback questions to ensure zero runtime downtime and zero price hallucinations.
+  * **Resilient Hybrid AI Layer:** Integrated a server-side AI API to generate quiz dilemmas from live stock metadata, paired with deterministic offline fallback questions to keep the demo available and prevent invented prices.
 * **Media & Demos:** Campaign ad and demo walkthrough are documented; public playback links are pending.
 * **Documentation:** [Detailed Technical Case Study](docs/portfolio.md#3-case-study-rollover--circular-retail-gacha-arcade-sdg-open-hack-2026) | [Resume Deliverables](docs/resume.md#rollover--circular-retail-gacha-arcade-sdg-open-hack-2026)
 
 ---
 
-### Shades of SG — AI-Powered Cultural Media Studio
-**Full-Stack Engineer — AI Video Generation Pipeline (V1) & Content Consumption Experience (P2)**
+### Shades of SG — AI Music Video Studio & Creative Copilot
+**Full-Stack Engineer — Media Generation Pipeline, Mini Timeline Editor & AI Assistant**
 
-An end-to-end distributed generative media pipeline and interactive cultural studio transforming traditional Singaporean folk songs into cinematic, lyric-synchronized visual narratives.
+An AI music video studio for a general music audience: bring a song, review its proposed scenes, generate the video, then refine frames and lyrics in a browser-based timeline editor with Shades Assistant.
 
-* **Architecture & Technologies:** React, Vite, Node.js, Express, PostgreSQL, Sequelize, WaveSurfer.js, Web Audio API, FFmpeg, Cloudinary, OpenAI Whisper, DeepSeek, OpenAI GPT Image 2
+* **Architecture & Technologies:** React, Vite, Node.js, Express, PostgreSQL, Sequelize, WaveSurfer.js, Web Audio API, FFmpeg, Cloudinary, AI API integration
 * **Core Engineering:**
-  * Asynchronous 5-phase generative media pipeline with human-in-the-loop review state machine (`AWAITING_REVIEW`)
-  * Sub-second atomic Whisper lyric block drag-and-drop system storing timing bounds in PostgreSQL JSONB (`scene_segments.blocks`)
+  * Generation Studio dashboard with song intake, job filtering, and three-second polling for queued and processing jobs
+  * Asynchronous media pipeline coordinating transcription, scene planning, a creator-review pause, image generation, and FFmpeg video assembly
+  * Timestamped lyric blocks that creators can move between scenes while preserving audio alignment in PostgreSQL JSONB (`scene_segments.blocks`)
   * Deterministic chorus hash caching (`normalizeCacheKey`) reducing image generation API costs by 20% to 35%
-  * Browser-based multitrack timeline editor (`VideoEditor.jsx`) with WaveSurfer.js and DeepSeek AI Copilot drawer (`Shift + A`) applying non-destructive JSON patches without playback interruption
-  * Custom HTML5 synchronized caption renderer with zero-drift non-inclusive intervals and Web Audio API heritage instrument synth
-* **Documentation:** [Detailed Technical Case Study](docs/portfolio.md#2-case-study-shades-of-sg--ai-powered-cultural-media-studio) | [Resume Deliverables](docs/resume.md#shades-of-sg--ai-powered-cultural-media-studio)
+  * Browser-based timeline editor with waveform navigation, frame regeneration or custom image upload, and caption-controlled export
+  * Shades Assistant offers scene critique and reviewable prompt, lyric, and chorus edits through actionable patch cards
+  * Public video playback with synchronized lyrics, creator-curated song articles, instrument interactions, and quizzes
+* **Repository:** [Shades-of-SG/Shades-of-SG](https://github.com/Shades-of-SG/Shades-of-SG)
+* **Documentation:** [Current Product Scope](docs/portfolio.md#26-current-product-scope-2026-10-12) | [Resume Deliverables](docs/resume.md#shades-of-sg--ai-assisted-music-video-studio)
 
 ---
 

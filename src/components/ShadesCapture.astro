@@ -1,0 +1,73 @@
+---
+import { Image, getImage } from 'astro:assets';
+import dashboard from '../assets/work/shades-of-sg/generation-dashboard.png';
+import review from '../assets/work/shades-of-sg/scene-review.png';
+import editor from '../assets/work/shades-of-sg/timeline-assistant.png';
+import player from '../assets/work/shades-of-sg/song-experience.png';
+
+const captures = {
+  dashboard: {
+    image: dashboard,
+    name: 'Generation Studio',
+    alt: 'Shades of SG generation dashboard with active and completed job counts, status filters, and completed song cards.',
+    description:
+      'A central view for starting a song and finding its generation job. This captured session shows completed tracks ready for the next step.',
+  },
+  review: {
+    image: review,
+    name: 'Scene review before image generation',
+    alt: 'A Shades of SG job paused at Awaiting Review, showing a timestamped lyric pill, an editable visual prompt, and the confirm-and-generate control.',
+    description:
+      'Creators review the scene plan, reorganize timestamped lyric blocks, and refine visual prompts before confirming image generation.',
+  },
+  editor: {
+    image: editor,
+    name: 'Timeline editor and Shades Assistant',
+    alt: 'Shades of SG timeline editor with a video preview, scene filmstrip, audio waveform, and Shades Assistant chat drawer.',
+    description:
+      'The video preview, scene frames, and waveform share a workspace with the assistant. Creators can ask for feedback or propose an edit while working on the timeline.',
+  },
+  player: {
+    image: player,
+    name: 'The published song experience',
+    alt: 'Shades of SG public song page for I Love You 3000, with a video player, track details, song article, instrument card, and interactive quiz.',
+    description:
+      'The finished video sits alongside song context and interactive content. This example uses a contemporary pop track.',
+  },
+};
+
+interface Props {
+  capture: keyof typeof captures;
+}
+const { capture } = Astro.props;
+const item = captures[capture];
+const fullSize = await getImage({
+  src: item.image,
+  format: 'webp',
+  quality: 90,
+});
+---
+
+<figure class="studio-capture shades-capture">
+  <Image
+    src={item.image}
+    alt={item.alt}
+    widths={[480, 960, 1280]}
+    sizes="(max-width: 767px) calc(100vw - 40px), (max-width: 1100px) calc(100vw - 319px), 760px"
+    format="webp"
+    loading="lazy"
+    decoding="async"
+  />
+  <figcaption>
+    <strong>{item.name}</strong>
+    <p>{item.description}</p>
+    <a
+      href={fullSize.src}
+      target="_blank"
+      rel="noopener noreferrer"
+      aria-label={`View full-size screenshot of ${item.name} (opens in a new tab)`}
+    >
+      View full-size screenshot
+    </a>
+  </figcaption>
+</figure>
