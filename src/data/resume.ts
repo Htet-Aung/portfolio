@@ -20,31 +20,26 @@ export const education = {
 export const skills = [
   {
     label: 'Languages',
-    items: 'Python, C#, JavaScript, TypeScript, SQL',
+    items: 'Python, TypeScript, JavaScript, SQL, C#',
   },
   {
-    label: 'Software & web',
-    items: 'React, Node.js, Express, Flask, HTML, CSS, Git, Pytest',
+    label: 'Software & Web',
+    items: 'React, Node.js, Express, Flask, Streamlit, REST APIs, HTML, CSS, Git, Pytest',
   },
   {
     label: 'Analytics & BI',
     items:
-      'Power BI, Power Query, DAX, KNIME, Excel, SAS Viya, dimensional modeling, data cleaning, feature engineering',
+      'Pandas, Power BI, Power Query, DAX, KNIME, Excel, SAS Viya, Dimensional Modeling, Data Cleaning, Feature Engineering',
   },
   {
-    label: 'Databases & cloud',
+    label: 'Databases & Cloud',
     items:
-      'PostgreSQL, SQLite, MySQL, MongoDB, Oracle SQL, Snowflake, Oracle Cloud, AWS',
+      'PostgreSQL, SQLite, MySQL, MongoDB, Oracle Database, Snowflake, Oracle Cloud, AWS',
   },
   {
-    label: 'AI & machine learning',
+    label: 'AI & Machine Learning',
     items:
-      'NumPy, automatic differentiation, neural networks, AI model API integration and orchestration, speech-to-text and image-generation workflows, FFmpeg, Streamlit',
-  },
-  {
-    label: 'Statistical methods',
-    items:
-      'Descriptive statistics, hypothesis testing, correlation analysis, regression, model evaluation, scenario analysis',
+      'NumPy, Automatic Differentiation, Neural Networks, Multimodal AI Pipelines, AI Orchestration, Generative AI Integration, Model Evaluation',
   },
 ];
 
@@ -112,7 +107,7 @@ export const resumeHighlights: Record<ProjectId, string[]> = {
   ...projectBullets,
   numpygrad: [
     'Built a NumPy deep learning framework with reverse-mode autograd, vectorized convolutions, AdamW, and checkpoints.',
-    'Created Streamlit demos and verified gradients with Pytest and finite-difference checks.',
+    'Built an interactive Streamlit studio with 2D decision boundary visualization and rover guidance; verified engine gradients using Pytest and centered finite-difference checks.',
   ],
   'shades-of-sg': [
     'Built an asynchronous pipeline for lyric transcription, AI scene planning, image generation, and FFmpeg assembly.',

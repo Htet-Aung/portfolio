@@ -2512,6 +2512,12 @@
       font-size: 8.8pt;
       line-height: 1.5;
     }
+    .resume-section-additional,
+    .resume-section-leadership {
+      padding-bottom: 11px;
+      border-bottom: 1px solid var(--line);
+    }
+    .resume-section + .resume-section-education,
     .resume-section-education {
       break-before: page;
       page-break-before: always;

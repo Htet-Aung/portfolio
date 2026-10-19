@@ -121,7 +121,7 @@ const sectionId = (name: string) => `resume-${name}`;
     </div>
   </section>
   <section
-    class="resume-section"
+    class="resume-section resume-section-additional"
     aria-labelledby={sectionId('additional-projects')}
   >
     <h2 id={sectionId('additional-projects')}>Additional projects</h2>
@@ -173,7 +173,10 @@ const sectionId = (name: string) => `resume-${name}`;
       ))}
     </ul>
   </section>
-  <section class="resume-section" aria-labelledby={sectionId('leadership')}>
+  <section
+    class="resume-section resume-section-leadership"
+    aria-labelledby={sectionId('leadership')}
+  >
     <h2 id={sectionId('leadership')}>Leadership &amp; activities</h2>
     <div class="resume-leadership">
       {leadership.map((item) => (

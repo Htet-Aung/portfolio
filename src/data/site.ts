@@ -1,7 +1,7 @@
 export const site = {
   name: 'Htet Aung Khant',
   shortName: 'Htet',
-  email: 'htet.ak@outlook.sg',
+  email: 'htet-ak@outlook.sg',
   github: 'https://github.com/Htet-Aung',
   location: 'Singapore',
   description:
