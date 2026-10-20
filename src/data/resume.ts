@@ -24,7 +24,8 @@ export const skills = [
   },
   {
     label: 'Software & Web',
-    items: 'React, Node.js, Express, Flask, Streamlit, REST APIs, HTML, CSS, Git, Pytest',
+    items:
+      'React, Node.js, Express, Flask, Streamlit, REST APIs, HTML, CSS, Git, Pytest',
   },
   {
     label: 'Analytics & BI',
@@ -79,26 +80,27 @@ export const projectBullets: Record<ProjectId, string[]> = {
     'Integrated browser speech input for English, Chinese, Malay, and Tamil, plus read-aloud, slang definition tooltips, quick-reply comment chips, and Link Guard confirmation for outbound URLs.',
   ],
   'hospital-operations': [
-    'Built a Power BI planning dashboard linking 12-month patient-inflow forecasts to staffing needs and waiting-time risk through interactive demand-growth scenarios.',
-    'Designed DAX measures that separate historical performance from what-if estimates, enabling comparison of capacity pressure across patient urgency groups.',
-    'Unified three hospital datasets through a star schema and shared date dimension, supporting consistent analysis of demand, waiting times, and patient satisfaction.',
+    'Built a Power BI planning dashboard linking 12-month patient inflow forecasts to staffing needs and wait-time risks through interactive scenario modeling.',
+    'Designed dynamic DAX measures to evaluate capacity pressure and service bottlenecks across patient urgency groups.',
+    'Integrated multiple hospital operational datasets into a unified data model, enabling cross-departmental analysis of patient demand, wait times, and satisfaction trends.',
+    'Developed a staffing simulator and wait-time breakdown to explore how additional clinical capacity affects patient experience under scenario assumptions.',
   ],
   'retail-data': [
-    'Designed a KNIME pipeline combining four regional spreadsheets into a structured customer master table, preserving source context and reconciling inconsistent schemas.',
-    'Implemented data profiling, field-specific validation rules, and median imputation to handle financial inconsistencies and invalid ages while retaining customer records.',
-    'Developed identifier masking, demographic groups, and guarded order-value calculations, then organized an Excel export for regional review and customer analysis.',
-    'Compared regional spending and customer segments, using scatter plots and Pearson correlation to examine the relationship between age and spending.',
+    'Designed a KNIME pipeline integrating multiple regional customer datasets into a structured master table, reconciling inconsistent schemas and preserving data lineage.',
+    'Implemented automated data profiling, validation rules, and median imputation to resolve demographic anomalies while preserving customer records.',
+    'Engineered customer demographic groups, order-value metrics, and identifier masking, generating structured Excel reports for regional review.',
+    'Analyzed customer segments and regional spending behaviors using Pearson correlation and scatter plots to identify demographic trends.',
   ],
   'workout-prediction': [
-    'Built a KNIME preparation workflow reducing 4,865 rows to 973 unique workouts before partitioning, preventing duplicate leakage in model evaluation.',
-    'Audited BMI and plausible outliers, engineered relative heart-rate intensity, and exported a 16-column dataset for regression modeling.',
-    'Diagnosed four SAS Viya regression models using residuals, tree structure, error curves, and feature importance; gradient boosting yielded 35 kcal validation RMSE on 292 observations.',
-    'Compared the selected ensemble with a 36.91 kcal linear baseline and explained prediction error and evaluation limits for a proposed calorie-estimation use case.',
+    'Built an automated KNIME data pipeline to clean, deduplicate, and prepare ~5,000 workout records across ~1,000 unique exercise sessions.',
+    'Audited physiological metrics and outliers, engineering relative heart-rate exertion features to improve predictive signal.',
+    'Trained and evaluated multiple regression models in SAS Viya (Linear Regression, Decision Tree, Random Forest, Gradient Boosting) using residual diagnostics and error curves.',
+    'Benchmarked ensemble models against baseline linear regressions, identifying Gradient Boosting as the highest-performing model for calorie expenditure estimation.',
   ],
   'student-wellbeing': [
-    'Performed Excel calculations and assisted manual statistical working in a five-person, 67-response study using 16 survey items to measure general FoMO and context-specific exclusion anxiety.',
-    'Interpreted descriptive statistics and one-sample test calculations, relating the observed FoMO gap to sample variability and standard error.',
-    'Contributed paired-test interpretation using within-person in-person and online score differences, connecting the reported result with distributional evidence.',
+    'Conducted survey data analysis and statistical modeling in Excel to evaluate student wellbeing, anxiety indicators, and social connectivity factors.',
+    'Applied descriptive statistics and one-sample hypothesis testing to measure significant variances across student cohorts.',
+    'Conducted paired-difference analysis comparing student behavioral trends across in-person and digital campus environments.',
     'Synthesized statistical findings into recommendations on digital boundaries and in-person campus connection, with conclusions scoped to the surveyed group.',
   ],
 };
@@ -122,12 +124,12 @@ export const resumeHighlights: Record<ProjectId, string[]> = {
     'Integrated multilingual speech input, read-aloud, slang tooltips, quick replies, and confirmation for outbound links.',
   ],
   'hospital-operations': [
-    'Built a Power BI planning dashboard linking 12-month patient-inflow forecasts to staffing needs and wait-time risk through DAX what-if scenarios.',
-    'Unified three hospital datasets in a star schema, enabling consistent time filters and urgency-based analysis of waits and satisfaction.',
+    'Built a Power BI planning dashboard linking 12-month patient inflow forecasts to staffing needs and wait-time risks through interactive what-if scenarios.',
+    'Integrated multiple hospital operational datasets into a unified data model, enabling cross-departmental analysis of patient demand, wait times, and satisfaction trends.',
   ],
   'workout-prediction': [
-    'Audited 4,865 rows in KNIME, deduplicating before splitting and engineering heart-rate features for 973 workouts.',
-    'Diagnosed four SAS Viya regression models; gradient boosting yielded 35 kcal validation RMSE on 292 observations.',
+    'Built an automated KNIME data pipeline to preprocess ~5,000 workout records, deduplicating data and engineering relative heart-rate features for ~1,000 sessions.',
+    'Trained and evaluated multiple regression models in SAS Viya (Gradient Boosting, Random Forest), optimizing predictive accuracy for calorie expenditure.',
   ],
 };
 
@@ -142,7 +144,7 @@ export const additionalProjects = [
   {
     id: 'retail-data',
     summary:
-      'Built a KNIME pipeline combining four regional sources with validation, identifier masking, customer features, and an Excel export for analysis.',
+      'Built a KNIME pipeline integrating multiple regional customer datasets with automated validation, demographic feature engineering, and reporting exports.',
   },
   {
     id: 'rollover',
@@ -157,7 +159,7 @@ export const additionalProjects = [
   {
     id: 'student-wellbeing',
     summary:
-      'Contributed Excel calculations and one-sample/paired test interpretation to a five-person study of 67 students.',
+      'Conducted survey data analysis and inferential hypothesis testing in Excel to evaluate student wellbeing and digital engagement patterns.',
   },
 ] satisfies Array<{ id: ProjectId; summary: string }>;
 
@@ -180,6 +182,7 @@ export const certificates = [
   'Snowflake SnowPro Associate: Platform',
   'AWS Training & Certification: Fundamentals of Machine Learning and Artificial Intelligence',
   'Anthropic AI Fluency: Framework & Foundations',
+  'KNIME L1: Basic Proficiency in KNIME Analytics Platform',
   'IBM SkillsBuild: User Experience Design Fundamentals',
 ];
 
