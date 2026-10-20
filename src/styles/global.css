@@ -2559,8 +2559,13 @@
     .resume-leadership-events li + li {
       margin-top: 2.5px;
     }
-    .resume-document :is(a, .accent, h2) {
+    .resume-document :is(a, h2) {
       color: inherit;
+    }
+    .resume-identity .accent {
+      color: var(--accent);
+      print-color-adjust: exact;
+      -webkit-print-color-adjust: exact;
     }
     .container {
       width: 100%;
