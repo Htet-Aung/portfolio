@@ -5,6 +5,7 @@ import PrintResume from '../components/PrintResume.astro';
 import ResumeDocument from '../components/ResumeDocument.astro';
 import { site } from '../data/site';
 import { getPublishedProjects } from '../data/work';
+
 const projects = (await getPublishedProjects()).filter(
   (project) => project.caseStudy,
 );
@@ -21,7 +22,7 @@ const projects = (await getPublishedProjects()).filter(
     </div>
     <ResumeDocument projects={projects} />
     <div class="resume-bottom">
-      <p>Explore all eight projects and the work behind them.</p>
+      <p>Explore the projects and the work behind them.</p>
       <a class="text-link" href="/#work">
         Read the case studies <Arrow />
       </a>

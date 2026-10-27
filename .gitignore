@@ -4,6 +4,7 @@ Thumbs.db
 desktop.ini
 *.swp
 *.swo
+*.exe
 
 # IDE & Editor files
 .idea/
@@ -18,6 +19,7 @@ desktop.ini
 .claude/
 .cursor/
 .windsurf/
+.codex/
 .aider*
 *.chat
 chat-*.json

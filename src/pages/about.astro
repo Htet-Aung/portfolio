@@ -11,8 +11,8 @@ import gdgTeam from '../assets/community/gdg-cloud-run-team.png';
 const capabilities = [
   {
     number: '01',
-    title: 'Interfaces that help',
-    text: 'Make a workflow easier to understand and use, with attention to language, input methods, and clear feedback.',
+    title: 'Full-stack web development',
+    text: 'Building responsive, accessible web applications with React, Node.js, and Flask, prioritizing reliable state management and clean component architecture.',
     links: [
       { title: 'SGEN', href: '/work/sgen/' },
       { title: 'ROLLOVER', href: '/work/rollover/' },
@@ -20,78 +20,69 @@ const capabilities = [
   },
   {
     number: '02',
-    title: 'Workflows that hold together',
-    text: 'Connect services, data, and human review so that a useful feature becomes a coherent end-to-end experience.',
+    title: 'AI & media pipelines',
+    text: 'Integrating multimodal AI APIs, audio processing with FFmpeg, and browser editors into cohesive creative tools.',
     links: [{ title: 'Shades of SG', href: '/work/shades-of-sg/' }],
   },
   {
     number: '03',
-    title: 'Internals you can explain',
-    text: 'Work through the mechanisms beneath an abstraction, then make the reasoning and trade-offs inspectable.',
+    title: 'Machine learning from scratch',
+    text: 'Implementing foundational ML algorithms from first principles—such as reverse-mode autograd dynamic DAGs, vectorized convolutions, and optimizer logic.',
     links: [{ title: 'NumPyGrad', href: '/work/numpygrad/' }],
   },
   {
     number: '04',
-    title: 'Data you can reason with',
-    text: 'Prepare inconsistent inputs, explore patterns, and explain dashboards and predictive results with their assumptions in view.',
+    title: 'Business intelligence & predictive modeling',
+    text: 'Building interactive Power BI operational dashboards, automated KNIME ETL pipelines, and regression models in SAS Viya.',
     links: [
       { title: 'Hospital Operations', href: '/work/hospital-operations/' },
       { title: 'Workout Energy Prediction', href: '/work/workout-prediction/' },
       { title: 'Retail Customer Analytics', href: '/work/retail-data/' },
-      { title: 'Student Wellbeing Study', href: '/work/student-wellbeing/' },
     ],
   },
 ];
 const approach = [
   {
-    title: 'Start with the person using it',
-    text: 'What are they trying to do? Where does the current experience make that harder?',
+    title: 'Focus on practical utility',
+    text: 'Build software that solves real problems with clear workflows, accessible controls, and immediate feedback.',
   },
   {
-    title: 'Follow the data through the system',
-    text: 'Be clear about what each component owns, how state moves, and where a decision is made.',
+    title: 'Clean architecture & predictable data flow',
+    text: 'Maintain clear boundaries between state, business logic, and UI components to keep systems maintainable.',
   },
   {
-    title: 'Check the decision, not just the demo',
-    text: 'Use tests and observable behavior to explain what works, where it falls short, and what should change next.',
+    title: 'Verify from first principles',
+    text: 'Validate implementations with automated test suites, gradient checks, and edge-case handling rather than stopping at a surface demo.',
   },
 ];
 ---
 
 <SiteLayout
   title={`About — ${site.name}`}
-  description="Get to know Htet Aung Khant's software, AI, and analytics experience, from full-stack products to dashboards, predictive models, and statistical analysis."
+  description="Learn about Htet Aung Khant's experience across full-stack development, applied AI, machine learning systems, and business intelligence."
 >
   <div class="container inner-page about-page">
     <header class="inner-page-header">
-      <p class="eyebrow">About / A little context</p>
       <h1>
-        Curious about
+        Software engineering
         <br />
-        the whole system<span class="accent">.</span>
+        &amp; applied AI<span class="accent">.</span>
       </h1>
       <p class="inner-page-intro">
-        I'm Htet, an Applied AI &amp; Analytics student in Singapore. I enjoy
-        building useful software and working with the data that informs it.
+        I'm Htet, an Applied AI &amp; Analytics student at Nanyang Polytechnic in Singapore.
+        I build full-stack web applications, machine learning tools, and data pipelines.
       </p>
     </header>
     <section class="about-profile" aria-labelledby="background-title">
       <div>
         <h2 id="background-title">
-          From interface
-          <br />
-          to internals.
+          Background
         </h2>
         <p>
-          My projects have taken me from an intergenerational social feed to a
-          music video creation studio, a deep learning engine, interactive
-          hospital dashboards, and workout prediction models.
+          My work spans full-stack web applications, machine learning systems built from first principles, and data analytics tools. I've engineered projects ranging from an autograd deep learning engine in pure NumPy to an AI music video creation pipeline, accessible social feed applications, and hospital operational planning dashboards.
         </p>
         <p>
-          I like understanding how those pieces fit together: how an interaction
-          changes state, how data becomes a useful measure, and how to explain
-          what a result supports. My work spans React and Python applications,
-          Power BI reporting, KNIME workflows, and statistical analysis.
+          I focus on writing clean, modular code and understanding the underlying mechanics—whether that means implementing dynamic computation graphs, configuring asynchronous media pipelines, or building dimensional data models in Power BI.
         </p>
       </div>
       <dl class="profile-notes">
@@ -100,7 +91,7 @@ const approach = [
           <dd>{site.location}</dd>
         </div>
         <div>
-          <dt>Background</dt>
+          <dt>Education</dt>
           <dd>
             {education.program}
             <span>
@@ -109,11 +100,11 @@ const approach = [
           </dd>
         </div>
         <div>
-          <dt>Interested in</dt>
+          <dt>Focus</dt>
           <dd>
-            Software, applied AI &amp; data analytics
+            Full-stack engineering &amp; applied AI
             <span>
-              Products, data workflows, and decisions you can explain.
+              Web development, ML systems, and analytics pipelines.
             </span>
           </dd>
         </div>
@@ -122,9 +113,8 @@ const approach = [
     <section class="capability-section" aria-labelledby="capabilities-title">
       <div class="section-heading">
         <div>
-          <p class="eyebrow">Focus, with evidence</p>
           <h2 id="capabilities-title">
-            What I bring to a project<span class="accent">.</span>
+            Core technical areas<span class="accent">.</span>
           </h2>
         </div>
       </div>
@@ -148,11 +138,10 @@ const approach = [
     </section>
     <section class="working-section" aria-labelledby="approach-title">
       <div>
-        <p class="eyebrow">How I approach the work</p>
         <h2 id="approach-title">
-          Make the reasoning
+          How I approach
           <br />
-          visible.
+          engineering<span class="accent">.</span>
         </h2>
       </div>
       <ol class="working-steps">
@@ -169,9 +158,8 @@ const approach = [
     </section>
 
     <section class="about-tools" aria-labelledby="tools-title">
-      <p class="eyebrow">Across software and analytics</p>
       <h2 id="tools-title">
-        Software and analytical skills<span class="accent">.</span>
+        Technical skills<span class="accent">.</span>
       </h2>
       <dl class="resume-skills">
         {skills.map((skill) => (
@@ -186,9 +174,8 @@ const approach = [
     <section class="community-section" aria-labelledby="community-title">
       <div class="section-heading">
         <div>
-          <p class="eyebrow">Leadership, mentorship &amp; community</p>
           <h2 id="community-title">
-            Beyond the code<span class="accent">.</span>
+            Leadership &amp; community<span class="accent">.</span>
           </h2>
         </div>
         <p class="section-note">
@@ -431,7 +418,7 @@ const approach = [
         View my resume <Arrow />
       </a>
       <a class="text-link" href="/#work">
-        Explore selected work <Arrow />
+        Explore projects <Arrow direction="right" />
       </a>
     </div>
   </div>

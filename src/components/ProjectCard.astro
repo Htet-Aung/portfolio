@@ -2,9 +2,11 @@
 import type { Project } from '../data/projects';
 import Arrow from './Arrow.astro';
 import ProjectCover from './ProjectCover.astro';
+
 interface Props {
   project: Project;
 }
+
 const { project } = Astro.props;
 ---
 
@@ -13,14 +15,10 @@ const { project } = Astro.props;
   <div class="project-card-body">
     <div class="project-category">
       <span>{project.category}</span>
-      <span>{project.number}</span>
     </div>
     <h4>
       {project.caseStudy ? (
-        <a href={project.caseStudy}>
-          {project.title}
-          <Arrow direction="up-right" />
-        </a>
+        <a href={project.caseStudy}>{project.title}</a>
       ) : (
         project.title
       )}
@@ -34,7 +32,7 @@ const { project } = Astro.props;
     </ul>
     {project.caseStudy ? (
       <a class="text-link project-action" href={project.caseStudy}>
-        Read case study <Arrow />
+        Read case study <Arrow direction="right" />
       </a>
     ) : project.repoUrl ? (
       <a class="text-link project-action" href={project.repoUrl}>

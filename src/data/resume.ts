@@ -2,7 +2,7 @@ import type { ProjectId } from './projects';
 import { site } from './site';
 
 export const profile =
-  'Applied AI & Analytics diploma student building full-stack applications, data workflows, Power BI dashboards, and predictive models. Combines software development with statistical analysis and AI API integration.';
+  "Progress comes from being willing to attempt what you don't yet know how to do. I approach unfamiliar challenges with persistence, learn through experimentation, and see each problem as an opportunity to expand what I'm capable of.";
 
 export const resumeContact = {
   phone: '+65 8115 3761',
@@ -156,11 +156,6 @@ export const additionalProjects = [
     summary:
       'Built Flask/React feed workflows with multilingual speech input, read-aloud, and safer link handling.',
   },
-  {
-    id: 'student-wellbeing',
-    summary:
-      'Conducted survey data analysis and inferential hypothesis testing in Excel to evaluate student wellbeing and digital engagement patterns.',
-  },
 ] satisfies Array<{ id: ProjectId; summary: string }>;
 
 export const educationHistory = [
@@ -197,8 +192,8 @@ export interface LeadershipItem {
 export const leadership: LeadershipItem[] = [
   {
     name: 'NYP AI',
-    role: 'Head of Publicity',
-    detail: 'Executive Committee',
+    role: 'Executive Committee',
+    detail: 'Head of Publicity',
     period: 'Year 2 Sem 1 – Present',
     events: [
       'Powering the Future (Networks & AI by Nokia): Co-organized 2-day systems engineering masterclass, led publicity to fill 50+ seats, and assisted student lab checkpoints.',

@@ -5,5 +5,5 @@ export const site = {
   github: 'https://github.com/Htet-Aung',
   location: 'Singapore',
   description:
-    'Htet Aung Khant builds software, AI workflows, and data tools. Explore full-stack projects, business intelligence dashboards, predictive models, and statistical research.',
+    'Htet Aung Khant is an Applied AI & Analytics student and software developer based in Singapore, building full-stack web applications, machine learning systems, and data pipelines.',
 } as const;
