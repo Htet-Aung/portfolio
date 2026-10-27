@@ -41,20 +41,6 @@ const capabilities = [
     ],
   },
 ];
-const approach = [
-  {
-    title: 'Focus on practical utility',
-    text: 'Build software that solves real problems with clear workflows, accessible controls, and immediate feedback.',
-  },
-  {
-    title: 'Clean architecture & predictable data flow',
-    text: 'Maintain clear boundaries between state, business logic, and UI components to keep systems maintainable.',
-  },
-  {
-    title: 'Verify from first principles',
-    text: 'Validate implementations with automated test suites, gradient checks, and edge-case handling rather than stopping at a surface demo.',
-  },
-];
 ---
 
 <SiteLayout
@@ -110,6 +96,21 @@ const approach = [
         </div>
       </dl>
     </section>
+
+    <section class="about-tools" aria-labelledby="tools-title">
+      <h2 id="tools-title">
+        Technical skills<span class="accent">.</span>
+      </h2>
+      <dl class="resume-skills">
+        {skills.map((skill) => (
+          <div>
+            <dt>{skill.label}</dt>
+            <dd>{skill.items}</dd>
+          </div>
+        ))}
+      </dl>
+    </section>
+
     <section class="capability-section" aria-labelledby="capabilities-title">
       <div class="section-heading">
         <div>
@@ -135,40 +136,6 @@ const approach = [
           </article>
         ))}
       </div>
-    </section>
-    <section class="working-section" aria-labelledby="approach-title">
-      <div>
-        <h2 id="approach-title">
-          How I approach
-          <br />
-          engineering<span class="accent">.</span>
-        </h2>
-      </div>
-      <ol class="working-steps">
-        {approach.map((step, i) => (
-          <li>
-            <span class="mono">0{i + 1}</span>
-            <div>
-              <h3>{step.title}</h3>
-              <p>{step.text}</p>
-            </div>
-          </li>
-        ))}
-      </ol>
-    </section>
-
-    <section class="about-tools" aria-labelledby="tools-title">
-      <h2 id="tools-title">
-        Technical skills<span class="accent">.</span>
-      </h2>
-      <dl class="resume-skills">
-        {skills.map((skill) => (
-          <div>
-            <dt>{skill.label}</dt>
-            <dd>{skill.items}</dd>
-          </div>
-        ))}
-      </dl>
     </section>
 
     <section class="community-section" aria-labelledby="community-title">

@@ -1236,16 +1236,14 @@
     font-size: 18px;
     line-height: 1.75;
   }
-  .about-profile,
-  .working-section {
+  .about-profile {
     display: grid;
     grid-template-columns: 1.1fr 1fr;
     gap: 80px;
     border-top: 1px solid var(--line);
     padding-block: 48px;
   }
-  .about-profile h2,
-  .working-section h2 {
+  .about-profile h2 {
     font-size: clamp(32px, 3.6vw, 44px);
     margin-bottom: 22px;
   }
@@ -1282,7 +1280,8 @@
     color: var(--muted);
   }
   .capability-section {
-    padding-block: 32px 56px;
+    padding-block: 48px 56px;
+    border-top: 1px solid var(--line);
   }
   .capability-section h2 {
     font-size: clamp(32px, 3.8vw, 46px);
@@ -1323,35 +1322,6 @@
   }
   .capability-links a {
     font-size: 12px;
-  }
-  .working-section .eyebrow {
-    margin-bottom: 18px;
-  }
-  .working-steps {
-    list-style: none;
-  }
-  .working-steps li {
-    display: flex;
-    gap: 20px;
-  }
-  .working-steps li + li {
-    margin-top: 28px;
-  }
-  .working-steps .mono {
-    color: var(--accent);
-    font-size: 11px;
-    padding-top: 3px;
-  }
-  .working-steps h3 {
-    font-size: 20px;
-    line-height: 1.3;
-    letter-spacing: -0.01em;
-  }
-  .working-steps p {
-    color: var(--muted);
-    font-size: 14px;
-    line-height: 1.75;
-    margin-top: 8px;
   }
   .inner-page-actions {
     display: flex;
@@ -1738,8 +1708,7 @@
     :root {
       --gutter: 32px;
     }
-    .about-profile,
-    .working-section {
+    .about-profile {
       gap: 40px;
     }
     .capability-grid {
@@ -1882,14 +1851,12 @@
     .inner-page-intro {
       font-size: 16px;
     }
-    .about-profile,
-    .working-section {
+    .about-profile {
       grid-template-columns: 1fr;
       gap: 28px;
       padding-block: 32px;
     }
-    .about-profile h2,
-    .working-section h2 {
+    .about-profile h2 {
       font-size: 34px;
     }
     .capability-section {
@@ -1906,9 +1873,6 @@
     }
     .capability-card h3 {
       margin-top: 18px;
-    }
-    .working-section h2 {
-      margin-bottom: 0;
     }
     .inner-page-actions {
       padding-top: 28px;
