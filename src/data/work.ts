@@ -7,7 +7,9 @@ export async function getPublishedProjects(): Promise<Project[]> {
     ({ data }) => data.status === 'published',
   );
   return projects
-    .filter((project) => entries.some(({ data }) => data.projectId === project.id))
+    .filter((project) =>
+      entries.some(({ data }) => data.projectId === project.id),
+    )
     .map((project) => {
       const entry = entries.find(({ data }) => data.projectId === project.id)!;
       return {
