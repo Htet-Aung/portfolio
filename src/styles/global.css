@@ -1219,49 +1219,51 @@
 
   /* About */
   .inner-page {
-    padding-block: 60px 80px;
+    padding-block: 48px 80px;
   }
   .inner-page-header {
     max-width: 880px;
-    margin-bottom: 60px;
+    margin-bottom: 48px;
   }
-  .inner-page-header h1 {
-    margin-block: 20px;
-    font-size: clamp(44px, min(6vw, 9svh), 76px);
+  .inner-page-header h1,
+  .about-profile h1 {
+    margin-block: 0 22px;
+    font-size: clamp(40px, min(5.2vw, 8.5svh), 64px);
     letter-spacing: -0.01em;
   }
   .inner-page-intro {
     max-width: 650px;
-    color: var(--muted);
-    font-size: 18px;
-    line-height: 1.75;
+    color: var(--ink);
+    font-size: 16.5px;
+    line-height: 1.7;
   }
   .about-profile {
     display: grid;
-    grid-template-columns: 1.1fr 1fr;
-    gap: 80px;
-    border-top: 1px solid var(--line);
-    padding-block: 48px;
-  }
-  .about-profile h2 {
-    font-size: clamp(32px, 3.6vw, 44px);
-    margin-bottom: 22px;
+    grid-template-columns: 1.25fr 0.85fr;
+    gap: 64px;
+    align-items: center;
+    padding-block: 8px 44px;
   }
   .about-profile p {
     color: var(--muted);
     font-size: 15px;
-    line-height: 1.8;
+    line-height: 1.75;
+  }
+  .about-profile p.inner-page-intro {
+    color: var(--ink);
+    font-size: 16.5px;
+    line-height: 1.7;
   }
   .about-profile p + p {
-    margin-top: 18px;
+    margin-top: 16px;
   }
   .profile-notes {
     margin: 0;
   }
   .profile-notes > div + div {
     border-top: 1px solid var(--line);
-    margin-top: 20px;
-    padding-top: 20px;
+    margin-top: 18px;
+    padding-top: 18px;
   }
   .profile-notes dt {
     font-family: var(--mono);
@@ -1269,32 +1271,33 @@
     color: var(--muted);
   }
   .profile-notes dd {
-    margin: 8px 0 0;
-    font-size: 16px;
-    line-height: 1.6;
+    margin: 6px 0 0;
+    font-size: 15.5px;
+    line-height: 1.55;
   }
   .profile-notes dd span {
     display: block;
-    margin-top: 4px;
+    margin-top: 3px;
     font-size: 13px;
     color: var(--muted);
   }
   .capability-section {
-    padding-block: 48px 56px;
+    padding-block: 24px 36px;
     border-top: 1px solid var(--line);
   }
   .capability-section h2 {
-    font-size: clamp(32px, 3.8vw, 46px);
+    margin-block: 10px 20px;
+    font-size: clamp(28px, 3.4vw, 40px);
   }
   .capability-grid {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 24px;
+    gap: 14px;
   }
   .capability-card {
     display: flex;
     flex-direction: column;
-    padding: 28px;
+    padding: 18px 22px;
     background: var(--surface);
     border: 1px solid var(--line);
     border-radius: 10px;
@@ -1304,14 +1307,15 @@
     font-size: 11px;
   }
   .capability-card h3 {
-    font-size: 26px;
-    margin-block: 25px 16px;
-    line-height: 1.2;
+    font-size: 19px;
+    margin-block: 8px 6px;
+    line-height: 1.25;
   }
   .capability-card p {
     color: var(--muted);
-    font-size: 14px;
-    line-height: 1.75;
+    font-size: 13.5px;
+    line-height: 1.6;
+    margin: 0;
   }
   .capability-links {
     display: flex;
@@ -1844,35 +1848,35 @@
     .inner-page-header {
       margin-bottom: 36px;
     }
-    .inner-page-header h1 {
-      font-size: clamp(40px, 8vw, 60px);
-      margin-block: 18px;
+    .inner-page-header h1,
+    .about-profile h1 {
+      font-size: clamp(36px, 8vw, 52px);
+      margin-block: 0 16px;
     }
-    .inner-page-intro {
-      font-size: 16px;
+    .inner-page-intro,
+    .about-profile p.inner-page-intro {
+      font-size: 15.5px;
     }
     .about-profile {
       grid-template-columns: 1fr;
       gap: 28px;
-      padding-block: 32px;
-    }
-    .about-profile h2 {
-      font-size: 34px;
+      padding-block: 4px 28px;
     }
     .capability-section {
-      padding-block: 24px 36px;
+      padding-block: 20px 28px;
     }
     .capability-section h2 {
-      font-size: 34px;
+      font-size: 28px;
     }
     .capability-grid {
       grid-template-columns: 1fr;
+      gap: 12px;
     }
     .capability-card {
-      padding: 24px;
+      padding: 16px 18px;
     }
     .capability-card h3 {
-      margin-top: 18px;
+      margin-top: 6px;
     }
     .inner-page-actions {
       padding-top: 28px;

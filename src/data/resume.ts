@@ -2,7 +2,7 @@ import type { ProjectId } from './projects';
 import { site } from './site';
 
 export const profile =
-  "Progress comes from being willing to attempt what you don't yet know how to do. I approach unfamiliar challenges with persistence, learn through experimentation, and see each problem as an opportunity to expand what I'm capable of.";
+  'Applied AI & Analytics student at Nanyang Polytechnic specializing in full-stack engineering, applied machine learning, and data analytics. Experienced in building from-scratch deep learning engines, AI-assisted media pipelines, and operational BI dashboards using Python, TypeScript, React, SQL, and Power BI.';
 
 export const resumeContact = {
   phone: '+65 8115 3761',
@@ -108,28 +108,28 @@ export const projectBullets: Record<ProjectId, string[]> = {
 export const resumeHighlights: Record<ProjectId, string[]> = {
   ...projectBullets,
   numpygrad: [
-    'Built a NumPy deep learning framework with reverse-mode autograd, vectorized convolutions, AdamW, and checkpoints.',
-    'Built an interactive Streamlit studio with 2D decision boundary visualization and rover guidance; verified engine gradients using Pytest and centered finite-difference checks.',
+    'Engineered a from-scratch autograd deep learning engine in pure NumPy, facing the challenge of computing reverse-mode gradients across dynamic computation graphs with multi-branch shared inputs and broadcasted tensors.',
+    'Overcame graph and performance bottlenecks by developing DFS topological ordering with gradient accumulators, vectorized spatial convolutions (im2col/col2im) to eliminate Python loop latency, and verifying correctness via 152 Pytest unit tests.',
   ],
   'shades-of-sg': [
-    'Built an asynchronous pipeline for lyric transcription, AI scene planning, image generation, and FFmpeg assembly.',
-    'Created a browser timeline editor and AI assistant with reviewable scene edits, frame regeneration, and caption controls.',
+    'Led the media generation pipeline and browser timeline editor on a team project, challenged by high API costs from duplicate image requests and audio-video timing drift across asynchronous generation stages.',
+    'Overcame these issues by architecting a deterministic chorus-hashing engine to reuse recurring frame assets (cutting API costs by 20–35%) and implementing an AWAITING_REVIEW workflow with draggable JSONB lyric blocks to preserve audio sync.',
   ],
   rollover: [
-    'Co-built a circular-retail platform in a three-person, 24-hour hackathon team, matching surplus inventory through budget, size, and allergen constraints.',
-    'Implemented spreadsheet catalog parsing, preview/reveal APIs with SHA-256 offer IDs, and an animated React checkout experience.',
+    'Co-built a circular-retail discovery platform during a 24-hour hackathon, facing the challenge of partitioning live surplus inventory into mystery bundles while enforcing strict budget, size, and allergen exclusions.',
+    'Prevented client-side inventory scraping and tampering by developing a zero-spoiler preview/reveal API architecture with SHA-256 offer verification and a responsive React 19 interface with offline fallbacks.',
   ],
   sgen: [
-    'Built asynchronous Flask post/comment endpoints and React feed workflows with optimistic likes, paginated loading, and duplicate-post filtering.',
-    'Integrated multilingual speech input, read-aloud, slang tooltips, quick replies, and confirmation for outbound links.',
+    'Developed asynchronous backend REST endpoints and React feed workflows, challenged by race conditions from duplicate in-flight requests during rapid scrolling and accessibility barriers for senior users.',
+    'Overcame these hurdles by engineering in-flight request guards with post deduplication, alongside integrating multilingual browser-native Web Speech API (STT/TTS) and client-side slang definition popovers.',
   ],
   'hospital-operations': [
-    'Built a Power BI planning dashboard linking 12-month patient inflow forecasts to staffing needs and wait-time risks through interactive what-if scenarios.',
-    'Integrated multiple hospital operational datasets into a unified data model, enabling cross-departmental analysis of patient demand, wait times, and satisfaction trends.',
+    'Solely designed the operational planning dashboard and data model, facing the challenge of integrating fragmented departmental tables with mismatched date granularities and conflicting admission records.',
+    'Overcame data inconsistencies by establishing a unified star schema with dynamic DAX capacity measures, building an interactive what-if simulator to forecast 12-month patient surges and test clinical staffing requirements.',
   ],
   'workout-prediction': [
-    'Built an automated KNIME data pipeline to preprocess ~5,000 workout records, deduplicating data and engineering relative heart-rate features for ~1,000 sessions.',
-    'Trained and evaluated multiple regression models in SAS Viya (Gradient Boosting, Random Forest), optimizing predictive accuracy for calorie expenditure.',
+    'Developed an end-to-end predictive regression workflow, challenged by noisy physiological telemetry across ~5,000 records and non-linear exertion dynamics that baseline linear models failed to capture.',
+    'Overcame baseline inaccuracy by building an automated KNIME data cleaning and feature engineering pipeline for relative heart-rate exertion, benchmarking models in SAS Viya to deploy Gradient Boosting for reliable calorie estimation.',
   ],
 };
 
