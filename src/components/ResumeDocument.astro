@@ -9,7 +9,8 @@ import {
   projectStacks,
   resumeHighlights,
   profile,
-  selectedProjectIds,
+  technicalProjectIds,
+  analyticsProjectIds,
   additionalProjects,
   certificates,
   leadership,
@@ -18,9 +19,10 @@ interface Props {
   projects: Project[];
 }
 const { projects } = Astro.props;
-const work = selectedProjectIds.map((id) =>
-  projects.find((project) => project.id === id)!,
-);
+const toProjects = (ids: readonly Project['id'][]) =>
+  ids.map((id) => projects.find((project) => project.id === id)!);
+const technicalProjects = toProjects(technicalProjectIds);
+const analyticsProjects = toProjects(analyticsProjectIds);
 const additionalWork = additionalProjects.map((item) => ({
   ...item,
   project: projects.find((project) => project.id === item.id)!,
@@ -86,10 +88,13 @@ const sectionId = (name: string) => `resume-${name}`;
       ))}
     </dl>
   </section>
-  <section class="resume-section" aria-labelledby={sectionId('projects')}>
-    <h2 id={sectionId('projects')}>Selected projects</h2>
+  <section
+    class="resume-section resume-section-technical"
+    aria-labelledby={sectionId('technical-projects')}
+  >
+    <h2 id={sectionId('technical-projects')}>Technical projects</h2>
     <div class="resume-projects">
-      {work.map((project) => (
+      {technicalProjects.map((project) => (
         <section class="resume-project" aria-labelledby={sectionId(project.id)}>
           <div class="resume-project-heading">
             <h3 id={sectionId(project.id)}>
@@ -108,7 +113,46 @@ const sectionId = (name: string) => `resume-${name}`;
           </div>
           <p class="resume-project-role">
             {project.role}
-            {project.teamContext !== 'Solo project' &&
+            {project.teamContext &&
+              project.teamContext !== 'Solo project' &&
+              ` · ${project.teamContext}`}
+          </p>
+          <ul>
+            {resumeHighlights[project.id].map((bullet) => (
+              <li>{bullet}</li>
+            ))}
+          </ul>
+        </section>
+      ))}
+    </div>
+  </section>
+  <section
+    class="resume-section resume-section-analytics"
+    aria-labelledby={sectionId('analytics-projects')}
+  >
+    <h2 id={sectionId('analytics-projects')}>Analytics projects</h2>
+    <div class="resume-projects">
+      {analyticsProjects.map((project) => (
+        <section class="resume-project" aria-labelledby={sectionId(project.id)}>
+          <div class="resume-project-heading">
+            <h3 id={sectionId(project.id)}>
+              <a
+                href={project.caseStudy}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                {project.title}
+                <Arrow direction="up-right" />
+              </a>
+            </h3>
+            <span class="resume-project-stack">
+              {projectStacks[project.id]}
+            </span>
+          </div>
+          <p class="resume-project-role">
+            {project.role}
+            {project.teamContext &&
+              project.teamContext !== 'Solo project' &&
               ` · ${project.teamContext}`}
           </p>
           <ul>
@@ -186,8 +230,13 @@ const sectionId = (name: string) => `resume-${name}`;
               {item.name}
               {item.role && ` — ${item.role}`}
             </strong>
-            {item.detail && ` · ${item.detail}`}
             {item.period && ` (${item.period})`}
+            {item.previousRole && (
+              <>
+                {' | '}
+                <em>{item.previousRole}</em>
+              </>
+            )}
           </p>
           {item.events && item.events.length > 0 && (
             <ul class="resume-leadership-events">

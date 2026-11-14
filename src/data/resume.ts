@@ -2,12 +2,12 @@ import type { ProjectId } from './projects';
 import { site } from './site';
 
 export const profile =
-  'Applied AI & Analytics student at Nanyang Polytechnic specializing in full-stack engineering, applied machine learning, and data analytics. Experienced in building from-scratch deep learning engines, AI-assisted media pipelines, and operational BI dashboards using Python, TypeScript, React, SQL, and Power BI.';
+  'Applied AI & Analytics student at Nanyang Polytechnic and President of NYP AI, building full-stack web apps, from-scratch ML and solver engines, and BI tools. Hands-on experience shipping TypeScript/React systems, pure-NumPy deep learning frameworks, AI media pipelines, and Power BI / KNIME analytics workflows.';
 
 export const resumeContact = {
-  phone: '+65 8115 3761',
+  phone: site.phone,
   email: site.email,
-  linkedin: 'https://www.linkedin.com/in/htet-ak/',
+  linkedin: site.linkedin,
   portfolio: 'https://htet-ak.pages.dev',
 };
 
@@ -25,7 +25,7 @@ export const skills = [
   {
     label: 'Software & Web',
     items:
-      'React, Node.js, Express, Flask, Streamlit, REST APIs, HTML, CSS, Git, Pytest',
+      'React, Node.js, Express, Flask, Streamlit, Zustand, Vite, REST APIs, Chrome MV3, Capacitor, Git, Vitest, Pytest',
   },
   {
     label: 'Analytics & BI',
@@ -38,21 +38,22 @@ export const skills = [
       'PostgreSQL, SQLite, MySQL, MongoDB, Oracle Database, Snowflake, Oracle Cloud, AWS',
   },
   {
-    label: 'AI & Machine Learning',
+    label: 'AI & Algorithms',
     items:
-      'NumPy, Automatic Differentiation, Neural Networks, Multimodal AI Pipelines, AI Orchestration, Generative AI Integration, Model Evaluation',
+      'NumPy, Automatic Differentiation, Neural Networks, Constraint & Graph Search, Multimodal AI Pipelines, Generative AI Integration, Model Evaluation',
   },
 ];
 
 export const projectStacks: Record<ProjectId, string> = {
   numpygrad: 'Python, NumPy, Pytest, Streamlit',
+  oxydoku:
+    'TypeScript, React, Zustand, Vite, Vitest, Chrome Extension (MV3), Capacitor',
   'shades-of-sg': 'React, Node.js, PostgreSQL, AI APIs, FFmpeg, WaveSurfer.js',
-  rollover:
-    'React 19, Vite, Node.js, Express 5, AI API integration, SheetJS (xlsx)',
-  sgen: 'React, JavaScript, Python (Flask async), aiosqlite, SQLite, Web Speech API',
-  'hospital-operations': 'Power BI, Power Query, DAX',
-  'retail-data': 'KNIME, Excel, Data preparation',
-  'workout-prediction': 'KNIME, SAS Viya, Regression',
+  rollover: 'React, Vite, Node.js, Express, AI APIs, SheetJS (xlsx)',
+  sgen: 'React, JavaScript, Python, Flask, aiosqlite, SQLite, Web Speech API',
+  'hospital-operations': 'Power BI, Power Query, DAX, Data modeling',
+  'retail-data': 'KNIME, Excel, Data quality, Feature engineering',
+  'workout-prediction': 'KNIME, SAS Viya, Feature engineering, Regression',
   'student-wellbeing': 'Excel, Statistics, Hypothesis testing',
 };
 
@@ -63,6 +64,11 @@ export const projectBullets: Record<ProjectId, string[]> = {
     'Built a Streamlit studio with validation-selected training, coordinate inference, parameter and gradient diagnostics, and model comparisons on shared data and mini-batches.',
     'Connected learned hazard scores to Dijkstra-based rover guidance and implemented multi-digit canvas preprocessing with saved-model inference; checked engine gradients with Pytest and finite differences.',
   ],
+  oxydoku: [
+    'Extended the open-source AImenes/sudokUI codebase into oxyDoku, engineering a multi-pattern scanner running 55 exhaustive and 21 bounded finders across 76 human solving techniques.',
+    'Indexed overlapping pattern proofs by canonical logical conclusion and mapped all 76 techniques across six reasoning concepts, Discovery Mode, and interactive chain training.',
+    'Built an interactive practice verifier grading board eliminations and participating cells against every valid step alongside a Manifest V3 Chrome Extension live-sync bridge and 1,250+ Vitest specs.',
+  ],
   'shades-of-sg': [
     'Built an asynchronous media pipeline that coordinates audio intake, lyric transcription, AI scene planning, image generation, and FFmpeg video assembly.',
     'Developed deterministic chorus hashing to reuse Cloudinary image assets for repeated lyrics, avoiding duplicate image-generation work.',
@@ -72,7 +78,7 @@ export const projectBullets: Record<ProjectId, string[]> = {
   rollover: [
     'Co-built a circular-retail discovery platform during SDG Open Hack 2026 with a three-person team, matching surplus inventory with shoppers through constraint-driven mystery bundles.',
     'Implemented inventory-aware matching with spreadsheet catalog parsing and budget, size, and allergen filters, plus separate preview and reveal API contracts with SHA-256 offer IDs.',
-    'Built a React 19 checkout experience with CSS 3D card animations and an AI-generated inventory quiz backed by a deterministic offline fallback.',
+    'Built a React checkout experience with CSS 3D card animations and an AI-generated inventory quiz backed by a deterministic offline fallback.',
   ],
   sgen: [
     'Built asynchronous Flask REST endpoints and React workflows for post and comment operations, including optimistic like updates.',
@@ -109,52 +115,61 @@ export const resumeHighlights: Record<ProjectId, string[]> = {
   ...projectBullets,
   numpygrad: [
     'Engineered a from-scratch autograd deep learning engine in pure NumPy, facing the challenge of computing reverse-mode gradients across dynamic computation graphs with multi-branch shared inputs and broadcasted tensors.',
-    'Overcame graph and performance bottlenecks by developing DFS topological ordering with gradient accumulators, vectorized spatial convolutions (im2col/col2im) to eliminate Python loop latency, and verifying correctness via 152 Pytest unit tests.',
+    'Overcame graph and Python-loop bottlenecks by implementing DFS topological ordering with gradient accumulators, vectorizing 2D convolutions via im2col/col2im, and verifying accuracy across 152 Pytest unit and finite-difference checks.',
+  ],
+  oxydoku: [
+    'Extended AImenes/sudokUI into oxyDoku in TypeScript and React, facing browser stalls and duplicate proofs when scanning 76 human solving techniques at once alongside pencil-mark loss when importing live puzzles.',
+    'Overcame these limits by combining 55 exhaustive and 21 step-bounded chain/ALS finders with canonical outcome indexing, an interactive proof verifier, and an MV3 Chrome live-sync bridge verified by 1,250+ Vitest oracle checks.',
   ],
   'shades-of-sg': [
     'Led the media generation pipeline and browser timeline editor on a team project, challenged by high API costs from duplicate image requests and audio-video timing drift across asynchronous generation stages.',
-    'Overcame these issues by architecting a deterministic chorus-hashing engine to reuse recurring frame assets (cutting API costs by 20–35%) and implementing an AWAITING_REVIEW workflow with draggable JSONB lyric blocks to preserve audio sync.',
+    'Resolved both issues by building a deterministic chorus-hashing cache to reuse recurring frame assets (cutting image API costs 20–35%) and an AWAITING_REVIEW stage with draggable PostgreSQL JSONB lyric blocks.',
   ],
   rollover: [
-    'Co-built a circular-retail discovery platform during a 24-hour hackathon, facing the challenge of partitioning live surplus inventory into mystery bundles while enforcing strict budget, size, and allergen exclusions.',
-    'Prevented client-side inventory scraping and tampering by developing a zero-spoiler preview/reveal API architecture with SHA-256 offer verification and a responsive React 19 interface with offline fallbacks.',
+    'Co-built a circular-retail discovery platform in a 24-hour hackathon, challenged by matching live surplus stock into mystery bundles under strict budget, size, and allergen rules without leaking bundle contents to the client.',
+    'Solved this by building a deterministic Express bundle-matching engine paired with split preview/reveal APIs and SHA-256 offer verification, alongside a React 3D card-reveal flow with offline quiz fallbacks.',
   ],
   sgen: [
-    'Developed asynchronous backend REST endpoints and React feed workflows, challenged by race conditions from duplicate in-flight requests during rapid scrolling and accessibility barriers for senior users.',
-    'Overcame these hurdles by engineering in-flight request guards with post deduplication, alongside integrating multilingual browser-native Web Speech API (STT/TTS) and client-side slang definition popovers.',
+    'Developed the posts engine, infinite feed, and assistive accessibility tools on a team project, challenged by duplicate-fetch race conditions during rapid scrolling and keyboard barriers for senior users.',
+    'Resolved feed race conditions with in-flight request guards and post-ID deduplication in React/Flask, and integrated Web Speech API dictation (EN, ZH, MS, TA), read-aloud synthesis, slang popovers, and outbound Link Guard prompts.',
   ],
   'hospital-operations': [
-    'Solely designed the operational planning dashboard and data model, facing the challenge of integrating fragmented departmental tables with mismatched date granularities and conflicting admission records.',
-    'Overcame data inconsistencies by establishing a unified star schema with dynamic DAX capacity measures, building an interactive what-if simulator to forecast 12-month patient surges and test clinical staffing requirements.',
+    'Solely designed the operational planning dashboard and data model, facing the challenge of integrating fragmented hospital admission, emergency wait-time, and scheduling tables with mismatched date granularities.',
+    'Overcame data inconsistencies by establishing a unified Power BI star schema with dynamic DAX capacity measures and an interactive 12-month inflow simulator to stress-test clinical staffing needs by patient urgency.',
   ],
   'workout-prediction': [
-    'Developed an end-to-end predictive regression workflow, challenged by noisy physiological telemetry across ~5,000 records and non-linear exertion dynamics that baseline linear models failed to capture.',
-    'Overcame baseline inaccuracy by building an automated KNIME data cleaning and feature engineering pipeline for relative heart-rate exertion, benchmarking models in SAS Viya to deploy Gradient Boosting for reliable calorie estimation.',
+    'Developed an end-to-end calorie expenditure regression workflow, challenged by 4,865 noisy, duplicated workout rows (~5x redundancy) and non-linear exertion dynamics that baseline linear models failed to capture.',
+    'Addressed data noise and baseline error by building an automated KNIME deduplication and heart-rate reserve pipeline (973 clean sessions) and benchmarking SAS Viya ensemble models to reach a 35.00 kcal validation RMSE.',
   ],
 };
 
-export const selectedProjectIds = [
+export const technicalProjectIds = [
   'numpygrad',
+  'oxydoku',
   'shades-of-sg',
+  'rollover',
+] as const satisfies readonly ProjectId[];
+
+export const analyticsProjectIds = [
   'hospital-operations',
   'workout-prediction',
+] as const satisfies readonly ProjectId[];
+
+export const selectedProjectIds = [
+  ...technicalProjectIds,
+  ...analyticsProjectIds,
 ] as const satisfies readonly ProjectId[];
 
 export const additionalProjects = [
   {
     id: 'retail-data',
     summary:
-      'Built a KNIME pipeline integrating multiple regional customer datasets with automated validation, demographic feature engineering, and reporting exports.',
-  },
-  {
-    id: 'rollover',
-    summary:
-      'Co-built a constraint-based surplus-retail platform with a three-person team during a 24-hour hackathon.',
+      'Built a KNIME pipeline to reconcile inconsistent regional customer schemas, automating validation, median imputation, and demographic feature engineering for Excel reporting.',
   },
   {
     id: 'sgen',
     summary:
-      'Built Flask/React feed workflows with multilingual speech input, read-aloud, and safer link handling.',
+      'Built async Flask/React feed workflows with in-flight request guards to prevent scroll race conditions, paired with multilingual speech input, read-aloud, and Link Guard safety prompts.',
   },
 ] satisfies Array<{ id: ProjectId; summary: string }>;
 
@@ -184,20 +199,20 @@ export const certificates = [
 export interface LeadershipItem {
   name: string;
   role?: string;
-  detail?: string;
   period?: string;
+  previousRole?: string;
   events?: string[];
 }
 
 export const leadership: LeadershipItem[] = [
   {
     name: 'NYP AI',
-    role: 'Executive Committee',
-    detail: 'Head of Publicity',
-    period: 'Year 2 Sem 1 – Present',
+    role: 'President',
+    period: 'Year 2 Sem 2 – Present',
+    previousRole: 'Executive Committee · Head of Publicity (Year 2 Sem 1)',
     events: [
-      'Powering the Future (Networks & AI by Nokia): Co-organized 2-day systems engineering masterclass, led publicity to fill 50+ seats, and assisted student lab checkpoints.',
-      'Project Starbound: Co-developed space-themed orientation challenges and debates on AI ethics for 100+ incoming students.',
+      'Powering the Future (Networks & AI by Nokia): Co-organized 2-day systems engineering masterclass, led publicity to fill 50+ seats, and guided student lab checkpoints.',
+      'Project Starbound: Co-organized orientation for 100+ incoming students, co-designing team activities, event logistics, and cohort outreach.',
     ],
   },
   {
@@ -211,7 +226,7 @@ export const leadership: LeadershipItem[] = [
   },
   {
     name: 'Class Representative',
-    detail: 'Class AA2502',
+    role: 'Class AA2502',
     period: 'Year 1 Sem 1 – Sem 2',
     events: [
       'Coordinated class feedback with academic mentors and organized class bonding events across both Year 1 semesters.',
