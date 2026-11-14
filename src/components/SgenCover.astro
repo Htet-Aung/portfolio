@@ -1,0 +1,68 @@
+---
+import { Image, getImage } from 'astro:assets';
+import { sgenCaptures } from '../data/sgen-captures';
+
+interface Props {
+  large?: boolean;
+}
+
+const { large = false } = Astro.props;
+const item = sgenCaptures.feed;
+const full = large
+  ? await getImage({ src: item.image, format: 'webp', quality: 95 })
+  : undefined;
+---
+
+<div
+  class:list={[
+    'analytics-cover',
+    'sgen-cover',
+    { 'analytics-cover-large': large },
+  ]}
+>
+  <div class="analytics-cover-heading">
+    <span>SGEN / Across generations</span>
+    <span>A little more connected</span>
+  </div>
+  <Image
+    src={item.image}
+    alt={item.alt}
+    widths={[480, 960, 1280]}
+    sizes={
+      large
+        ? '(max-width: 767px) calc(100vw - 40px), 1120px'
+        : '(max-width: 767px) calc(100vw - 40px), 544px'
+    }
+    format="webp"
+    quality={85}
+    loading="lazy"
+    decoding="async"
+  />
+  <div class="analytics-cover-footer">
+    <p class="analytics-cover-detail">
+      Different generations · Shared stories · Assistive feed
+    </p>
+    {full && (
+      <a
+        href={full.src}
+        target="_blank"
+        rel="noopener noreferrer"
+        aria-label={`View full-size figure: ${item.title} (opens in a new tab)`}
+      >
+        View full-size figure
+      </a>
+    )}
+  </div>
+</div>
+
+<style>
+  .sgen-cover img {
+    object-fit: cover;
+    object-position: top center;
+    background: transparent;
+    border: 1px solid #d8deed;
+  }
+  .sgen-cover.analytics-cover-large img {
+    object-fit: contain;
+  }
+</style>

@@ -15,6 +15,7 @@ status: published
 ---
 
 import ArchitectureDiagram from '../../components/ArchitectureDiagram.astro';
+import SgenCapture from '../../components/SgenCapture.astro';
 
 ## The short version
 
@@ -54,7 +55,7 @@ The React client requests posts from Flask API handlers backed by SQLite storage
 
 Post and comment actions stay connected to their records rather than creating a second data model for assistance. A read-aloud action reads the post text; dictation updates the composition input; a slang explanation augments an unfamiliar phrase.
 
-This is a useful design boundary: assistance changes how someone interacts with the content, while the underlying conversation remains the same.
+<SgenCapture capture="feed" />
 
 ## Load more without duplicating posts
 
@@ -68,6 +69,8 @@ The [feed hook](https://github.com/Generic-Inc/SGEN/blob/main/src/client/src/sta
 
 For a larger or rapidly changing feed, I would consider keyset pagination, cancellation or stale-response handling when switching feeds, and virtualization for long sessions. Incremental loading limits the first request, but does not by itself bound the amount of content eventually kept in the DOM.
 
+<SgenCapture capture="community" />
+
 ## Let people speak and listen
 
 The composition interface offers browser speech recognition with language selection and interim text. Dictation feeds into the same input that supports ordinary typing, so the person can review or correct the result before submitting a post.
@@ -78,6 +81,8 @@ The browser APIs are a lightweight integration point, but speech recognition and
 
 Keeping those limitations visible in the implementation helped me treat voice as another input and output method with fallbacks, rather than a replacement for the base interface.
 
+<SgenCapture capture="voice" />
+
 ## Explain a term, make a link choice clearer
 
 The slang highlighter matches post text against a local dictionary. Matched terms can present a short explanation without a server round trip. Longer phrases are considered before shorter terms so a phrase is not needlessly split into separate matches.
@@ -87,6 +92,8 @@ This approach is predictable and easy to inspect, while requiring the dictionary
 The same content layer handles outbound links through a confirmation dialog. It shows the destination and asks the person to choose whether to continue. That creates an opportunity to inspect an unfamiliar address before leaving the app.
 
 A confirmation step is not a phishing detector and should not imply that a destination has been verified as safe. Its value is the clearer decision at the point of navigation. The [content component](https://github.com/Generic-Inc/SGEN/blob/main/src/client/src/components/sub%20components/slang_highlighter.jsx) contains the dictionary highlighting and link interaction.
+
+<SgenCapture capture="safety" />
 
 ## Trade-offs and next steps
 

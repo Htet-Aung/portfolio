@@ -2,7 +2,9 @@
 import type { ProjectId } from '../data/projects';
 import AnalyticsCover from './AnalyticsCover.astro';
 import NumPyGradCover from './NumPyGradCover.astro';
+import OxyDokuCover from './OxyDokuCover.astro';
 import RolloverCover from './RolloverCover.astro';
+import SgenCover from './SgenCover.astro';
 import ShadesCover from './ShadesCover.astro';
 import {
   analyticsCovers,
@@ -17,39 +19,19 @@ const { project, large = false } = Astro.props;
 
 {project === 'numpygrad' ? (
   <NumPyGradCover large={large} />
+) : project === 'oxydoku' ? (
+  <OxyDokuCover large={large} />
 ) : project === 'rollover' ? (
   <RolloverCover large={large} />
 ) : project === 'shades-of-sg' ? (
   <ShadesCover large={large} />
+) : project === 'sgen' ? (
+  <SgenCover large={large} />
 ) : project in analyticsCovers ? (
   <AnalyticsCover project={project as AnalyticsProjectId} large={large} />
 ) : (
   <div
     class:list={['project-cover', `cover-${project}`, { 'cover-large': large }]}
     aria-hidden="true"
-  >
-    {project === 'sgen' && (
-      <>
-        <div class="cover-topline">
-          <span>SGEN / Across generations</span>
-          <span>A little more connected</span>
-        </div>
-        <div class="sgen-graphic">
-          <span class="speech-bubble speech-one">
-            hello<span>EN</span>
-          </span>
-          <span class="speech-bubble speech-two">
-            你好<span>ZH</span>
-          </span>
-          <span class="sgen-wordmark">
-            sgen<span>↗</span>
-          </span>
-        </div>
-        <div class="cover-bottomline">
-          <span>Different generations. Shared stories.</span>
-          <span>✳</span>
-        </div>
-      </>
-    )}
-  </div>
+  />
 )}

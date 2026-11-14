@@ -1,0 +1,44 @@
+---
+import { Image, getImage } from 'astro:assets';
+import {
+  oxydokuCaptures,
+  type OxyDokuCaptureId,
+} from '../data/oxydoku-captures';
+
+interface Props {
+  capture: OxyDokuCaptureId;
+}
+
+const { capture: captureId } = Astro.props;
+const item = oxydokuCaptures[captureId];
+const fullImage = await getImage({
+  src: item.image,
+  format: 'webp',
+  quality: 94,
+});
+---
+
+<figure class="studio-capture oxydoku-capture">
+  <Image
+    src={item.image}
+    alt={item.alt}
+    widths={[480, 960, 1440]}
+    sizes="(max-width: 767px) calc(100vw - 40px), (max-width: 1100px) calc(100vw - 319px), 760px"
+    format="webp"
+    quality={90}
+    loading="lazy"
+    decoding="async"
+  />
+  <figcaption>
+    <strong>{item.title}</strong>
+    <p>{item.caption}</p>
+    <a
+      href={fullImage.src}
+      target="_blank"
+      rel="noopener noreferrer"
+      aria-label={`View full-size figure: ${item.title} (opens in a new tab)`}
+    >
+      View full-size figure
+    </a>
+  </figcaption>
+</figure>

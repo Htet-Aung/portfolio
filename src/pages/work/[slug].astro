@@ -38,7 +38,10 @@ const nextProject =
   ];
 ---
 
-<SiteLayout title={`${data.title} — ${site.name}`} description={data.intro}>
+<SiteLayout
+  title={`${data.title} — ${site.name}`}
+  description={data.intro.replace(/\s+/g, ' ').trim()}
+>
   <div class="container case-page">
     <header class="case-header">
       <a class="text-link back-link" href="/#work">
@@ -51,7 +54,9 @@ const nextProject =
         <span class="accent">.</span>
       </h1>
       <p class="case-deck">{data.description}</p>
-      <p class="case-intro">{data.intro}</p>
+      {data.intro.split(/\n\s*\n/).map((paragraph) => (
+        <p class="case-intro">{paragraph.trim()}</p>
+      ))}
       <div class="case-metadata">
         <div>
           <span class="mono">My role</span>

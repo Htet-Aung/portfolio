@@ -1,0 +1,57 @@
+---
+import { Image, getImage } from 'astro:assets';
+import { oxydokuCaptures } from '../data/oxydoku-captures';
+
+interface Props {
+  large?: boolean;
+}
+
+const { large = false } = Astro.props;
+const capture = oxydokuCaptures.scanner;
+const fullImage = large
+  ? await getImage({ src: capture.image, format: 'webp', quality: 92 })
+  : null;
+---
+
+<div
+  class:list={[
+    'analytics-cover',
+    'oxydoku-cover',
+    large && 'analytics-cover-large',
+  ]}
+>
+  <div class="analytics-cover-heading">
+    <span>oxyDoku / Analysis board</span>
+    <span>TypeScript &middot; 76 techniques</span>
+  </div>
+  <Image
+    src={capture.image}
+    alt={capture.alt}
+    widths={[480, 960, 1280]}
+    sizes={
+      large
+        ? '(max-width: 767px) calc(100vw - 40px), 1120px'
+        : '(max-width: 767px) calc(100vw - 40px), 544px'
+    }
+    format="webp"
+    quality={85}
+    loading="lazy"
+    decoding="async"
+  />
+  <div class="analytics-cover-footer">
+    <p class="analytics-cover-detail">
+      Multi-pattern scanner &middot; Outcome grouping &middot; Chain trainer
+      &middot; Live sync
+    </p>
+    {large && fullImage && (
+      <a
+        href={fullImage.src}
+        target="_blank"
+        rel="noopener noreferrer"
+        aria-label={`View full-size figure: ${capture.title} (opens in a new tab)`}
+      >
+        View full-size figure
+      </a>
+    )}
+  </div>
+</div>
