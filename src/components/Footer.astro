@@ -15,12 +15,45 @@ import { site } from '../data/site';
       <div class="contact-links">
         <p>
           Whether you're looking for an intern, want to collaborate on a
-          project, or just want to connect—feel free to drop me an email.
+          project, or just want to connect—feel free to drop me an email or
+          reach out directly.
         </p>
-        <a class="email-link" href={`mailto:${site.email}`}>
-          Email me <Arrow direction="up-right" />
-        </a>
-        <span class="contact-address">{site.email}</span>
+        <div class="contact-actions">
+          <div class="contact-primary">
+            <a class="email-link" href={`mailto:${site.email}`}>
+              Email me <Arrow direction="up-right" />
+            </a>
+            <span class="contact-address">{site.email}</span>
+          </div>
+          <div
+            class="contact-secondary"
+            role="group"
+            aria-label="Other ways to connect"
+          >
+            <div class="contact-secondary-item">
+              <a
+                class="secondary-contact-link"
+                href={site.whatsapp}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                WhatsApp <Arrow direction="up-right" />
+              </a>
+              <span class="contact-address">{site.phone}</span>
+            </div>
+            <div class="contact-secondary-item">
+              <a
+                class="secondary-contact-link"
+                href={site.linkedin}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                LinkedIn <Arrow direction="up-right" />
+              </a>
+              <span class="contact-address">in/htet-ak</span>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
     <div class="footer-bottom">
