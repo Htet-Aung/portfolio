@@ -38,8 +38,6 @@ I used a sequence of Rule Engine nodes to handle different errors explicitly:
 - **Income:** treat the placeholder and entries failing the workflow's minimum-income rule as missing values.
 - **Credit-card use:** convert `1` and `0` into readable `Yes` and `No` categories.
 
-The spending rule uses two columns together, showing how I translated a business relationship into a validation rule. The flag transformation makes the prepared data easier to interpret in reports.
-
 For purchases, spending, and income, I filled missing entries with the column median. This keeps the customer's other information available, and the median is less sensitive to extreme values than the mean. A second Statistics node checks the result: the captured profile shows no remaining missing values in these three financial fields.
 
 <AnalyticsCapture capture="dataProfile" />
@@ -59,8 +57,6 @@ Writing the transformation explicitly gave me control over the output format and
 ### Deriving age and handling invalid dates
 
 I used Date&Time Difference to calculate age from birth date and the workflow's execution date. Profiling the new field revealed zero and negative ages caused by future-dated entries. I converted those invalid ages to missing values and applied median imputation, preserving the usable parts of the affected records.
-
-This stage shows why derived features need their own checks: a date can be present and parse successfully while still producing an impossible age.
 
 ### Creating demographic groups
 

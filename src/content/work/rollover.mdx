@@ -9,7 +9,7 @@ stack:
   - React
   - Express
   - JavaScript
-  - xlsx
+  - SheetJS (xlsx)
 repoUrl: https://github.com/Samuwuwuwu/SGD-Open-Hack-26-CMC
 status: published
 ---
@@ -39,7 +39,7 @@ The user first chooses **For me** or **Someone else**, then sets a spending ceil
 
 These choices become domain inputs. The Express backend reads an Excel inventory workbook with `xlsx`, normalizing product records into an in-memory catalog. Before building bundles, it checks active status, stock, valid affordable prices, and the requested category, condition, size, and food restrictions. Keeping these rules on the server connects the interface’s promises to the products it can actually offer.
 
-This distinction matters: a quiz answer can make an eligible item more appealing, but it cannot make a disallowed size or excluded allergen acceptable. Editing the setup clears the existing offers and reveals so the user’s new limits cannot be paired with an old result. That is the kind of state handling needed when a multi-step form becomes a real product workflow.
+This distinction matters: a quiz answer can make an eligible item more appealing, but it cannot make a disallowed size or excluded allergen acceptable. Editing the setup clears the existing offers and reveals so the user’s new limits cannot be paired with an old result.
 
 <RolloverCapture capture="setup" />
 
@@ -59,7 +59,7 @@ The quiz leads to sealed bundles with names such as **Little lift**, **The remix
 
 Underneath those cards, the matcher starts with the eligible pool, scores quiz relevance, and constructs bundles around affordable anchor items. Different profiles target different budget fractions and item counts. Category variety and overlap penalties help the offers provide distinct choices; duplicate bundles are skipped, and a sparse catalog can produce fewer than four candidates. Totals are calculated in integer cents to avoid floating-point drift in the budget checks.
 
-The preview API, `/api/drops/match`, returns enough information to compare offers while leaving full product records for the reveal response. This is a useful product boundary: shoppers can assess cost and general fit before choosing, while the discovery mechanic still has something to uncover. It also shows how recommendation logic, money handling, and an API contract work together to support a visible feature.
+The preview API, `/api/drops/match`, returns enough information to compare offers while leaving full product records for the reveal response. This is a useful product boundary: shoppers can assess cost and general fit before choosing, while the discovery mechanic still has something to uncover.
 
 <RolloverCapture capture="boxes" />
 
@@ -79,7 +79,7 @@ After the box opens, its contents appear as sealed product cards. Users can unco
 
 The client stores each opened drop and its card-reveal progress against the offer ID. Going back to compare boxes and returning to a previously opened offer preserves its discoveries. This makes exploration possible without forcing users to repeat the opening or losing track of which products they have already seen.
 
-The interaction also handles focus as cards open, directing keyboard users toward the next card or summary action. Buttons use a stationary hit area with a visually moving face, so their pressed effect does not move the target away from the pointer. These are small implementation decisions with a practical result: a tactile interface that remains controllable.
+The interaction also handles focus as cards open, directing keyboard users toward the next card or summary action. Buttons use a stationary hit area with a visually moving face, so their pressed effect does not move the target away from the pointer. That keeps the arcade buttons tactile without making them frustrating to click.
 
 <RolloverCapture capture="cards" />
 
@@ -97,7 +97,7 @@ Here, the expanded Casio watch entry explains the product and its overstock stat
 
 ROLLOVER brought product design, frontend interaction, backend rules, and AI integration into one coherent journey under a short delivery window. The strongest part is the connection between them: setup changes invalidate old offers, preferences rank eligible inventory, the preview carries through to the reveal, and returning to a box preserves progress. Those behaviors make the interface more than a collection of animated screens.
 
-The architecture also reflects the prototype’s scope. A spreadsheet catalog made stock easy to edit during the sprint, and a separate matching module kept eligibility and bundle logic inspectable. CSS suited the box geometry without introducing a separate 3D rendering system. Deterministic recomputation kept the backend lean, but a changing production catalog would need versioned offers, expiry, and transactional stock reservations. These choices show full-stack judgment about where to invest effort and what a successful prototype still needs to become a service.
+The architecture also reflects the prototype’s scope. A spreadsheet catalog made stock easy to edit during the sprint, and a separate matching module kept eligibility and bundle logic inspectable. CSS suited the box geometry without introducing a separate 3D rendering system. Deterministic recomputation kept the backend lean, but a changing production catalog would need versioned offers, expiry, and transactional stock reservations.
 
 ## Watch the complete journey
 

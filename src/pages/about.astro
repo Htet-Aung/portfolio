@@ -12,22 +12,22 @@ const capabilities = [
   {
     number: '01',
     title: 'Full-stack web development',
-    text: 'Responsive, accessible web apps in React, Node.js, and Flask with clean state management.',
+    text: 'TypeScript and React interfaces, Node.js and Flask backends, Zustand state, and MV3 browser extensions.',
   },
   {
     number: '02',
-    title: 'AI & media pipelines',
-    text: 'Multimodal AI workflows, FFmpeg processing, and browser-based creative tools.',
+    title: 'ML & solver engines from scratch',
+    text: 'Reverse-mode autograd and vectorized convolutions in pure NumPy, plus bitmask constraint solvers and 76-technique graph scanners in TypeScript.',
   },
   {
     number: '03',
-    title: 'Machine learning from scratch',
-    text: 'Core ML mechanics from first principles—reverse-mode autograd, convolutions, and optimizers.',
+    title: 'AI & media pipelines',
+    text: 'Asynchronous multimodal workflows, lyric-synced timeline editing, FFmpeg assembly, and reviewable assistant edits.',
   },
   {
     number: '04',
     title: 'BI & predictive modeling',
-    text: 'Power BI operational dashboards, automated KNIME ETL pipelines, and SAS Viya regression.',
+    text: 'Power BI capacity simulators, DAX star schemas, automated KNIME data prep, and SAS Viya regression.',
   },
 ];
 ---
@@ -47,16 +47,22 @@ const capabilities = [
         <p class="inner-page-intro">
           Progress comes from being willing to attempt what you don't yet know
           how to do.
-          <br />I approach unfamiliar challenges with persistence, learn through
-          experimentation, and see each problem as an opportunity to expand what
-          I'm capable of.
         </p>
         <p>
           I'm Htet, an Applied AI &amp; Analytics student at Nanyang Polytechnic
-          in Singapore. I care about understanding how systems work under the
-          hood—whether that means building an autograd engine from first
-          principles, orchestrating AI media pipelines, or designing interactive
-          operational dashboards.
+          in Singapore. Most of what I build starts with a real problem I've run
+          into myself, or a system I want to understand from the inside out.
+        </p>
+        <p>
+          Outside of code, I play rapid chess (1750 on Chess.com) and solve
+          Sudoku. When I got stuck on harder Sudoku puzzles, existing solvers
+          only gave away the next move instead of teaching the logic behind
+          it—so I built oxyDoku, a 76-technique analysis and training platform
+          with a live-sync Chrome extension. When I wanted to see how neural
+          networks actually learn beneath PyTorch, I built NumPyGrad from first
+          principles in pure NumPy. That same habit carries into my team and
+          analytics projects, from AI video studios and 24-hour hackathon builds
+          to hospital capacity simulators in Power BI.
         </p>
       </div>
       <dl class="profile-notes">
@@ -74,10 +80,19 @@ const capabilities = [
           </dd>
         </div>
         <div>
+          <dt>Leadership</dt>
+          <dd>
+            President, NYP AI
+            <span>
+              Technical workshops, industry sessions &amp; student community.
+            </span>
+          </dd>
+        </div>
+        <div>
           <dt>Focus</dt>
           <dd>
-            Full-stack engineering &amp; applied AI
-            <span>Web development, ML systems, and analytics pipelines.</span>
+            Full-stack engineering, AI &amp; analytics
+            <span>Web apps, ML &amp; solver engines, and BI pipelines.</span>
           </dd>
         </div>
       </dl>
@@ -130,14 +145,15 @@ const capabilities = [
         <article class="community-card">
           <div class="community-card-header">
             <span class="mono community-role">
-              Executive Committee · Head of Publicity · Year 2 Sem 1 – Present
+              President (Year 2 Sem 2 – Present) |{' '}
+              <em>Executive Committee · Head of Publicity (Year 2 Sem 1)</em>
             </span>
             <h3>NYP AI</h3>
             <p class="community-lead">
-              Executive Committee of NYP AI directing multi-channel outreach
-              across Instagram, Telegram, Discord, and WhatsApp Community
-              channels, while collaborating with the team on event planning,
-              proposals, and logistics.
+              Leading NYP AI with the Executive Committee across technical
+              workshops, industry masterclasses, and cohort events—after
+              previously running multi-channel publicity across Instagram,
+              Telegram, Discord, and WhatsApp in Year 2 Sem 1.
             </p>
           </div>
 
@@ -146,34 +162,32 @@ const capabilities = [
               <h4>Powering the Future — Networks &amp; AI by Nokia</h4>
               <p>
                 Co-organized and led publicity for an intensive 2-day systems
-                engineering masterclass (18 hours across 18–19 June) hosted at
+                engineering masterclass (18 hours across June 18–19) hosted at
                 NYP, featuring <strong>Thomas Corre</strong>, Regional PLM &amp;
                 Consulting Engineer at Nokia (certified Google Cloud
                 Professional Cloud Architect &amp; Nokia Service Routing
                 Architect). Curated for 50+ selected diploma students with
                 networking and AI backgrounds, the sessions explored how modern
-                AI compute clusters rely on high-bandwidth data centre
+                AI compute clusters rely on high-bandwidth data center
                 infrastructure:
               </p>
               <ul class="community-list">
                 <li>
-                  <strong>Connecting Students with Industry:</strong>{' '}
-                  Collaborated with Nokia engineering leadership to bring
-                  real-world network architecture into the student community,
-                  giving peers direct access to enterprise engineering insights
-                  and mentorship.
+                  <strong>Connecting Students with Industry:</strong> Worked
+                  with Nokia engineers to bring real data-center and network
+                  architecture topics to campus, giving students direct time
+                  with practicing systems engineers.
                 </li>
                 <li>
-                  <strong>Multi-Channel Promotion &amp; Full Turnout:</strong>{' '}
-                  Spearheaded promotional outreach across student message
-                  channels, cohort broadcasts, and social platforms (@nyp_ai) to
-                  fill all 50+ workshop seats.
+                  <strong>Multi-Channel Outreach &amp; Full Turnout:</strong>{' '}
+                  Ran promotion across student chat channels, cohort broadcasts,
+                  and @nyp_ai social accounts to fill all 50+ seats.
                 </li>
                 <li>
-                  <strong>Lab Mentorship &amp; Event Support:</strong> Supported
-                  attendees during hands-on digital twin exercises and lab
-                  checkpoints, helping participants troubleshoot setups
-                  alongside the speaker to earn co-issued Nokia e-certificates.
+                  <strong>Lab Mentorship &amp; Facilitation:</strong> Walked the
+                  room during hands-on digital twin labs and checkpoints,
+                  helping attendees debug their setups alongside the speaker to
+                  complete their co-issued Nokia e-certificates.
                 </li>
               </ul>
             </div>
@@ -196,32 +210,31 @@ const capabilities = [
 
           <div class="community-subevent">
             <h4>
-              NYP AI Engagement Session – Project Starbound: The AI Frontier
+              NYP AI Engagement Session — Project Starbound: The AI Frontier
             </h4>
             <p>
-              Helped organize NYP AI's orientation and engagement session for
-              100+ students, welcoming new cohorts through an interactive,
+              Co-organized NYP AI's orientation and engagement session for 100+
+              students, welcoming new cohorts through an interactive,
               space-exploration theme:
             </p>
             <ul class="community-list">
               <li>
                 <strong>Interactive Community Activities:</strong> Co-designed
-                accessible, team-based activities — including friendly debates
-                on AI ethics (<em>Galactic Consensus</em>), interactive machine
-                learning trivia (<em>Starfield AI</em>), and a campus-wide
-                scavenger hunt (<em>The Nebula Hunt</em>) — to help new students
-                connect and break the ice.
+                team icebreakers—including AI ethics debates (
+                <em>Galactic Consensus</em>), machine learning trivia (
+                <em>Starfield AI</em>), and a campus-wide scavenger hunt (
+                <em>The Nebula Hunt</em>)—so incoming students could meet people
+                across cohorts.
               </li>
               <li>
-                <strong>Collaborative Event Planning:</strong> Contributed to
-                run-of-show scheduling, venue logistics across campus, and
-                facilitator briefings to create an organized and welcoming
-                experience for incoming cohorts.
+                <strong>Event Operations:</strong> Co-planned the run-of-show,
+                campus venue routing, and facilitator briefings for 100+
+                attendees.
               </li>
               <li>
-                <strong>Cohort Outreach:</strong> Coordinated publicity across
-                WhatsApp communities, Telegram channels, Instagram, and School
-                of IT display screens to welcome students across diplomas.
+                <strong>Cohort Outreach:</strong> Coordinated announcements
+                across WhatsApp communities, Telegram channels, Instagram, and
+                School of IT display screens.
               </li>
             </ul>
           </div>
@@ -230,13 +243,13 @@ const capabilities = [
         <article class="community-card">
           <div class="community-card-header">
             <span class="mono community-role">
-              Subcommittee · Year 1 Sem 1 – Sem 2
+              Subcommittee (Year 1 Sem 1 – Sem 2)
             </span>
             <h3>NYP Google Developer Group (GDGoC)</h3>
             <p class="community-lead">
-              Part of the GDGoC NYP subcommittee supporting technical workshops,
-              hands-on developer sessions, and outreach initiatives on cloud
-              architecture, containerization, and programming logic.
+              Part of the GDGoC NYP subcommittee co-organizing technical
+              workshops, hands-on developer sessions, and outreach initiatives
+              on cloud architecture, containerization, and programming logic.
             </p>
           </div>
 
@@ -254,23 +267,19 @@ const capabilities = [
               </p>
               <ul class="community-list">
                 <li>
-                  <strong>Step-by-Step Cloud Walkthroughs:</strong> Co-presented
-                  practical demonstrations breaking down container concepts and
-                  serverless architecture into clear, approachable steps —
-                  taking attendees from source code to live services on Google
-                  Cloud Run.
+                  <strong>Hands-On Cloud Walkthroughs:</strong> Co-presented
+                  practical demos taking attendees from source code to live
+                  containers on Google Cloud Run.
                 </li>
                 <li>
-                  <strong>Live Peer Coaching &amp; Troubleshooting:</strong>{' '}
-                  Mentored attendees during hands-on exercises in Google Cloud
-                  Shell, helping them debug deployment issues and build
-                  confidence working with cloud tools.
+                  <strong>Live Debugging &amp; Coaching:</strong> Helped
+                  participants troubleshoot deployment issues in Google Cloud
+                  Shell during the lab segments.
                 </li>
                 <li>
-                  <strong>Cross-Campus Tech Community:</strong> Collaborated
-                  with the NUS Computing developer community to facilitate
-                  shared peer learning between polytechnic and university
-                  students.
+                  <strong>Cross-Campus Collaboration:</strong> Worked with the
+                  Developer Group @ NUS Computing team to run a joint session
+                  for polytechnic and university students.
                 </li>
               </ul>
             </div>
@@ -308,7 +317,7 @@ const capabilities = [
           </div>
 
           <div class="community-subevent">
-            <h4>NYP Course Advising – Programming Logic</h4>
+            <h4>NYP Course Advising — Programming Logic</h4>
             <p>
               Represented GDGoC NYP as a station presenter during NYP's course
               advising outreach, introducing visiting secondary school students
@@ -316,22 +325,19 @@ const capabilities = [
             </p>
             <ul class="community-list">
               <li>
-                <strong>Making Logic Approachable:</strong> Demystified core
-                programming concepts using intuitive real-world analogies,
-                helping beginners understand how software makes decisions
-                without getting bogged down by dry syntax.
+                <strong>Approachable Logic Demos:</strong> Explained core
+                programming concepts through everyday analogies rather than dry
+                syntax.
               </li>
               <li>
-                <strong>Interactive Problem-Solving:</strong> Guided students
-                through hands-on logic activities — such as designing
-                conditional rules for an automated smart lamp — encouraging them
-                to reason through inputs, conditions, and outcomes.
+                <strong>Interactive Problem-Solving:</strong> Walked students
+                through conditional logic puzzles—like designing rules for an
+                automated smart lamp—to show how inputs map to decisions.
               </li>
               <li>
-                <strong>Inspiring Young Learners:</strong> Shared personal
-                enthusiasm for technology and polytechnic studies, answering
-                questions and creating an encouraging, low-pressure space for
-                kids taking their very first steps into coding.
+                <strong>Welcoming First-Timers:</strong> Answered questions
+                about polytechnic life and computing for secondary school
+                visitors trying code for the first time.
               </li>
             </ul>
           </div>
@@ -340,14 +346,24 @@ const capabilities = [
         <article class="community-card community-card-compact">
           <div class="community-card-header">
             <span class="mono community-role">
-              Class AA2502 · Year 1 Sem 1 – Sem 2
+              Class AA2502 (Year 1 Sem 1 – Sem 2)
             </span>
             <h3>Class Representative</h3>
             <p>
-              Coordinated class feedback and bridged communication with academic
-              mentors across both Year 1 semesters, while organizing class
-              bonding events to foster strong peer support and collaboration
-              among classmates.
+              Relayed class feedback to academic mentors across both Year 1
+              semesters and organized class bonding events for AA2502.
+            </p>
+          </div>
+        </article>
+
+        <article class="community-card community-card-compact">
+          <div class="community-card-header">
+            <span class="mono community-role">NYP Semi-finalist (2026)</span>
+            <h3>SDG Open Hack 2026</h3>
+            <p>
+              Co-built and pitched ROLLOVER—a circular-retail discovery platform
+              matching surplus inventory into constraint-checked mystery
+              bundles—with a three-person team in a 24-hour hackathon sprint.
             </p>
           </div>
         </article>

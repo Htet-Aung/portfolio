@@ -24,7 +24,7 @@ NumPyGrad began with a question: could I build the machinery behind a neural net
 
 The Streamlit studio turns that engine into an interactive product. Its three main views are **2D Decision Boundaries**, **Autonomous Neural Pathfinding**, and **Handwritten Digit Recognition**. The first view contains the training workspace, coordinate inference, computation trace, and model comparison. The journey below follows those interactions, then moves into the rover and drawing canvas.
 
-This connects several parts of my engineering work: implementing the mathematics, evaluating models, making their behavior inspectable, and handling the input and presentation needed for a usable application. The six screenshots and rover recording on this page were supplied directly from my studio sessions.
+All six screenshots and the rover recording below come directly from runs in that studio.
 
 ## 1. Train a boundary and watch the model learn
 
@@ -50,7 +50,7 @@ Each mini-batch passes through my `Linear` and activation layers, then the numer
 
 The backward rules handle cases that matter in ordinary networks. Shared inputs accumulate contributions from every downstream branch. `_unbroadcast` sums batch contributions back into a bias tensor's original shape. The `Module` hierarchy registers parameters and propagates training or evaluation mode through nested layers, giving dropout and batch normalization the appropriate behavior.
 
-I checked those mechanics with centered finite-difference gradient comparisons and automated tests for graph ordering, branching, broadcasting, layers, and serialization. The [gradient checker](https://github.com/Htet-Aung/numpygrad/blob/main/src/numpygrad/utils/gradcheck.py) and [test suite](https://github.com/Htet-Aung/numpygrad/tree/main/tests) provide independent ways to inspect the implementation. This is the foundation that makes the studio's training results meaningful.
+I checked those mechanics with centered finite-difference gradient comparisons and automated tests for graph ordering, branching, broadcasting, layers, and serialization. The [gradient checker](https://github.com/Htet-Aung/numpygrad/blob/main/src/numpygrad/utils/gradcheck.py) and [test suite](https://github.com/Htet-Aung/numpygrad/tree/main/tests) provide independent ways to inspect the implementation.
 
 ## 2. Probe a prediction at a new coordinate
 
@@ -61,8 +61,6 @@ After training, a visitor can click the boundary plot, move the X1 and X2 slider
 At **(0, 0)** in this session, the model predicts Class 1 with a **99.14% softmax score**, versus 0.86% for Class 0. That score exposes how strongly the model favors its prediction; it is not a guarantee that a new point is classified correctly.
 
 The same trained network evaluates a coordinate tensor of shape `(1, 2)` through its layers. I run the forward pass in evaluation mode inside `no_grad()`, which prevents autograd dependency recording and backward-graph retention during inference. This keeps prediction separate from training work and avoids building a graph that the interaction will never use.
-
-The interaction gives the boundary plot a practical purpose: visitors can investigate confident regions and uncertain borders instead of only looking at a finished chart.
 
 ## 3. Open the computation trace and inspect the internals
 
@@ -92,7 +90,7 @@ The supplied session compares a **one-layer, four-neuron Tanh model with SGD** a
 
 At the origin, their predictions disagree: Model A selects Class 0 with a **62.7% score**; Model B selects Class 1 with a **99.7% score**. A shared test point makes the difference tangible, while the maps show how it arises across the wider input space.
 
-The shared data and training batches make the configurations easier to compare. Because architecture, activation, and optimizer all change in this example, it illustrates the behavior of the complete configurations rather than isolating depth alone. This demonstrates experiment design and comparative diagnostics alongside the implementation of multi-model training.
+The shared data and training batches make the configurations easier to compare. Because architecture, activation, and optimizer all change in this example, it illustrates the behavior of the complete configurations rather than isolating depth alone.
 
 ## 5. Use the learned boundary to guide a rover
 
@@ -114,7 +112,7 @@ The controller combines three mechanisms:
 
 The mission view exposes route length, steps, model hazard, and inference counts, making controller behavior inspectable alongside the movement. Its displayed **5.8% maximum hazard** is a model score along this particular route; reaching the goal in the demo does not establish safety on arbitrary maps.
 
-I also investigated that distinction in a separate [navigation study](https://github.com/Htet-Aung/numpygrad/blob/main/docs/NAVIGATION_STUDY.md): **60 trained models and 120 routes**, evaluated against a known synthetic obstacle map. A stronger classifier did not guarantee success on every route. Connecting model quality to a downstream outcome demonstrates why classification metrics alone are insufficient for evaluating a navigation system.
+I also investigated that distinction in a separate [navigation study](https://github.com/Htet-Aung/numpygrad/blob/main/docs/NAVIGATION_STUDY.md): **60 trained models and 120 routes**, evaluated against a known synthetic obstacle map. A stronger classifier did not guarantee success on every route. That gap showed why classification accuracy alone isn't enough to judge a downstream controller.
 
 ## 6. Draw digits and follow the recognition pipeline
 
