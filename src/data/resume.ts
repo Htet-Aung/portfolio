@@ -2,7 +2,7 @@ import type { ProjectId } from './projects';
 import { site } from './site';
 
 export const profile =
-  'Applied AI & Analytics student at Nanyang Polytechnic and President of NYP AI, building full-stack web apps, from-scratch ML and solver engines, and BI tools. Hands-on experience shipping TypeScript/React systems, pure-NumPy deep learning frameworks, AI media pipelines, and Power BI / KNIME analytics workflows.';
+  "Applied AI & Analytics student at Nanyang Polytechnic and President of NYP AI, building full-stack software, from-scratch ML and solver engines, and analytics tools. Progress comes from being willing to attempt what you don't yet know how to do, taking on unfamiliar problems and figuring out the missing pieces as I build.";
 
 export const resumeContact = {
   phone: site.phone,
