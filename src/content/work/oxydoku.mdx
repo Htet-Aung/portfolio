@@ -1,9 +1,9 @@
 ---
 title: 'oxyDoku'
 projectId: 'oxydoku'
-description: 'An interactive Sudoku analysis and learning tool built to help me understand, discover, and practice advanced solving techniques.'
+description: 'An interactive Sudoku pattern scanner and learning studio built to study, understand, and practice advanced solving techniques.'
 intro: |-
-  When I got stuck on harder Sudoku puzzles, existing solvers only handed out the next move instead of teaching the pattern behind it—and importing a live board meant losing every pencil mark. I built oxyDoku on top of AImenes/sudokUI to solve that for myself: scanning 76 human techniques at once, comparing different proofs for the same elimination, and letting me practice chains and deductions interactively.
+  Existing Sudoku solvers give away a single move in a fixed order instead of showing every pattern on the board or helping you learn how they work. I extended AImenes/sudokUI into oxyDoku to scan 76 human techniques simultaneously, organize them into nine reasoning concepts with step-by-step proofs, and drill specific patterns interactively.
 role: 'Creator & systems developer'
 teamContext: 'Solo engineering extension built on AImenes/sudokUI'
 stack:
@@ -22,88 +22,92 @@ import OxyDokuCapture from '../../components/OxyDokuCapture.astro';
 
 ## Why I built oxyDoku
 
-Outside of code, I play rapid chess (1750 on Chess.com) and spend a lot of time on Sudoku. In both games, the fun part isn't just seeing the right move—it's understanding why a position works and learning to spot the pattern yourself next time.
+Outside of code, I play rapid chess (1750 on Chess.com) and spend a lot of time on hard Sudoku. In both games, looking up the answer is only useful if it teaches you how to recognize the idea yourself next time.
 
-Once I moved into harder Sudoku puzzles—where progress depends on Wings, Fish, Almost Locked Sets, and Alternating Inference Chains—most tools stopped helping me learn. Clicking "Hint" usually just revealed a single step from a fixed solver order, with no way to see what else was sitting on the board or test whether I actually understood the logic. Worse, whenever I wanted to analyze a tough position from a site like Sudoku Exchange, pasting an 81-character puzzle string wiped out all my corner and center pencil marks.
+Once I moved past basic singles and subsets into Wings, Fish, Almost Locked Sets, and Alternating Inference Chains, I kept running into the same three walls:
 
-I started extending the open-source [AImenes/sudokUI](https://github.com/aimenes/sudokUI) project (built for [sudokui.org](https://sudokui.org)) to fix those exact annoyances for my own practice. Over time, that personal tool grew into **oxyDoku**: a full-board 76-technique scanner, an outcome cross-indexer that lines up competing proofs side by side, an interactive proof verifier and chain trainer, and a Chrome extension that syncs live boards without losing pencil marks.
+1. **No easy way to scan a board for all patterns at once.** Most solvers only reveal the single next step in a fixed priority order, hiding everything else sitting in the same position.
+2. **No structured online course for advanced logic.** Guides online mostly dump dozens of named techniques into flat lists without connecting the underlying rules or walking through why a deduction holds.
+3. **No targeted way to practice spotting specific patterns.** Reading an explanation makes it easy to nod along, yet I had no way to drill one technique on demand, test myself on a blind mix, or verify my own eliminations directly on the grid.
+
+I built **oxyDoku** on top of the open-source [AImenes/sudokUI](https://github.com/aimenes/sudokUI) codebase (for [sudokui.org](https://sudokui.org)) to fix those gaps for my own study. It keeps `sudokUI`'s local-first playing workspace and extends it into a 76-technique position scanner, a concept-driven learning hub with case-by-case proofs, an interactive practice lab, a chain trainer, and a live board sync extension.
 
 <OxyDokuCapture capture="scanner" />
 
 ## System architecture
 
-To keep full-board pattern scans fast in the browser while supporting multiple platforms, oxyDoku separates board representation from pattern search and the interactive learning interface. The core solver engine is written in pure TypeScript and shared across the web application, the Chrome Extension sync bridge, and the Capacitor Android build.
+To keep full-board pattern scans responsive in the browser while running identically on desktop, mobile, and tests, oxyDoku separates the board model and solver engine from React state and the learning UI. The core engine is pure TypeScript with zero DOM dependencies, shared across the web app, the Chrome Extension bridge, and the Capacitor Android wrapper.
 
 <ArchitectureDiagram
   label="The deduction pipeline"
-  flow="board state → technique finders → outcome grouping → active practice"
+  flow="board state → pattern scanner → concepts & proofs → active practice"
   steps={[
     {
       number: '01',
-      title: 'State & import',
-      detail: '9-bit candidate masks, Sudoku Exchange parser, MV3 sync bridge',
+      title: 'Board & sync',
+      detail: '9-bit candidate masks, photo & text import, MV3 live sync',
     },
     {
       number: '02',
       title: 'Pattern scanner',
-      detail: '55 exhaustive + 21 bounded finders across 80-technique catalog',
+      detail: '55 exhaustive + 21 bounded finders across 76 human techniques',
     },
     {
       number: '03',
-      title: 'Outcome & taxonomy',
-      detail: 'Duplicate removal, outcome grouping, 6 reasoning concepts',
+      title: 'Concepts & proofs',
+      detail: '9 reasoning concepts, outcome grouping, case-by-case explainer',
     },
     {
       number: '04',
-      title: 'Active learning',
-      detail: 'Chain trainer, 4-stage progressive hints, answer verification',
+      title: 'Active practice',
+      detail:
+        'Focused & mixed drills, 4-stage hints, board verifier, chain trainer',
     },
   ]}
-  caption="Every platform runs the same TypeScript solver engine: compact 9-bit candidate masks feed both the exhaustive single-step finders and bounded graph searches, which then power the grouped pattern views and interactive practice tools."
+  caption="Every platform runs the same TypeScript engine: compact 9-bit candidate masks feed exhaustive and bounded pattern finders, which then power the outcome comparison view, structured explanations, and practice verification."
 />
 
-## Exhaustive and bounded multi-pattern scanning
+## Scanning every pattern and comparing proofs
 
-When I got stuck on a difficult puzzle, I didn't just want to know the easiest available move—I wanted to see every valid pattern sitting on the board at that moment. Out of an 80-technique catalog (79 human techniques plus a brute-force fallback), oxyDoku scans **76 implemented human solving techniques** simultaneously (`IMPLEMENTED_TECHS`). These are divided into **55 exhaustive finders** (covering singles, locked candidates, subsets, basic fish, wings, uniqueness, and coloring) and **21 bounded graph finders** (`X-Chain`, `XY-Chain`, `AIC`, `Grouped Nice Loop`, `ALS-XZ`, `ALS-XY-Wing`, `ALS-XY-Chain`, `Death Blossom`, `Sue de Coq`, `Forcing Chain`, and complex fish/Exocet patterns).
+When I get stuck on a tough board, seeing only the cheapest legal step rarely tells me what I missed. Out of an 80-technique catalog (79 human techniques plus a brute-force fallback), oxyDoku scans **76 implemented human solving techniques** (`IMPLEMENTED_TECHS`) without mutating the board: **55 exhaustive finders** (singles, intersections, subsets, basic and finned fish, wings, uniqueness, and coloring) alongside **21 bounded graph and template finders** (`X-Chain`, `XY-Chain`, `AIC`, `Grouped Nice Loop`, `ALS-XZ`, `ALS-XY-Wing`, `ALS-XY-Chain`, `Death Blossom`, `Aligned Pair Exclusion`, `Forcing` chains, and `Exocet`).
 
-Scanning for all 76 techniques at once introduced two practical engineering challenges:
+Enumerating every pattern simultaneously created two practical problems in `src/engine/scanner.ts`:
 
-1. **Keeping deep searches responsive.** Advanced chain and Almost Locked Set finders explore branching graph paths that can quickly multiply on open boards. To prevent the browser from hanging, each bounded finder runs within an explicit step budget. If a search reaches its limit before finishing, `searchBudgetReached` displays a clear notice in the scanner panel showing which deeper technique families were capped rather than silently omitting results.
-2. **Removing duplicate findings.** Different search paths can sometimes discover the exact same deduction from different starting cells. oxyDoku identifies and removes duplicate findings—matching each `PatternInstance` by its technique, logical conclusion, and participating cells—so the results remain organized and easier to explore.
-
-## Overlapping deductions and reasoning taxonomy
-
-A single candidate elimination can sometimes be explained by several different solving techniques. oxyDoku groups these findings together, allowing me to compare different ways of reaching the same conclusion. By indexing each discovered pattern by the exact elimination or placement it produces (`elim:digit:cell` or `place:digit:cell`), the **By Outcome** view lines up techniques such as an `ALS-XZ`, an `ALS-XY-Wing`, and an `ALS-XY-Chain` whenever they justify the same move. Seeing them side by side makes it much easier to understand how simpler and more advanced patterns connect on the same board.
+1. **Keeping deep searches responsive without hiding limits.** Branching chains and Almost Locked Set finders can blow up on open grids. Each bounded finder runs under explicit limits in `BOUNDED_TECH_BOUNDS` (`maxLength`, `nodeBudget`, `maxAls`, `maxTemplates`, or `maxBranchSize`). When a search hits a limit, `truncated` and `truncationReason` (`search-budget`, `instance-cap`, or `template-overflow`) trigger a `"Search budget reached"` notice in the scanner panel instead of quietly dropping results.
+2. **Deduplicating symmetric paths and comparing overlapping proofs.** Different search orders often rediscover the same chain backward, rotate the same continuous loop to another starting cell, or flag a reducible superset (like a Swordfish built from an X-Wing plus an extra line). `patternInstanceKey` canonicalizes reversed chains, rotated loops, swapped parity colors, and multi-unit subsets, while `irreducibleOnly` suppresses redundant supersets. At the same time, different techniques that eliminate the same candidate are kept separate and indexed in `byConclusion` under atomic keys (`E:cell:digit` and `P:cell:digit`), so the **By Outcome** view lines up competing proofs (such as an `ALS-XZ`, an `ALS-XY-Wing`, and an `ALS-XY-Chain`) side by side.
 
 <OxyDokuCapture capture="deductions" />
 
-Studying 76 separate techniques as a flat list can also feel overwhelming, especially when many of them share the same underlying logic. To make that structure easier to navigate, `My Techniques` organizes the catalog into six core reasoning concepts: _Locked Sets & Subsets_, _Fish & Single-Digit Patterns_, _Wings & Bent Subsets_, _Coloring & Single-Digit Chains_, _Alternating Inference Chains_, and _Almost Locked Sets_. I can mark individual techniques as `Known`, `Learning`, or `Unfamiliar` to keep everyday scans focused, or switch on **Discovery Mode** to highlight unfamiliar patterns that appear in a live position.
+## Structured learning: concepts, guides, and step-by-step proofs
+
+A solver that lists pattern names still leaves a beginner staring at 76 separate tricks. To turn oxyDoku into something closer to a structured course, I built four connected learning layers across `src/content/` and `src/ui/`:
+
+- **Nine reasoning concepts instead of a flat list:** `TECHNIQUE_TAXONOMY` in `src/content/concepts.ts` organizes the catalog under **9 core reasoning concepts** (_Locked Sets & Subsets_, _Fish Logic & Transposition_, _Single-Digit Chains & Turbot Patterns_, _Wing & Bent Subset Logic_, _Coloring & Alternating Inference Chains_, _Almost Locked Sets (ALS)_, _Uniqueness Deadly Patterns_, _Contradiction & Forcing Chains_, and _Overlays & Exotic Patterns_). Each entry links aliases and relationships (`specialCaseOf`, `generalizes`, `related`), showing how a Skyscraper and a 2-String Kite are both 4-node Turbot/X-Chains, or how XY-Wings and XYZ-Wings act as small `ALS-XZ` interactions.
+- **Personal mastery and Discovery Mode:** In `My Techniques` (`src/content/mastery.ts`, `MyTechniquesDialog.tsx`), I can pick a starter preset or tag each technique as `Known`, `Learning`, or `Unfamiliar`. Nothing is ever marked known automatically just because I viewed a hint. Everyday scans stay scoped to patterns I know or am studying, and toggling **Discovery Mode** flags unfamiliar patterns sitting on a live board when I want to see what else applies.
+- **Guides with pitfalls and false friends:** `sudokUI`'s Learn hub already includes an Intuition guide (explaining core rules formally and in plain, notation-free language), a linked glossary, worked examples, and a frequency-ordered learning path. In `src/content/techniqueGuides.ts`, oxyDoku pairs those entries with structural roles, affected candidates, **common pitfalls & false friends** (lookalike shapes that break the rule, such as a finned fish whose fins cross boxes or an XY-Wing whose pincers see each other), distinctions from related patterns, inline familiarity toggles, and buttons to jump straight to practicing or scanning the live board.
+- **Case-by-case step proofs and visual walkthroughs:** Rather than printing one dense line of cell notation, `src/content/stepExplainer.ts` uses 14 specialized builders to break any scanned pattern or hint into a **Core Principle**, **Case-by-Case Proof** branches (for example, tracing both candidate values of a Wing pivot), step-by-step causal logic, and per-candidate elimination reasons. `FormattedExplanation.tsx` highlights coordinates, rows, columns, boxes, and digits with theme-aware color tokens, while `Walk through it` steps through the board drawing one idea at a time.
 
 <OxyDokuCapture capture="taxonomy" />
 
-## Interactive proof verification and chain training
+## Practicing specific patterns and building chains
 
-Reading a hint explanation makes it easy to nod along without really testing whether I could spot the pattern on my own. To make practice more active, I built two interactive training tools that focus on working through the logic yourself:
+To move from reading explanations to recognizing patterns under real board clutter, I built an interactive Practice Lab and paired it with `sudokUI`'s SVG Chain Trainer:
 
-- **Practice Verifier:** Generates targeted exercises from verified puzzle positions where a specific technique applies. As I cross out candidates on the board, select the key digits, and highlight the participating cells, the verifier checks my attempt against all valid deductions in that position (`allValidSteps`). It distinguishes between an exact match for the target technique, a valid alternative pattern that proves the same elimination, a partial match, or an incorrect move. When I need a nudge without giving away the answer, a **4-stage progressive hint system** reveals the logic gradually—starting with the general area of the board before showing the pattern structure and full explanation.
-- **Chain Trainer:** Alternating inference chains were one of the hardest techniques for me to track mentally. The Chain Trainer lets me click candidates directly on the SVG board to draw alternating strong and weak links, check whether the chain forms a valid elimination or continuous loop, and step through the reasoning one link at a time.
+- **Focused and mixed-technique drills:** Across **61 practisable techniques**, Focused Practice drops me into a generated puzzle position where that exact pattern is the next logical move. When I want realistic pattern-recognition testing without knowing the answer ahead of time, **Mixed-Technique Practice** pulls blind drills from my `Known` and `Learning` techniques so I have to figure out which pattern is actually on the board.
+- **Direct board verification and 4-stage progressive hints:** In `PracticePanel.tsx`, I can strike out candidate notes or place digits directly on the board (or pick key digits and pattern cells), and `verifyPracticeAnswer` in `src/engine/practiceVerifier.ts` checks my move against `allValidSteps` to distinguish an exact target match, a valid alternative pattern proving a real deduction on the board, a partial match, or a wrong elimination. If I get stuck, `progressiveHints.ts` reveals help in four stages: (1) a house and digit nudge, (2) the technique name and structural mechanism, (3) the participating cells and links without the eliminations, and (4) the full solution.
+- **Relaxed local progress tracking:** `practiceStore.ts` and `Progress.tsx` log attempts, recognition rates, and hint usage in `localStorage` with no countdown timers or leaderboards, surfacing **Techniques to Strengthen** (`getStrugglingTechniques`) for patterns where I repeatedly needed hints or multiple tries.
+- **Interactive Chain Trainer:** Alternating Inference Chains are hard to hold in your head at first. In `chainTrainer.ts`, clicking candidates directly on the SVG grid draws strong and weak alternating links, reads the causal chain back in plain language as each node is added, flags valid eliminations or continuous loops, and lets me step through the links.
 
 <OxyDokuCapture capture="practice" />
 
 <OxyDokuCapture capture="chains" />
 
-## Full-state import and MV3 Live Sync
+## Live Sync, themes, and verification
 
-When I came across an interesting position while solving on external sites like Sudoku Exchange, copying a standard 81-character puzzle string meant losing all of my progress—every placed digit, corner note, center candidate, and color highlight had to be entered again from scratch. To solve this, I designed a lossless **Base64URL v1 state payload** (`#import-position=`) and a dedicated **Sudoku Exchange parser** that preserves the full board state, including 9-bit candidate bitmasks and cell colors.
-
-To make that workflow effortless while playing, I also built a **Manifest V3 Chrome Extension** (`bridge.js` and `content.js` connected to Zustand via `syncStore.ts`) that mirrors a live Sudoku Exchange board directly into oxyDoku as candidates are updated, shown below in the custom Chess theme.
+When I want to study a tough position mid-solve on Sudoku Exchange without retyping the board, a **Manifest V3 Chrome Extension** (`extension/background.js`, `content-sudokuexchange.js`, and `content-sudokui.js`, wired into Zustand via `syncStore.ts`) mirrors the live board state into oxyDoku, alongside `#import-position=` links, text grid imports, and camera photo scanning. Below is the Live Sync popover connected over one of oxyDoku's nine built-in color palettes, the custom Chess theme.
 
 <OxyDokuCapture capture="sync" />
 
-## Verification and engineering discipline
-
-For a learning tool to be genuinely helpful, its deductions have to be trustworthy—a single false elimination can ruin a puzzle and teach the wrong habit. The solver engine and learning tools are backed by **1,250+ automated Vitest specifications across 82 test files**. Rather than relying only on static snapshot checks, `scanner.test.ts` validates every candidate elimination produced across all 76 implemented techniques against a **brute-force unique-solution oracle**, ensuring no finder ever eliminates a digit that belongs to the true solution.
-
-Additional test suites verify the 4-stage progressive hint generator (`progressiveHints.ts`), the answer verification system (`practiceVerifier.ts`), and lossless pencil-mark round-trips in `sudokuExchangeImport.ts`. Beyond the interactive web app, the build pipeline generates **267 localized `/learn/` guide pages** and **80 SVG technique diagrams**, and packages the project for offline mobile play through a **Capacitor Android wrapper**.
+Because a learning tool teaches the wrong lesson if even one finder makes an unsound elimination, the solver engine and learning subsystems are backed by **1,250+ automated Vitest specs across 82 test files**. `scanner.test.ts` and `soundness.test.ts` verify candidate eliminations across all 76 implemented techniques against a brute-force solution oracle (`tests/solutionOracle.ts`), ensuring no finder ever removes a true solution digit. Separate suites test `stepExplainer.ts`, `progressiveHints.ts`, `practiceVerifier.ts`, `mastery.ts`, and `syncStore.ts`. Beyond the web app, the build pipeline pre-renders **267 localized `/learn/` pages** and **80 SVG technique diagrams**, and packages offline mobile builds through a **Capacitor Android** wrapper.
 
 [Explore oxyDoku on GitHub →](https://github.com/Htet-Aung/oxyDoku)

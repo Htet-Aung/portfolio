@@ -18,7 +18,7 @@ export const oxydokuCaptures = {
     title: 'Comparing overlapping deductions by outcome',
     alt: 'oxyDoku By Outcome view grouping ALS-XZ, ALS-XY-Wing, and ALS-XY-Chain instances that all prove the same candidate elimination',
     caption:
-      'Grouping findings By Outcome lines up different techniques—such as ALS-XZ, ALS-XY-Wing, and ALS-XY-Chain—whenever they prove the same candidate elimination.',
+      'Grouping findings By Outcome lines up different techniques (such as ALS-XZ, ALS-XY-Wing, and ALS-XY-Chain) whenever they prove the same candidate elimination.',
   },
   chains: {
     image: chainTrainer,
@@ -29,24 +29,24 @@ export const oxydokuCaptures = {
   },
   taxonomy: {
     image: conceptTaxonomy,
-    title: 'Six-concept taxonomy and My Techniques mastery',
+    title: 'Nine-concept taxonomy and My Techniques mastery',
     alt: 'oxyDoku My Techniques dialog organizing 76 supported techniques across Known, Learning, and Unfamiliar states by underlying reasoning concept',
     caption:
-      'My Techniques organizes all 76 supported patterns into six core reasoning concepts and tracks Known, Learning, and Unfamiliar states.',
+      'My Techniques organizes the catalog into nine core reasoning concepts and tracks Known, Learning, and Unfamiliar states.',
   },
   practice: {
     image: practiceVerifier,
     title: 'Practice verifier and progressive hints',
     alt: 'oxyDoku Practice Panel verifying a Skyscraper exercise with progressive board highlights and digit/cell answer controls',
     caption:
-      'The interactive Practice mode grades eliminations, key digits, and participating cells against every valid deduction on the board while disclosing hints across four progressive stages.',
+      'Focused and Mixed Practice grade board eliminations or cell/digit selections against every valid deduction on the board while disclosing hints across four progressive stages.',
   },
   sync: {
     image: liveSyncChessTheme,
     title: 'Manifest V3 Live Sync and Chess board theme',
     alt: 'oxyDoku rendered in the Chess board theme with the Live Sync status popover connected and pattern highlights active',
     caption:
-      'A Manifest V3 Chrome Extension mirrors live board state and pencil-mark bitmasks into oxyDoku, shown here in the custom Chess theme.',
+      'A Manifest V3 Chrome Extension mirrors a live Sudoku Exchange board into oxyDoku so you can scan and study a position mid-game, shown here in the custom Chess theme.',
   },
 } as const;
 

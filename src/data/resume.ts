@@ -66,8 +66,8 @@ export const projectBullets: Record<ProjectId, string[]> = {
   ],
   oxydoku: [
     'Extended the open-source AImenes/sudokUI codebase into oxyDoku, engineering a multi-pattern scanner running 55 exhaustive and 21 bounded finders across 76 human solving techniques.',
-    'Indexed overlapping pattern proofs by canonical logical conclusion and mapped all 76 techniques across six reasoning concepts, Discovery Mode, and interactive chain training.',
-    'Built an interactive practice verifier grading board eliminations and participating cells against every valid step alongside a Manifest V3 Chrome Extension live-sync bridge and 1,250+ Vitest specs.',
+    'Organized the catalog across nine reasoning concepts with Discovery Mode, pitfall guides, case-by-case step proofs, and interactive SVG chain training.',
+    'Built focused and mixed pattern practice grading board eliminations against every valid step alongside 4-stage progressive hints, MV3 live sync, and 1,250+ Vitest oracle checks.',
   ],
   'shades-of-sg': [
     'Built an asynchronous media pipeline that coordinates audio intake, lyric transcription, AI scene planning, image generation, and FFmpeg video assembly.',
@@ -118,8 +118,8 @@ export const resumeHighlights: Record<ProjectId, string[]> = {
     'Overcame graph and Python-loop bottlenecks by implementing DFS topological ordering with gradient accumulators, vectorizing 2D convolutions via im2col/col2im, and verifying accuracy across 152 Pytest unit and finite-difference checks.',
   ],
   oxydoku: [
-    'Extended AImenes/sudokUI into oxyDoku in TypeScript and React, facing browser stalls and duplicate proofs when scanning 76 human solving techniques at once alongside pencil-mark loss when importing live puzzles.',
-    'Overcame these limits by combining 55 exhaustive and 21 step-bounded chain/ALS finders with canonical outcome indexing, an interactive proof verifier, and an MV3 Chrome live-sync bridge verified by 1,250+ Vitest oracle checks.',
+    'Extended AImenes/sudokUI into oxyDoku in TypeScript and React, tackling browser stalls and duplicate proofs across 76 techniques while turning single-move hints into an active pattern-learning studio.',
+    'Built 55 exhaustive and 21 step-bounded finders with outcome grouping, a 9-concept taxonomy, case-by-case step proofs, focused/mixed practice verification with 4-stage hints, and 1,250+ Vitest oracle checks.',
   ],
   'shades-of-sg': [
     'Led the media generation pipeline and browser timeline editor on a team project, challenged by high API costs from duplicate image requests and audio-video timing drift across asynchronous generation stages.',

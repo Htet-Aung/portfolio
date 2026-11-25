@@ -49,7 +49,7 @@ export const projects: Project[] = [
     group: 'software',
     descriptor: 'A Sudoku pattern scanner and active-learning studio',
     summary:
-      'Built to actually learn advanced Sudoku instead of just getting next-move hints—scanning 76 techniques at once, comparing overlapping proofs, and syncing live boards.',
+      'Built to scan all 76 Sudoku techniques at once, learn the 9 reasoning concepts behind them, and practice spotting specific patterns interactively.',
     role: 'Creator & systems developer',
     teamContext: 'Solo engineering extension built on AImenes/sudokUI',
     stack: [

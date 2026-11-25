@@ -52,19 +52,19 @@ A lightweight, PyTorch-style deep learning framework and reverse-mode automatic 
 
 ---
 
-### oxyDoku — Interactive Sudoku Reasoning Engine & Pattern Lab
+### oxyDoku — Interactive Sudoku Pattern Scanner & Learning Studio
 
 **Creator & Systems Developer — Built on AImenes/sudokUI**
 
-An interactive Sudoku analysis and training platform built to teach advanced solving techniques instead of handing out single next-move spoilers.
+An interactive Sudoku pattern scanner and active-learning studio built to scan all patterns on a board, explain why each deduction works, and drill techniques interactively.
 
 - **Architecture & Technologies:** TypeScript, React 18, Zustand, Vite, Vitest (1,250+ tests across 82 files), Chrome Extension (MV3), Capacitor 8
 - **Core Engineering:**
-  - **76-Technique Multi-Pattern Scanner:** Runs 55 exhaustive and 21 bounded graph finders (`X-Chain`, `XY-Chain`, `AIC`, `ALS`, `Fish`, `Exocet`) simultaneously over compact 9-bit candidate masks with explicit search budgets (`searchBudgetReached`).
-  - **Outcome Cross-Indexing & Concept Taxonomy:** Groups overlapping pattern proofs by canonical elimination (`elim:digit:cell` / `place:digit:cell`) and organizes 76 techniques into six core reasoning concepts with Discovery Mode.
-  - **Active Practice & Chain Training:** Includes a Practice Verifier grading eliminations and participating cells against all valid steps (`allValidSteps`) with 4-stage hints, plus an SVG Chain Trainer for drawing strong/weak alternating links.
-  - **Lossless State & MV3 Live Sync:** Preserves 9-bit pencil-mark bitmasks via Base64URL v1 state payloads and mirrors live Sudoku Exchange boards through a Manifest V3 Chrome Extension (`bridge.js`, `content.js`, `syncStore.ts`).
-  - **Verification & Distribution:** Tested against a brute-force unique-solution oracle in `scanner.test.ts`, paired with 267 localized `/learn/` pages, 80 SVG diagrams, and an offline Capacitor Android build.
+  - **76-Technique Multi-Pattern Scanner:** Runs 55 exhaustive and 21 bounded graph/template finders (`X-Chain`, `XY-Chain`, `AIC`, `ALS`, `Fish`, `Exocet`) simultaneously over compact 9-bit candidate masks, disclosing limits via `truncated` / `truncationReason` and deduplicating symmetric traversals via `patternInstanceKey`.
+  - **Outcome Grouping & 9-Concept Taxonomy:** Indexes overlapping deductions by canonical logical outcome (`E:cell:digit` / `P:cell:digit`) and maps the catalog across 9 reasoning concepts alongside `My Techniques` (`Known`, `Learning`, `Unfamiliar`) and Discovery Mode.
+  - **Structured Guides & Case-by-Case Proofs:** Adds structural guides with common pitfalls and false friends (`techniqueGuides.ts`), 14 specialized deductive proof builders (`stepExplainer.ts`), and color-coded walkthrough frames (`FormattedExplanation.tsx`).
+  - **Focused & Mixed Practice + Chain Trainer:** Drills 61 practisable techniques via focused exercises or blind mixed drills, grading board eliminations and participating cells against `allValidSteps` with 4-stage progressive hints, relaxed local progress tracking, and an interactive SVG Chain Trainer.
+  - **Live Sync, Verification & Distribution:** Mirrors live Sudoku Exchange boards via a Manifest V3 Chrome Extension (`background.js`, `content-sudokuexchange.js`, `content-sudokui.js`, `syncStore.ts`), backed by brute-force oracle checks (`scanner.test.ts`, `soundness.test.ts`), 267 localized `/learn/` pages, 80 SVG diagrams, and an offline Capacitor Android build.
 - **Repository & Case Study:** [Htet-Aung/oxyDoku](https://github.com/Htet-Aung/oxyDoku) | [Case Study Source](src/content/work/oxydoku.mdx)
 
 ---
